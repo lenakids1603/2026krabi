@@ -1,0 +1,6 @@
+{
+  "name": "Andaman Corporate Expedition",
+  "description": "A comprehensive retreat guide for the Krabi 2024 corporate trip, featuring itinerary, logistics, and local tips.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
