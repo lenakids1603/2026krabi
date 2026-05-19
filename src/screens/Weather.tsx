@@ -1,5 +1,5 @@
 import { motion } from 'motion/react';
-import { Sun, CloudRain, Cloud, CloudLightning, Thermometer, Droplets, Wind, Eye, Waves, Navigation, ShieldAlert, CheckCircle2, AlertTriangle, Droplet } from 'lucide-react';
+import { Sun, CloudRain, Cloud, CloudLightning, Thermometer, Droplets, Wind, Eye, Waves, Navigation, ShieldAlert, CheckCircle2, AlertTriangle, Droplet, Calendar } from 'lucide-react';
 import { cn } from '@/src/lib/utils';
 
 export default function Weather() {

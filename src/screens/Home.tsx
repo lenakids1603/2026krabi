@@ -25,7 +25,7 @@ export default function Home() {
           </h2>
           <div className="flex items-center text-white/90 gap-2 text-sm font-medium">
             <Calendar size={18} />
-            6月28日 - 7月8日
+            6月28日 - 7月6日
           </div>
         </div>
       </motion.section>
@@ -41,11 +41,11 @@ export default function Home() {
             <div className="text-on-surface-variant text-[10px] uppercase font-bold tracking-[0.2em] mb-2 opacity-60">行程状态</div>
             <div className="flex items-baseline gap-2">
               <span className="text-primary font-heading font-bold text-5xl">Day 1</span>
-              <span className="text-on-surface-variant text-sm font-medium">/ 11 Days</span>
+              <span className="text-on-surface-variant text-sm font-medium">/ 9 Days</span>
             </div>
             <div className="mt-4 flex items-center gap-2 text-secondary font-semibold bg-secondary/10 px-3 py-1.5 rounded-full w-fit text-sm">
                 <Waves size={16} />
-                今日启程：上海 - 甲米
+                今日启程：杭州 - 甲米
             </div>
           </div>
           <div className="flex-[2] w-full">
@@ -57,7 +57,7 @@ export default function Home() {
                 </div>
                 <div>
                   <h4 className="font-heading font-bold text-lg text-primary">团队集结 & 登机</h4>
-                  <p className="text-on-surface-variant text-xs font-medium mt-0.5">14:30 · 浦东国际机场 T2</p>
+                  <p className="text-on-surface-variant text-xs font-medium mt-0.5">23:00 · 萧山国际机场 T4</p>
                 </div>
               </div>
               <ArrowRight className="text-outline-variant group-hover:text-primary transition-colors group-hover:translate-x-1 duration-300" size={20} />
@@ -83,7 +83,7 @@ export default function Home() {
               </div>
               <div>
                 <h4 className="font-heading font-bold text-3xl mb-3">团建行程</h4>
-                <p className="text-white/80 text-sm leading-relaxed font-medium">从甲米落日到兰塔浮潜，11天完整日程安排</p>
+                <p className="text-white/80 text-sm leading-relaxed font-medium">从甲米落日到兰塔浮潜，9天完整日程安排</p>
               </div>
             </div>
             <div className="absolute top-6 right-6 opacity-0 group-hover:opacity-100 transition-all duration-300 translate-y-2 group-hover:translate-y-0">

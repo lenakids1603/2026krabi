@@ -1,11 +1,15 @@
 import { Attraction, DayItinerary, NavItem, Restaurant, TeamMember } from './types';
 
 export const NAV_ITEMS: NavItem[] = [
-  { id: 'home', label: 'Home', path: '/', icon: 'home' },
-  { id: 'itinerary', label: '行程', path: '/itinerary', icon: 'calendar-days' },
-  { id: 'gallery', label: '相册', path: '/gallery', icon: 'camera' },
+  { id: 'home', label: '首页', path: '/', icon: 'home' },
+  { id: 'itinerary', label: '行程安排', path: '/itinerary', icon: 'calendar-days' },
+  { id: 'travel-info', label: '机酒信息', path: '/travel-info', icon: 'plane-takeoff' },
+  { id: 'attractions', label: '景点项目', path: '/attractions', icon: 'map-pin' },
+  { id: 'dining', label: '餐饮便利', path: '/dining', icon: 'utensils' },
+  { id: 'weather', label: '天气潮汐', path: '/weather', icon: 'waves' },
+  { id: 'gallery', label: '共享相册', path: '/gallery', icon: 'camera' },
   { id: 'directory', label: '通讯录', path: '/directory', icon: 'users' },
-  { id: 'more', label: '更多', path: '/more', icon: 'more-horizontal' },
+  { id: 'notes', label: '注意事项', path: '/more', icon: 'info' },
 ];
 
 export const TEAM_MEMBERS: TeamMember[] = [
@@ -45,54 +49,80 @@ export const ITINERARY: DayItinerary[] = [
   {
     day: 1,
     date: '06.28',
-    title: '抵达甲米',
+    title: '启程赴约',
     activities: [
       {
         id: 'a1',
-        time: '14:30 - 全天',
-        title: '抵达甲米',
-        location: '甲米国际机场 (KBV)',
-        description: '专车接机前往度假村，办理入住并领取迎新礼包。',
+        time: '23:00',
+        title: '团队集结 & 登机',
+        location: '萧山国际机场 (HGH) T4',
+        description: '带着憧憬出发，开启我们的2026兰塔之旅。',
         type: 'itinerary',
         icon: 'plane-takeoff'
       }
     ],
-    tags: ['入驻', '交通'],
+    tags: ['交通', '集结'],
     image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBOES9ZcKSfDVRt43cviTp-F8lFD5V7mQ-XWzpLZv12RDlNZRwEg_bvpqNpdiKf5bqmrIcXB_ufC7Kx7yKihmGSncsrD3ikckIMWhT7YSGMoLIwGG3I530eAVJpHDEB33tRcfkF7O_l3zPw1E5XbcH0fgFV5i5FrMdnILmtgxoDt-nLDM6KiHpivbFevwcSQT8f-DuoiR3yuXVDf9QWJod-Ngq0S2BcAZ6LgmBDeDFvwRyqfDMm87ZltfinDUGcQJwM8pzG_H8h06U'
   },
   {
     day: 2,
     date: '06.29',
-    title: '开营仪式 & 迎新晚宴',
+    title: '抵达度假村',
     activities: [
-        {
-            id: 'a2',
-            time: '09:00 / 18:30',
-            title: '开营仪式 & 迎新晚宴',
-            location: '度假村宴会厅 & 海滩',
-            description: '正式开启我们的2026团建之旅。',
-            type: 'dining',
-            icon: 'utensils'
-        }
+      {
+        id: 'a2',
+        time: '11:50',
+        title: '抵达甲米',
+        location: '甲米国际机场 (KBV)',
+        description: '专车接机前往度假村，办理入住。',
+        type: 'itinerary',
+        icon: 'navigation'
+      },
+      {
+        id: 'a2-2',
+        time: '18:30',
+        title: '迎新晚宴',
+        location: '海滨餐厅',
+        description: '吹着海风，享用特色泰式美食。',
+        type: 'dining',
+        icon: 'utensils'
+      }
     ],
-    tags: ['团建', '餐饮']
+    tags: ['抵达', '餐饮']
   },
   {
     day: 3,
     date: '06.30',
-    title: '神奇四岛浮潜之旅',
+    title: '海岛探索',
     activities: [
-        {
-            id: 'a3',
-            time: '08:00 - 16:00',
-            title: '神奇四岛浮潜之旅',
-            location: 'Chicken Island & Poda Island',
-            description: '体验最纯净的海水和最迷人的沙滩。',
-            type: 'attraction',
-            icon: 'waves'
-        }
+      {
+        id: 'a3',
+        time: '09:00 - 16:00',
+        title: '神奇四岛浮潜',
+        location: 'Chicken Island & Poda Island',
+        description: '在蔚蓝的海水中尽情浮潜。',
+        type: 'attraction',
+        icon: 'waves'
+      }
     ],
     image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBogDIo2NVk-umTvJYtV4BVmUfZhfyQ8UGJRnl_jXf9lSbJstwaceIOJGIg6frStwXaPo2H4RRmKcjqxm47U3D-nfaBEtTCiaHJuM6EjHMm7Mx6o6X1-PAur1BPGOYqtFy7ExdeWW8fI2sr9CMlC5Obs87wxu4OoOwF6aw5AM2wcd_9IdPOqCFv7DOcdFcfEVmXFQFwL2G7wVM_R0lhrsj-9gCu_JpilblL4ziajFk8NnolTvQqIqrdjPjdFmrdedwjplwwN0m54bI'
+  },
+  {
+    day: 9,
+    date: '07.06',
+    title: '告别甲米 & 返程',
+    activities: [
+      {
+        id: 'a9',
+        time: '12:25',
+        title: '团队集结 & 赴机',
+        location: '甲米国际机场 (KBV)',
+        description: '结束愉快的2026兰塔之旅，启程回国。',
+        type: 'itinerary',
+        icon: 'plane-takeoff'
+      }
+    ],
+    tags: ['返程', '交通']
   }
 ];
 

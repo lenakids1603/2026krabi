@@ -69,9 +69,6 @@ export default function Gallery() {
                     <button className="p-2 bg-white/20 backdrop-blur-md rounded-full text-white hover:bg-white/40 transition-all">
                         <Maximize size={16} />
                     </button>
-                    <div className="w-8 h-8 rounded-full border-2 border-white/50 overflow-hidden">
-                        <User2 size={32} className="text-white/40 -ml-1 -mt-1" />
-                    </div>
                 </div>
               </div>
             </div>

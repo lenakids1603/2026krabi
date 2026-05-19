@@ -1,6 +1,6 @@
 import { motion } from 'motion/react';
 import { TEAM_MEMBERS } from '@/src/constants';
-import { Phone, MessageSquare, Search, Filter, MedicalCross, Info, Users, Briefcase, UserCircle, PhoneCall, History } from 'lucide-react';
+import { Phone, MessageSquare, Search, Filter, Info, Users, Briefcase, UserCircle, PhoneCall, History } from 'lucide-react';
 import { cn } from '@/src/lib/utils';
 import { useState } from 'react';
 

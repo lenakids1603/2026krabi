@@ -93,28 +93,15 @@ export default function Itinerary() {
           </motion.div>
         ))}
 
-        {/* Future Days Summary (Day 4-10) */}
+        {/* Future Days Summary (Day 4-8) */}
         <motion.div 
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             className="grid grid-cols-1 md:grid-cols-2 gap-4"
         >
             <SummaryCard day="D4 - 07.01" icon={<Users size={20} />} title="兰塔岛跨海乔迁" desc="体验私家轮渡前往兰塔岛，开启海岛深度协作模式。" />
-            <SummaryCard day="D5-D7 - 兰塔周期" icon={<Brain size={20} />} title="战略研讨 & 自由探索" desc="上午进行半天战略会议，下午皮划艇或环岛骑行。" />
+            <SummaryCard day="D5-D8 - 兰塔周期" icon={<Brain size={20} />} title="战略研讨 & 自由探索" desc="战略会议与海岛骑行。享受这段纯粹的时光。" />
         </motion.div>
-         {/* Day 11 */}
-         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="relative">
-             <div className="absolute -left-10 w-8 h-8 rounded-full bg-outline-variant text-on-surface-variant flex items-center justify-center font-bold text-xs shadow-lg z-10">D11</div>
-             <div className="rounded-3xl p-6 bg-surface-container-low border border-transparent">
-                 <div className="flex justify-between items-start mb-4">
-                     <h3 className="font-heading font-bold text-xl">返程准备</h3>
-                     <div className="text-primary opacity-60"><PlaneTakeoff size={24} /></div>
-                 </div>
-                 <div className="flex items-center gap-3 text-on-surface-variant text-sm font-semibold">
-                     <Clock size={16} /> 09:00 - 14:00
-                 </div>
-             </div>
-         </motion.div>
       </div>
 
       <footer className="pt-12 text-center text-on-surface-variant/40 text-[10px] font-bold uppercase tracking-widest leading-loose">

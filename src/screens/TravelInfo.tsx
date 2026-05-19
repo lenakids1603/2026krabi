@@ -1,8 +1,24 @@
-import { motion } from 'motion/react';
-import { Plane, Hotel, Map, Phone, Calendar, ArrowRight, Navigation, MapPin, ExternalLink, ShieldCheck, HeartPulse } from 'lucide-react';
+import { motion, AnimatePresence } from 'motion/react';
+import { useState, useEffect } from 'react';
+import { Plane, Hotel, Map, Phone, Calendar, ArrowRight, Navigation, MapPin, ExternalLink, ShieldCheck, HeartPulse, Sparkles, Globe } from 'lucide-react';
 import { cn } from '@/src/lib/utils';
 
+const CHANGI_IMAGES = [
+  "https://images.unsplash.com/photo-1588668214407-6ea9a6d8c272?q=80&w=2070&auto=format&fit=crop",
+  "https://images.unsplash.com/photo-1542296332-2e4473faf563?q=80&w=2070&auto=format&fit=crop",
+  "https://images.unsplash.com/photo-1559599141-3816a0b7da11?q=80&w=2070&auto=format&fit=crop"
+];
+
 export default function TravelInfo() {
+  const [currentImgIndex, setCurrentImgIndex] = useState(0);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentImgIndex((prev) => (prev + 1) % CHANGI_IMAGES.length);
+    }, 5000);
+    return () => clearInterval(timer);
+  }, []);
+
   return (
     <div className="space-y-10 pb-12 overflow-x-hidden">
       <header className="space-y-3">
@@ -19,9 +35,148 @@ export default function TravelInfo() {
           <h3 className="font-heading font-bold text-2xl text-primary tracking-tight">往返航班</h3>
         </div>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <FlightCard type="去程 / Outbound" flight="CZ3063" date="2026-06-28" from="广州 (CAN)" to="甲米 (KBV)" departure="14:20" arrival="17:00" duration="3h 40m" color="border-primary" />
-          <FlightCard type="回程 / Inbound" flight="CZ3064" date="2026-07-08" from="甲米 (KBV)" to="广州 (CAN)" departure="18:10" arrival="23:00" duration="3h 50m" color="border-secondary" />
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <FlightCard 
+            type="去程 / Outbound"
+            route="杭州 (HGH) — 甲米 (KBV)"
+            totalDuration="13h 50m"
+            color="border-primary"
+            segments={[
+              {
+                flight: "TR189",
+                airline: "酷航 Scoot",
+                from: "杭州 HGH (T4)",
+                to: "新加坡 SIN (T1)",
+                departure: "23:00",
+                arrival: "04:05 (+1)",
+                date: "06-28",
+                duration: "5h 05m"
+              },
+              {
+                layover: "新加坡 (SIN) 中转 6h 55m",
+              },
+              {
+                flight: "TR682",
+                airline: "酷航 Scoot",
+                from: "新加坡 SIN (T1)",
+                to: "甲米 KBV",
+                departure: "11:00",
+                arrival: "11:50",
+                date: "06-29",
+                duration: "1h 50m"
+              }
+            ]}
+          />
+          <FlightCard 
+            type="回程 / Inbound"
+            route="甲米 (KBV) — 杭州 (HGH)"
+            totalDuration="8h 20m"
+            color="border-secondary"
+            segments={[
+              {
+                flight: "TR683",
+                airline: "酷航 Scoot",
+                from: "甲米 KBV",
+                to: "新加坡 SIN (T1)",
+                departure: "12:25",
+                arrival: "15:30",
+                date: "07-06",
+                duration: "2h 05m"
+              },
+              {
+                layover: "新加坡 (SIN) 中转 1h 00m",
+              },
+              {
+                flight: "TR188",
+                airline: "酷航 Scoot",
+                from: "新加坡 SIN (T1)",
+                to: "杭州 HGH (T4)",
+                departure: "16:30",
+                arrival: "21:45",
+                date: "07-06",
+                duration: "5h 15m"
+              }
+            ]}
+          />
+        </div>
+      </section>
+
+      {/* Changi Airport Section */}
+      <section className="space-y-6">
+        <div className="flex items-center gap-3 border-b border-outline-variant/30 pb-4">
+          <div className="p-2 bg-primary/10 rounded-xl text-primary">
+            <Sparkles size={24} />
+          </div>
+          <h3 className="font-heading font-bold text-2xl text-primary tracking-tight">樟宜机场中转指南</h3>
+        </div>
+        
+        <div className="bg-white rounded-[2.5rem] shadow-xl overflow-hidden border border-outline-variant/20 group">
+          <div className="grid grid-cols-1 md:grid-cols-2">
+            <div className="h-72 md:h-auto relative overflow-hidden bg-black">
+              <AnimatePresence mode="wait">
+                <motion.img 
+                  key={currentImgIndex}
+                  src={CHANGI_IMAGES[currentImgIndex]} 
+                  alt={`Changi Airport ${currentImgIndex}`} 
+                  initial={{ opacity: 0, scale: 1.1 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.95 }}
+                  transition={{ duration: 1.5, ease: "easeInOut" }}
+                  className="absolute inset-0 w-full h-full object-cover"
+                />
+              </AnimatePresence>
+              <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-2">
+                {CHANGI_IMAGES.map((_, idx) => (
+                  <div 
+                    key={idx} 
+                    className={cn(
+                      "w-2 h-2 rounded-full transition-all duration-500",
+                      currentImgIndex === idx ? "bg-white w-6" : "bg-white/40"
+                    )}
+                  />
+                ))}
+              </div>
+            </div>
+            <div className="p-8 md:p-12 flex flex-col justify-center space-y-5">
+              <h4 className="font-heading font-bold text-2xl text-on-surface">新加坡樟宜机场 (SIN)</h4>
+              <p className="text-on-surface-variant text-sm leading-relaxed font-medium">
+                全球最佳机场之一，樟宜机场不仅是中转站，更是一个微缩的生态景观园。
+              </p>
+              <ul className="space-y-3">
+                <li className="flex items-center gap-3 text-sm font-bold text-primary">
+                  <div className="w-2 h-2 rounded-full bg-primary/20 flex items-center justify-center"><div className="w-1 h-1 rounded-full bg-primary" /></div>
+                  星耀樟宜 (Jewel)：绝美瀑布，必打卡地点
+                </li>
+                <li className="flex items-center gap-3 text-sm font-bold text-primary">
+                  <div className="w-2 h-2 rounded-full bg-primary/20 flex items-center justify-center"><div className="w-1 h-1 rounded-full bg-primary" /></div>
+                  免税购物：从大牌到南洋特产应有尽有
+                </li>
+                <li className="flex items-center gap-3 text-sm font-bold text-primary">
+                  <div className="w-2 h-2 rounded-full bg-primary/20 flex items-center justify-center"><div className="w-1 h-1 rounded-full bg-primary" /></div>
+                  放松娱乐：梦幻花园、免费电影院
+                </li>
+              </ul>
+              <div className="pt-6 flex gap-4">
+                <a 
+                  href="https://www.changiairport.com/" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="flex-1 px-6 py-4 bg-primary text-white font-bold rounded-2xl hover:brightness-110 transition-all active:scale-95 text-xs uppercase tracking-widest shadow-lg shadow-primary/20 flex items-center justify-center gap-3"
+                >
+                  <Globe size={18} /> 官方网站
+                </a>
+                <a 
+                  href="https://www.changiairport.com/en/maps.html" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="w-14 h-14 border-2 border-primary text-primary rounded-2xl flex items-center justify-center hover:bg-primary hover:text-white transition-all active:scale-95 shadow-md flex-shrink-0"
+                  title="查看机场地图"
+                >
+                   <Navigation size={24} />
+                </a>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -54,59 +209,68 @@ export default function TravelInfo() {
         </div>
       </section>
 
-      {/* Emergency Section */}
-      <motion.section 
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="bg-tertiary-container/10 p-8 rounded-[2.5rem] border border-tertiary-container/30 shadow-[0px_4px_30px_rgba(255,184,119,0.1)] relative overflow-hidden group"
-      >
-        <div className="absolute -top-10 -right-10 text-tertiary/10 rotate-12 group-hover:rotate-0 transition-all duration-700">
-            <HeartPulse size={200} />
-        </div>
-        <div className="relative z-10">
-            <h3 className="font-heading font-bold text-2xl text-tertiary mb-6 flex items-center gap-3">
-                <ShieldCheck size={32} /> 紧急联络方式
-            </h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <ContactItem label="行政部/领队 (Jack)" phone="+86 138-0000-0000" />
-                <ContactItem label="当地导游 (Malee)" phone="+66 (0) 75-123-456" />
-            </div>
-        </div>
-      </motion.section>
     </div>
   );
 }
 
-function FlightCard({ type, flight, date, from, to, departure, arrival, duration, color }: any) {
+function FlightCard({ type, route, totalDuration, segments, color }: any) {
   return (
-    <div className={cn("bg-white p-8 rounded-[2rem] shadow-xl border-l-[12px] flex flex-col group hover:shadow-2xl transition-all duration-500", color)}>
-      <div className="flex justify-between items-start mb-10">
+    <div className={cn("bg-white p-6 rounded-[2.5rem] shadow-xl border-l-[12px] flex flex-col group hover:shadow-2xl transition-all duration-500", color)}>
+      <div className="flex justify-between items-start mb-6">
         <div>
           <span className="bg-surface-container opacity-90 px-4 py-1.5 rounded-full text-[10px] font-bold text-on-surface-variant uppercase tracking-widest border border-outline-variant/30">{type}</span>
-          <p className="font-heading font-bold text-2xl mt-4 tracking-tight group-hover:text-primary transition-colors">{flight}</p>
+          <h4 className="font-heading font-bold text-xl mt-3 tracking-tight group-hover:text-primary transition-colors">{route}</h4>
         </div>
-        <p className="text-on-surface-variant text-sm font-bold opacity-60 flex items-center gap-2">
-            <Calendar size={16} /> {date}
-        </p>
+        <div className="text-right">
+          <p className="text-[10px] font-bold text-outline-variant uppercase tracking-widest mb-1">总时长</p>
+          <p className="text-sm font-bold text-on-surface-variant">{totalDuration}</p>
+        </div>
       </div>
-      <div className="flex justify-between items-center relative py-4">
-        <div className="text-left z-10">
-          <p className="font-heading font-bold text-3xl text-on-surface mb-1">{departure}</p>
-          <p className="font-sans font-bold text-xs text-on-surface-variant opacity-60 uppercase tracking-widest">{from}</p>
-        </div>
-        
-        <div className="flex-grow flex flex-col items-center px-6 relative">
-          <span className="text-[10px] font-bold text-outline uppercase tracking-[0.2em] mb-3 bg-white px-3 relative z-10">{duration}</span>
-          <div className="w-full h-0.5 bg-outline-variant/30 absolute top-[2.4rem] left-0" />
-          <div className="p-2 bg-white rounded-full relative z-10 border border-outline-variant/30 shadow-md group-hover:scale-125 transition-all duration-500">
-             <Plane size={20} className={cn("rotate-90 fill-current", color.replace('border-', 'text-'))} />
-          </div>
-        </div>
-        
-        <div className="text-right z-10">
-          <p className="font-heading font-bold text-3xl text-on-surface mb-1">{arrival}</p>
-          <p className="font-sans font-bold text-xs text-on-surface-variant opacity-60 uppercase tracking-widest">{to}</p>
-        </div>
+
+      <div className="space-y-6 relative before:absolute before:left-[11px] before:top-4 before:bottom-4 before:w-0.5 before:bg-outline-variant/30">
+        {segments.map((segment: any, idx: number) => {
+          if (segment.layover) {
+            return (
+              <div key={idx} className="pl-10 relative py-1">
+                 <div className="absolute left-[8px] top-1/2 -translate-y-1/2 w-2 h-2 rounded-full bg-outline-variant" />
+                 <p className="text-[10px] font-bold text-on-surface-variant/60 uppercase tracking-widest flex items-center gap-2">
+                   {segment.layover}
+                 </p>
+              </div>
+            );
+          }
+
+          return (
+            <div key={idx} className="pl-10 relative">
+              {/* Dot */}
+              <div className={cn("absolute left-[6px] top-0 w-3 h-3 rounded-full border-2 border-white shadow-sm z-10", color.replace('border-', 'bg-'))} />
+              
+              <div className="flex justify-between items-start">
+                <div className="space-y-3 flex-1">
+                  <div className="flex items-center gap-3">
+                    <span className="text-xs font-bold text-primary">{segment.flight}</span>
+                    <span className="text-[10px] font-medium text-on-surface-variant/70">{segment.airline}</span>
+                  </div>
+                  
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <p className="text-lg font-heading font-bold text-on-surface">{segment.departure}</p>
+                      <p className="text-[10px] font-bold text-on-surface-variant/60 truncate uppercase">{segment.from}</p>
+                    </div>
+                    <div>
+                      <p className="text-lg font-heading font-bold text-on-surface">{segment.arrival}</p>
+                      <p className="text-[10px] font-bold text-on-surface-variant/60 truncate uppercase">{segment.to}</p>
+                    </div>
+                  </div>
+                </div>
+                <div className="text-right">
+                   <p className="text-[10px] font-bold text-on-surface-variant/60 mb-2 uppercase tracking-tight"><Calendar size={10} className="inline mr-1" /> {segment.date}</p>
+                   <p className="text-[10px] font-bold px-2 py-1 bg-surface-container rounded-lg text-outline">{segment.duration}</p>
+                </div>
+              </div>
+            </div>
+          );
+        })}
       </div>
     </div>
   );
