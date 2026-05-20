@@ -11,6 +11,7 @@ import krabiIslands from '@/src/assets/images/krabi_island_tour_1779244669020.pn
 import krabiResort from '@/src/assets/images/krabi_luxury_resort_1779244650872.png';
 import beachDinner from '@/src/assets/images/thai_beach_dinner_1779244685299.png';
 import krabiSunsetDinner from '@/src/assets/images/krabi_sunset_dinner_1779252115396.png';
+import changiWaterfall from '@/src/assets/images/changi_waterfall_one_1779244607786.png';
 
 export const NAV_ITEMS: NavItem[] = [
   { id: 'home', label: '首页', path: '/', icon: 'home' },
@@ -82,7 +83,7 @@ export const ITINERARY: DayItinerary[] = [
       }
     ],
     tags: ['机场集结', '红眼航班'],
-    image: ITINERARY_DAY1_BG
+    image: changiWaterfall
   },
   {
     day: 2,

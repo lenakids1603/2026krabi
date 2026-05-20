@@ -11,8 +11,7 @@ export default function Home() {
       <motion.section 
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="relative h-[420px] rounded-3xl overflow-hidden shadow-2xl"
-        style={{ height: '420px' }}
+        className="relative w-full h-[65vh] min-h-[500px] rounded-3xl overflow-hidden shadow-2xl"
       >
         <img 
           src={heroImg} 
