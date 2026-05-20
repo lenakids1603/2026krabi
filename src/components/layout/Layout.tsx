@@ -1,9 +1,8 @@
 import { useState, ReactNode } from 'react';
-import { NavItem } from '@/src/types';
-import { NAV_ITEMS } from '@/src/constants';
+import { NAV_ITEMS } from '../../data/navItems';
 import { Link, useLocation } from 'react-router-dom';
 import { Menu, X, ChevronRight } from 'lucide-react';
-import { cn } from '@/src/lib/utils';
+import { cn } from '../../lib/utils';
 import * as Icons from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 

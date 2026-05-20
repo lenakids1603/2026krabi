@@ -1,30 +1,34 @@
+import React from 'react';
 import { motion } from 'motion/react';
-import { RESTAURANTS } from '@/src/constants';
-import { Star, MapPin, Search, Utensils, Coffee, Pizza, Navigation, ShoppingCart, Cross, Banknote, Truck, ArrowRight, Heart } from 'lucide-react';
-import { cn } from '@/src/lib/utils';
+import { RESTAURANTS } from '../data/restaurants';
+import { Star, MapPin, Utensils, ShoppingCart, Banknote, Truck, ArrowRight, Heart } from 'lucide-react';
+import { cn } from '../lib/utils';
+import { useState } from 'react';
 
 export default function Dining() {
+  const [activeTab, setActiveTab] = useState<'全部' | 'Seafood' | 'Street Food' | 'Coffee'>('全部');
+
   return (
-    <div className="space-y-10 pb-12">
+    <div className="space-y-10 pb-12 text-left">
       <header className="space-y-3">
         <motion.h2 
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            className="font-heading font-bold text-3xl text-on-surface"
+            className="font-heading font-bold text-3xl text-on-surface text-left"
         >
             餐饮与便利店
         </motion.h2>
-        <p className="text-on-surface-variant font-medium text-sm leading-relaxed max-w-lg">
+        <p className="text-on-surface-variant font-medium text-sm leading-relaxed max-w-lg text-left">
             为您精选克拉比及兰塔岛最地道的海鲜料理与周边生活指南。
         </p>
       </header>
 
       {/* Filter Chips */}
       <div className="flex gap-3 overflow-x-auto hide-scrollbar py-2 -mx-4 px-4">
-        <FilterChip icon={<Utensils size={18} />} label="全部" active />
-        <FilterChip label="Seafood" />
-        <FilterChip label="Street Food" />
-        <FilterChip label="Coffee" />
+        <FilterChip icon={<Utensils size={18} />} label="全部" active={activeTab === '全部'} onClick={() => setActiveTab('全部')} />
+        <FilterChip label="Seafood" active={activeTab === 'Seafood'} onClick={() => setActiveTab('Seafood')} />
+        <FilterChip label="Street Food" active={activeTab === 'Street Food'} onClick={() => setActiveTab('Street Food')} />
+        <FilterChip label="Coffee" active={activeTab === 'Coffee'} onClick={() => setActiveTab('Coffee')} />
       </div>
 
       {/* Featured Restaurant */}
@@ -39,20 +43,21 @@ export default function Dining() {
                 src={RESTAURANTS[0].image} 
                 alt="Featured Restaurant" 
                 className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110" 
+                referrerPolicy="no-referrer"
             />
           </div>
           <div className="p-8 space-y-4">
             <div className="flex justify-between items-start">
               <div>
                 <span className="bg-secondary text-white px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest mb-3 inline-block shadow-md">Top Rated</span>
-                <h3 className="font-heading font-bold text-2xl text-on-surface tracking-tight">{RESTAURANTS[0].name}</h3>
+                <h3 className="font-heading font-bold text-2xl text-on-surface tracking-tight text-left">{RESTAURANTS[0].name}</h3>
               </div>
               <div className="flex items-center text-tertiary font-bold gap-1 bg-tertiary/10 px-3 py-1.5 rounded-2xl">
                 <Star size={18} className="fill-tertiary" />
                 <span className="text-lg">4.9</span>
               </div>
             </div>
-            <p className="text-on-surface-variant font-medium text-sm leading-relaxed opacity-90 line-clamp-2">
+            <p className="text-on-surface-variant font-medium text-sm leading-relaxed opacity-90 line-clamp-2 text-left">
                 {RESTAURANTS[0].description}
             </p>
             <div className="flex gap-3 flex-wrap pt-2">
@@ -86,7 +91,7 @@ export default function Dining() {
       {/* Convenience Info */}
       <section className="space-y-6">
         <div className="flex justify-between items-end border-b border-outline-variant/30 pb-4">
-            <h3 className="font-heading font-bold text-2xl text-on-surface flex items-center gap-3">
+            <h3 className="font-heading font-bold text-2xl text-on-surface flex items-center gap-3 text-left">
                 <MapPin className="text-primary" size={28} /> 生活便利指南
             </h3>
             <a href="#" className="text-primary text-xs font-bold flex items-center gap-1 uppercase tracking-widest hover:underline transition-all group">
@@ -99,25 +104,26 @@ export default function Dining() {
                     src="https://lh3.googleusercontent.com/aida-public/AB6AXuB3KXiD_QBn4r8EfKWZ6BfWJYnWHfwgPQSawwyGcwTRh_rEtM8AH5Med1oMFrMsPs3yYP6GfKXkxI_EHBlZpQotPLFNP5RrdkBmglzgaLZymK84Egbr-moktXWc4kOCM0Uyv4A8qW06G5UCfKevdSIMNFfexlIlAyihF-7hg6yIDfGNuCt8xOMx6xFAJnboNa-TgPYArHMyXibttdm0Ms61mRjnzQyQRth3koslxqZYNQRAM9MnP1j02M7YG-uviCO4MSBaA1uuYb0" 
                     alt="Map Info" 
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-[2000ms]"
+                    referrerPolicy="no-referrer"
                 />
                 <div className="absolute bottom-6 left-6 right-6 bg-white/95 backdrop-blur-md p-6 rounded-[2rem] shadow-2xl flex items-center justify-between border border-white/50">
                     <div className="flex items-center gap-4">
                         <div className="w-14 h-14 rounded-2xl bg-brand-coral/10 flex items-center justify-center text-brand-coral">
                             <ShoppingCart size={28} />
                         </div>
-                        <div>
+                        <div className="text-left">
                             <p className="font-heading font-bold text-on-surface text-lg">最近的 7-Eleven</p>
                             <p className="text-on-surface-variant text-xs font-bold opacity-60">步行 5 分钟 (400m)</p>
                         </div>
                     </div>
-                    <button className="bg-primary text-white px-8 py-3 rounded-2xl font-bold hover:shadow-lg transition-all active:scale-95 text-sm uppercase tracking-widest">
+                    <button className="bg-primary text-white px-8 py-3 rounded-2xl font-bold hover:shadow-lg transition-all active:scale-95 text-sm uppercase tracking-widest cursor-pointer">
                         导航
                     </button>
                 </div>
             </div>
             
             <div className="space-y-4">
-                <ConvenienceCard icon={<Cross size={20} className="text-primary fill-primary/20" />} title="药店 & 医疗" desc="Krabi Pharmacy (08:00 - 22:00)" note="提供防蚊液、肠胃药等" color="border-primary" />
+                <ConvenienceCard icon={<Star size={20} className="text-primary fill-primary/20" />} title="药店 & 医疗" desc="Krabi Pharmacy (08:00 - 22:00)" note="提供防蚊液、肠胃药等" color="border-primary" />
                 <ConvenienceCard icon={<Banknote size={20} className="text-secondary" />} title="ATM & 换汇" desc="SCB Bank ATM (24h)" note="出门右转 200m，支持银联" color="border-secondary" />
                 <ConvenienceCard icon={<Truck size={20} className="text-tertiary" />} title="洗衣服务" desc="Lanta Express Wash" note="次日达，50泰铢/公斤" color="border-tertiary" />
             </div>
@@ -127,12 +133,22 @@ export default function Dining() {
   );
 }
 
-function FilterChip({ icon, label, active }: any) {
+interface FilterChipProps {
+  icon?: React.ReactNode;
+  label: string;
+  active: boolean;
+  onClick?: () => void;
+}
+
+function FilterChip({ icon, label, active, onClick }: FilterChipProps) {
   return (
-    <button className={cn(
-      "flex items-center gap-2 px-8 py-3 rounded-full text-sm font-bold transition-all duration-300 shadow-sm active:scale-95 shrink-0 uppercase tracking-widest",
-      active ? "bg-primary text-white shadow-primary/20" : "bg-white text-on-surface-variant hover:bg-surface-container border border-outline-variant/30"
-    )}>
+    <button 
+      onClick={onClick}
+      className={cn(
+        "flex items-center gap-2 px-8 py-3 rounded-full text-sm font-bold transition-all duration-300 shadow-sm active:scale-95 shrink-0 uppercase tracking-widest cursor-pointer",
+        active ? "bg-primary text-white shadow-primary/20" : "bg-white text-on-surface-variant hover:bg-surface-container border border-outline-variant/30"
+      )}
+    >
       {icon} {label}
     </button>
   );
@@ -142,13 +158,13 @@ function SmallFoodCard({ img, title, dist, cat }: any) {
   return (
     <div className="bg-white rounded-[2rem] shadow-sm border border-outline-variant/30 overflow-hidden group hover:shadow-xl transition-all duration-500 translate-y-0 hover:translate-y-[-8px]">
         <div className="aspect-[4/3] relative overflow-hidden">
-            <img src={img} alt={title} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
+            <img src={img} alt={title} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" referrerPolicy="no-referrer" />
             <div className="absolute top-4 left-4 glass-effect px-3 py-1.5 rounded-xl text-[10px] text-primary font-bold shadow-lg uppercase tracking-widest border border-white/50">
                 {dist}
             </div>
         </div>
         <div className="p-6">
-            <h4 className="font-heading font-bold text-base text-on-surface mb-2">{title}</h4>
+            <h4 className="font-heading font-bold text-base text-on-surface mb-2 text-left">{title}</h4>
             <div className="flex gap-2">
                 <span className="bg-secondary/10 text-secondary px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest">{cat}</span>
             </div>
@@ -159,7 +175,7 @@ function SmallFoodCard({ img, title, dist, cat }: any) {
 
 function ConvenienceCard({ icon, title, desc, note, color }: any) {
   return (
-    <div className={cn("bg-surface-container rounded-3xl p-6 border-l-8 transition-all hover:bg-surface-container-high cursor-pointer shadow-sm", color)}>
+    <div className={cn("bg-surface-container rounded-3xl p-6 border-l-8 transition-all hover:bg-surface-container-high cursor-pointer shadow-sm text-left", color)}>
         <div className="flex items-center gap-3 mb-3">
             {icon}
             <h4 className="font-heading font-bold text-sm text-on-surface uppercase tracking-wide">{title}</h4>
