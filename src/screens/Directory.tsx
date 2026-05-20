@@ -2,7 +2,7 @@ import React from 'react';
 import { motion } from 'motion/react';
 import { TEAM_MEMBERS } from '../data/teamMembers';
 import { EMERGENCY_CONTACTS } from '../data/emergencyContacts';
-import { Search, Filter, History, Activity, Phone, MessageSquare, Briefcase, MapPin, Shield } from 'lucide-react';
+import { Search, Filter, History, Activity, Phone, MessageSquare, Briefcase, MapPin, Shield, Landmark } from 'lucide-react';
 import { cn } from '../lib/utils';
 import { useState } from 'react';
 import { MemberCard } from '../components/directory/MemberCard';
@@ -16,21 +16,21 @@ export default function Directory() {
     // Match group filter
     if (activeFilter !== 'all' && m.group !== activeFilter) return false;
 
-    // Match search query (姓名, 角色, 分组)
+    // Match search query (姓名, 部门)
     const query = search.toLowerCase().trim();
     if (!query) return true;
 
     return (
       m.name.toLowerCase().includes(query) || 
-      m.role.toLowerCase().includes(query) ||
       m.group.toLowerCase().includes(query) ||
       (m.nameEn && m.nameEn.toLowerCase().includes(query)) ||
+      (m.role && m.role.toLowerCase().includes(query)) ||
       (m.roleEn && m.roleEn.toLowerCase().includes(query))
     );
   });
 
-  // Unique groups dynamically harvested or explicitly defined for clear sorting
-  const groups = ['直播组', '运营组', '客服组', '其他'];
+  // Unique groups custom sorted by headcount descending, with BOSS and 亲友团 at the very end
+  const groups = ['直播组', '运营', '客服', '行政', '开发', '财务', '采购', 'BOSS', '亲友团'];
 
   const countByGroup = (group: string) => {
     return TEAM_MEMBERS.filter(m => m.group === group).length;
@@ -45,7 +45,7 @@ export default function Directory() {
             animate={{ opacity: 1, y: 0 }} 
             className="font-heading font-bold text-3xl text-primary tracking-tight text-left"
           >
-            团队通讯录
+            泰国旅游号码通讯录
           </motion.h2>
           <p className="text-on-surface-variant font-medium text-xs leading-relaxed max-w-sm mt-1 opacity-60 text-left">
             轻松跨国呼叫随队协调人员 & 24小时突发事件应急求助
@@ -69,7 +69,7 @@ export default function Directory() {
           type="text" 
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          placeholder="以下列英文缩写姓名（如 ZSH）、中文姓名或部门分组进行搜索..."
+          placeholder="按姓名或部门（如直播组、运营）进行快速搜索..."
           className="w-full h-16 pl-14 pr-6 bg-white border border-outline-variant/50 rounded-[1.5rem] shadow-sm focus:ring-4 focus:ring-primary/10 focus:border-primary outline-none transition-all font-sans font-bold text-sm tracking-tight placeholder:opacity-40 text-left"
         />
         <div className="absolute inset-y-3 right-3">
@@ -137,9 +137,7 @@ export default function Directory() {
             >
               <div className="flex items-start gap-4 text-left">
                 <div className="p-3.5 bg-red-500/10 rounded-2xl text-red-600 flex-shrink-0">
-                  {contact.group === '领队' && <Briefcase size={22} />}
-                  {contact.group === '酒店' && <MapPin size={22} />}
-                  {contact.group === '医院' && <Activity size={22} />}
+                  {contact.group === '中国大使馆' && <Landmark size={22} />}
                   {contact.group === '旅游警察' && <Shield size={22} />}
                 </div>
                 <div className="space-y-1 text-left flex-1">

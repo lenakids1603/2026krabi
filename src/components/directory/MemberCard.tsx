@@ -1,8 +1,9 @@
 import React from 'react';
 import { motion } from 'motion/react';
-import { Phone, MessageSquare, Video, Compass, Headphones, Cpu } from 'lucide-react';
+import { Phone, MessageSquare, Video, Compass, Headphones, Cpu, Shield, Briefcase, Package, Users } from 'lucide-react';
 import { TeamMember } from '../../types';
 import { cn } from '../../lib/utils';
+import { SymbolicAvatar } from './SymbolicAvatar';
 
 interface MemberCardProps {
   member: TeamMember;
@@ -14,25 +15,60 @@ export function MemberCard({ member, index }: MemberCardProps): React.JSX.Elemen
   // Group color and icon mapping
   const getGroupBadge = (group: string) => {
     switch (group) {
+      case 'BOSS':
+        return {
+          bg: 'bg-[#1C2541]/10 text-[#1C2541] border-[#1C2541]/20',
+          icon: <Shield size={12} className="text-[#1C2541]" />,
+          accentText: 'text-[#1C2541]'
+        };
       case '直播组':
         return {
-          bg: 'bg-[#E76F51]/10 text-[#E76F51] border-[#E76F51]/20',
-          icon: <Video size={12} className="text-[#E76F51]" />,
-          accentText: 'text-[#E76F51]'
+          bg: 'bg-[#D90429]/10 text-[#D90429] border-[#D90429]/20',
+          icon: <Video size={12} className="text-[#D90429]" />,
+          accentText: 'text-[#D90429]'
         };
-      case '运营组':
+      case '运营':
         return {
           bg: 'bg-[#2A9D8F]/10 text-[#218276] border-[#2A9D8F]/20',
           icon: <Compass size={12} className="text-[#218276]" />,
           accentText: 'text-[#218276]'
         };
-      case '客服组':
+      case '客服':
         return {
           bg: 'bg-[#457B9D]/10 text-[#2A5270] border-[#457B9D]/20',
           icon: <Headphones size={12} className="text-[#2A5270]" />,
           accentText: 'text-[#2A5270]'
         };
-      case '其他':
+      case '开发':
+        return {
+          bg: 'bg-[#0077B6]/10 text-[#0077B6] border-[#0077B6]/20',
+          icon: <Cpu size={12} className="text-[#0077B6]" />,
+          accentText: 'text-[#0077B6]'
+        };
+      case '行政':
+        return {
+          bg: 'bg-[#F77F00]/10 text-[#D62828] border-[#F77F00]/20',
+          icon: <Briefcase size={12} className="text-[#D62828]" />,
+          accentText: 'text-[#D62828]'
+        };
+      case '财务':
+        return {
+          bg: 'bg-[#D4AF37]/10 text-[#AA7C11] border-[#D4AF37]/20',
+          icon: <Shield size={12} className="text-[#AA7C11]" />,
+          accentText: 'text-[#AA7C11]'
+        };
+      case '采购':
+        return {
+          bg: 'bg-[#588157]/10 text-[#344E41] border-[#588157]/20',
+          icon: <Package size={12} className="text-[#344E41]" />,
+          accentText: 'text-[#344E41]'
+        };
+      case '亲友团':
+        return {
+          bg: 'bg-[#F72585]/10 text-[#7209B7] border-[#F72585]/20',
+          icon: <Users size={12} className="text-[#7209B7]" />,
+          accentText: 'text-[#7209B7]'
+        };
       default:
         return {
           bg: 'bg-secondary/10 text-secondary border-secondary/20',
@@ -43,38 +79,7 @@ export function MemberCard({ member, index }: MemberCardProps): React.JSX.Elemen
   };
 
   const badge = getGroupBadge(member.group);
-
-  // Initials mapping for clean minimal displaying
-  const INITIALS_MAP: Record<string, string> = {
-    '于静波': 'YJB',
-    '王玉蓉': 'WYR',
-    '张少华': 'ZSH',
-    '孙梦祥': 'SMX',
-    '包志望': 'BZW',
-    '朱隆隆': 'ZLL',
-    '董颖': 'DY',
-    '王亚菲': 'WYF',
-    '饶盼盼': 'RPP',
-    '徐菲菲': 'XFF',
-    '朱安若': 'ZAR',
-    '张雨婷': 'ZYT',
-    '张婷': 'ZT',
-    '陈清俊': 'CQJ',
-    '庞美玲': 'PML',
-    '郭晓莹': 'GXY',
-    '胡小雨': 'HXY',
-    '詹海璇': 'ZHX',
-    '廖梦洁': 'LMJ',
-    '吴宪华': 'WXH',
-    '杨言志': 'YYZ',
-    '林琪': 'LQ',
-    '王志娟': 'WZJ',
-    '王诺': 'WN',
-    '徐舒言': 'XSY',
-    '陈妍': 'CY'
-  };
-
-  const displayName = INITIALS_MAP[member.name] || member.name;
+  const displayName = member.name;
 
   return (
     <motion.div 
@@ -84,12 +89,12 @@ export function MemberCard({ member, index }: MemberCardProps): React.JSX.Elemen
       className="group bg-white p-6 rounded-[2rem] shadow-sm border border-outline-variant/30 flex flex-col md:flex-row md:items-center gap-6 hover:shadow-xl hover:translate-y-[-4px] transition-all duration-300"
     >
       <div className="flex items-center gap-5 flex-1">
-        <div className="relative">
-          <img 
-            src={member.avatar} 
-            alt={displayName} 
-            className="w-20 h-20 rounded-full object-cover border-4 border-primary-container/20 group-hover:border-primary-container transition-all bg-surface-container-low" 
-            referrerPolicy="no-referrer"
+        <div className="relative shrink-0">
+          <SymbolicAvatar 
+            gender={member.gender} 
+            group={member.group} 
+            name={member.name} 
+            className="w-20 h-20 rounded-full border-2 border-primary-container/20 group-hover:border-primary-container hover:scale-105 transition-all duration-300" 
           />
           <div className="absolute bottom-1 right-1 w-5 h-5 bg-[#2A9D8F] rounded-full border-2 border-white" />
         </div>

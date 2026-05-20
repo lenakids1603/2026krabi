@@ -29,12 +29,13 @@ export interface TeamMember {
   id: string;
   name: string;
   nameEn?: string;
-  role: string;
+  role?: string;
   roleEn?: string;
   group: string;
   phoneDisplay: string;
   phoneRaw: string;
   avatar: string;
+  gender?: '男' | '女';
 }
 
 export interface Attraction {
@@ -46,6 +47,8 @@ export interface Attraction {
   image: string;
   packingList: string[];
   type: 'water' | 'nature' | 'culture';
+  category?: 'unified' | 'suggested';
+  region?: '甲米' | '兰塔';
 }
 
 export interface Restaurant {
