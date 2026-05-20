@@ -49,6 +49,12 @@ export interface Attraction {
   type: 'water' | 'nature' | 'culture';
   category?: 'unified' | 'suggested';
   region?: '甲米' | '兰塔';
+  schedule?: string;
+  meetingPoint?: string;
+  effort?: '轻松' | '中等' | '较强' | string;
+  cost?: string;
+  warnings?: string[];
+  mapsUrl?: string;
 }
 
 export interface Restaurant {
