@@ -1,6 +1,6 @@
 import { motion } from 'motion/react';
 import { TEAM_MEMBERS } from '@/src/constants';
-import { Phone, MessageSquare, Search, Filter, Info, Users, Briefcase, UserCircle, PhoneCall, History } from 'lucide-react';
+import { Phone, MessageSquare, Search, Filter, Info, Users, Briefcase, UserCircle, PhoneCall, History, Activity } from 'lucide-react';
 import { cn } from '@/src/lib/utils';
 import { useState } from 'react';
 
@@ -98,20 +98,20 @@ export default function Directory() {
       {/* Emergency Section */}
       <motion.div 
         whileHover={{ scale: 1.02 }}
-        className="mt-12 p-8 bg-error-container text-on-error-container rounded-[2.5rem] flex items-center gap-6 shadow-xl border border-error/20"
+        className="mt-12 p-6 md:p-8 bg-error-container text-on-error-container rounded-[2.5rem] flex flex-col md:flex-row items-center gap-6 shadow-xl border border-error/20"
       >
-        <div className="w-20 h-20 rounded-full bg-white flex items-center justify-center text-error shadow-2xl relative animate-pulse">
-            <span className="material-symbols-outlined text-4xl font-bold">medical_services</span>
+        <div className="w-20 h-20 rounded-full bg-white flex items-center justify-center text-error shadow-2xl relative animate-pulse flex-shrink-0">
+            <Activity size={40} strokeWidth={3} />
         </div>
-        <div>
+        <div className="flex-1 text-center md:text-left">
           <h4 className="font-heading font-bold text-xl mb-1 tracking-tight">紧急医疗支援 / Emergency Medical</h4>
-          <p className="text-xs font-bold opacity-80 uppercase tracking-widest mb-3">甲米曼谷医院 (Bangkok Hospital Krabi) - 24小时救援</p>
-          <div className="flex items-baseline gap-2">
-              <span className="text-2xl font-sans font-black flex items-center gap-2">
+          <p className="text-[10px] font-bold opacity-80 uppercase tracking-widest mb-3">甲米曼谷医院 (Bangkok Hospital Krabi) - 24小时救援</p>
+          <div className="flex flex-col sm:flex-row items-center md:items-baseline justify-center md:justify-start gap-2 md:gap-4">
+              <span className="text-2xl font-sans font-black flex items-center gap-2 whitespace-nowrap">
                  <PhoneCall size={20} /> 1719
               </span>
-              <span className="text-lg opacity-60">或</span>
-              <span className="text-xl font-bold font-sans">+66 75 626 777</span>
+              <span className="text-lg opacity-60 hidden sm:inline">或</span>
+              <span className="text-xl font-bold font-sans whitespace-nowrap">+66 75 626 777</span>
           </div>
         </div>
       </motion.div>
