@@ -69,7 +69,7 @@ export default function Directory() {
           type="text" 
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          placeholder="按照姓名、角色、或部门分组(直播组/运营组/客服组/其他)进行搜索..."
+          placeholder="以下列英文缩写姓名（如 ZSH）、中文姓名或部门分组进行搜索..."
           className="w-full h-16 pl-14 pr-6 bg-white border border-outline-variant/50 rounded-[1.5rem] shadow-sm focus:ring-4 focus:ring-primary/10 focus:border-primary outline-none transition-all font-sans font-bold text-sm tracking-tight placeholder:opacity-40 text-left"
         />
         <div className="absolute inset-y-3 right-3">

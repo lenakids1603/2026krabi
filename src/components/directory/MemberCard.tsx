@@ -44,6 +44,38 @@ export function MemberCard({ member, index }: MemberCardProps): React.JSX.Elemen
 
   const badge = getGroupBadge(member.group);
 
+  // Initials mapping for clean minimal displaying
+  const INITIALS_MAP: Record<string, string> = {
+    '于静波': 'YJB',
+    '王玉蓉': 'WYR',
+    '张少华': 'ZSH',
+    '孙梦祥': 'SMX',
+    '包志望': 'BZW',
+    '朱隆隆': 'ZLL',
+    '董颖': 'DY',
+    '王亚菲': 'WYF',
+    '饶盼盼': 'RPP',
+    '徐菲菲': 'XFF',
+    '朱安若': 'ZAR',
+    '张雨婷': 'ZYT',
+    '张婷': 'ZT',
+    '陈清俊': 'CQJ',
+    '庞美玲': 'PML',
+    '郭晓莹': 'GXY',
+    '胡小雨': 'HXY',
+    '詹海璇': 'ZHX',
+    '廖梦洁': 'LMJ',
+    '吴宪华': 'WXH',
+    '杨言志': 'YYZ',
+    '林琪': 'LQ',
+    '王志娟': 'WZJ',
+    '王诺': 'WN',
+    '徐舒言': 'XSY',
+    '陈妍': 'CY'
+  };
+
+  const displayName = INITIALS_MAP[member.name] || member.name;
+
   return (
     <motion.div 
       initial={{ opacity: 0, x: -10 }}
@@ -55,25 +87,19 @@ export function MemberCard({ member, index }: MemberCardProps): React.JSX.Elemen
         <div className="relative">
           <img 
             src={member.avatar} 
-            alt={member.name} 
+            alt={displayName} 
             className="w-20 h-20 rounded-full object-cover border-4 border-primary-container/20 group-hover:border-primary-container transition-all bg-surface-container-low" 
             referrerPolicy="no-referrer"
           />
           <div className="absolute bottom-1 right-1 w-5 h-5 bg-[#2A9D8F] rounded-full border-2 border-white" />
         </div>
         <div className="space-y-1.5 text-left">
-          <h3 className="font-heading font-bold text-xl text-on-surface flex items-center gap-2 text-left">
-            {member.name} 
-            {member.nameEn && (
-              <span className="text-sm font-sans font-medium text-on-surface-variant opacity-60 italic">({member.nameEn})</span>
-            )}
+          <h3 className="font-heading font-extrabold text-2xl text-on-surface text-left">
+            {displayName} 
           </h3>
           <div className="flex flex-wrap items-center gap-2">
             <span className={cn("px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider border flex items-center gap-1.5", badge.bg)}>
               {badge.icon} {member.group}
-            </span>
-            <span className="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest opacity-60">
-              {member.role} {member.roleEn ? `/ ${member.roleEn}` : ''}
             </span>
           </div>
         </div>

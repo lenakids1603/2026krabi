@@ -14,10 +14,12 @@ import Weather from './screens/Weather';
 import Directory from './screens/Directory';
 import Gallery from './screens/Gallery';
 import Notes from './screens/Notes';
+import ScrollToTop from './components/layout/ScrollToTop';
 
 export default function App() {
   return (
     <Router>
+      <ScrollToTop />
       <Layout>
         <Routes>
           <Route path="/" element={<Home />} />
