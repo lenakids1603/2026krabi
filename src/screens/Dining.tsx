@@ -1,187 +1,311 @@
-import React from 'react';
-import { motion } from 'motion/react';
-import { RESTAURANTS } from '../data/restaurants';
-import { Star, MapPin, Utensils, ShoppingCart, Banknote, Truck, ArrowRight, Heart } from 'lucide-react';
+import React, { useState } from 'react';
+import { motion, AnimatePresence } from 'motion/react';
+import { 
+  Utensils, 
+  ShoppingCart, 
+  Pill, 
+  CreditCard, 
+  RefreshCw, 
+  Bike, 
+  Compass, 
+  MapPin, 
+  ArrowUpRight 
+} from 'lucide-react';
 import { cn } from '../lib/utils';
-import { useState } from 'react';
+
+// Define the region type
+type Region = 'krabi' | 'lanta';
+
+interface ServiceItem {
+  id: string;
+  title: string;
+  icon: React.ElementType;
+  iconBg: string;
+  iconColor: string;
+  shadowColor: string;
+  queries: {
+    krabi: {
+      desc: string;
+      query: string;
+    };
+    lanta: {
+      desc: string;
+      query: string;
+    };
+  };
+}
+
+const SERVICES_DATA: ServiceItem[] = [
+  {
+    id: 'restaurants',
+    title: '特色餐厅',
+    icon: Utensils,
+    iconBg: 'bg-sky-50',
+    iconColor: 'text-sky-600',
+    shadowColor: 'hover:shadow-sky-100/50',
+    queries: {
+      krabi: {
+        desc: '寻找奥南海滩周边的海鲜大排档、地道泰餐、绝美海景餐厅及网红咖啡馆。',
+        query: 'restaurants near Ao Nang Beach Krabi'
+      },
+      lanta: {
+        desc: '寻找兰塔老镇悬景悬空木质吊脚楼海鲜、西海岸绝美日落落日酒吧与椰林咖啡。',
+        query: 'restaurants near Koh Lanta Krabi'
+      }
+    }
+  },
+  {
+    id: 'convenience',
+    title: '便利商店',
+    icon: ShoppingCart,
+    iconBg: 'bg-emerald-50',
+    iconColor: 'text-emerald-600',
+    shadowColor: 'hover:shadow-emerald-100/50',
+    queries: {
+      krabi: {
+        desc: '搜寻奥南主街上最近的 7-Eleven、全家(FamilyMart)或本土连锁便利商店。',
+        query: '7-Eleven convenience store near Ao Nang Beach Krabi'
+      },
+      lanta: {
+        desc: '搜寻兰塔岛 Saladan 镇及西海岸主干道的 7-Eleven 等日常物资补给点。',
+        query: '7-Eleven convenience store near Koh Lanta Krabi'
+      }
+    }
+  },
+  {
+    id: 'pharmacy',
+    title: '药店药房',
+    icon: Pill,
+    iconBg: 'bg-rose-50',
+    iconColor: 'text-rose-600',
+    shadowColor: 'hover:shadow-rose-100/50',
+    queries: {
+      krabi: {
+        desc: '快速定位奥南海滩沿街配药局，备齐防蚊液、肠胃药、晕船药及晒后修复润肤露。',
+        query: 'pharmacy near Ao Nang Beach Krabi'
+      },
+      lanta: {
+        desc: '搜寻兰塔岛各沙滩周边的本土药局与诊所，保障海岛浮潜嬉水时的健康。',
+        query: 'pharmacy near Koh Lanta Krabi'
+      }
+    }
+  },
+  {
+    id: 'atm',
+    title: 'ATM 取款',
+    icon: CreditCard,
+    iconBg: 'bg-amber-50',
+    iconColor: 'text-amber-600',
+    shadowColor: 'hover:shadow-amber-100/50',
+    queries: {
+      krabi: {
+        desc: '查找奥南周边的 24 小时自动柜员机，支持银联(UnionPay)、VISA 或 Master 卡取现。',
+        query: 'atm and bank near Ao Nang Beach Krabi'
+      },
+      lanta: {
+        desc: '搜寻兰塔岛主干道的 SCB、KBANK 自动柜员提现点，方便随时兑换纸币。',
+        query: 'atm and bank near Koh Lanta Krabi'
+      }
+    }
+  },
+  {
+    id: 'exchange',
+    title: '货币兑换',
+    icon: RefreshCw,
+    iconBg: 'bg-indigo-50',
+    iconColor: 'text-indigo-600',
+    shadowColor: 'hover:shadow-indigo-100/50',
+    queries: {
+      krabi: {
+        desc: '查找奥南海滩沿路汇率优良的绿色/黄色兑换亭、正规银行外币换汇服务点。',
+        query: 'currency exchange near Ao Nang Beach Krabi'
+      },
+      lanta: {
+        desc: '查找兰塔岛 Saladan 码头、老镇周边的官方批准多国法定外币兑换网点。',
+        query: 'currency exchange near Koh Lanta Krabi'
+      }
+    }
+  },
+  {
+    id: 'motorbike_rental',
+    title: '租摩托车',
+    icon: Bike,
+    iconBg: 'bg-teal-50',
+    iconColor: 'text-teal-600',
+    shadowColor: 'hover:shadow-teal-100/50',
+    queries: {
+      krabi: {
+        desc: '搜寻奥南周边的摩托车和踏板车租赁行，便捷划算地开启本地环游。',
+        query: 'motorbike rental scooter near Ao Nang Beach Krabi'
+      },
+      lanta: {
+        desc: '搜寻兰塔岛主干道及 Saladan 镇的优质摩托车租赁，开启海岛御风骑行。',
+        query: 'scooter motorbike rental near Koh Lanta Krabi'
+      }
+    }
+  }
+];
 
 export default function Dining() {
-  const [activeTab, setActiveTab] = useState<'全部' | 'Seafood' | 'Street Food' | 'Coffee'>('全部');
+  const [activeRegion, setActiveRegion] = useState<Region>('krabi');
+
+  const handleOpenMap = (query: string) => {
+    const encodedQuery = encodeURIComponent(query);
+    const googleMapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodedQuery}`;
+    window.open(googleMapsUrl, '_blank', 'noopener,noreferrer');
+  };
 
   return (
-    <div className="space-y-10 pb-12 text-left">
+    <div className="space-y-8 pb-16 text-left">
+      {/* Dynamic Header */}
       <header className="space-y-3">
+        <div className="flex items-center gap-2">
+          <span className="bg-primary/5 text-primary border border-primary/20 px-3 py-1 rounded-full text-[10px] font-bold tracking-widest uppercase">
+            🗺️ LBS 地理信息助手
+          </span>
+        </div>
         <motion.h2 
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="font-heading font-bold text-3xl text-on-surface text-left"
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="font-heading font-black text-3xl text-on-surface tracking-tight"
         >
-            餐饮与便利店
+          周边查询
         </motion.h2>
-        <p className="text-on-surface-variant font-medium text-sm leading-relaxed max-w-lg text-left">
-            为您精选克拉比及兰塔岛最地道的海鲜料理与周边生活指南。
+        <p className="text-on-surface-variant font-medium text-sm leading-relaxed max-w-2xl">
+          基于 Google Maps 开放导航！一键查找甲米奥南和兰塔岛最便捷的本地公共配套设施。
+          请选择您当前所在的区域，即可智能调配对应目的地的检索链接。
         </p>
       </header>
 
-      {/* Filter Chips */}
-      <div className="flex gap-3 overflow-x-auto hide-scrollbar py-2 -mx-4 px-4">
-        <FilterChip icon={<Utensils size={18} />} label="全部" active={activeTab === '全部'} onClick={() => setActiveTab('全部')} />
-        <FilterChip label="Seafood" active={activeTab === 'Seafood'} onClick={() => setActiveTab('Seafood')} />
-        <FilterChip label="Street Food" active={activeTab === 'Street Food'} onClick={() => setActiveTab('Street Food')} />
-        <FilterChip label="Coffee" active={activeTab === 'Coffee'} onClick={() => setActiveTab('Coffee')} />
+      {/* Modern Region Selector Segment Tabs */}
+      <div className="flex justify-center sm:justify-start">
+        <div className="bg-slate-100/80 backdrop-blur-md p-1.5 rounded-[1.75rem] border border-outline-variant/20 inline-flex shadow-inner">
+          <button
+            onClick={() => setActiveRegion('krabi')}
+            className={cn(
+              "flex items-center gap-2 px-6 py-2.5 rounded-[1.5rem] text-xs font-bold transition-all duration-300",
+              activeRegion === 'krabi'
+                ? "bg-white text-primary shadow-sm ring-1 ring-slate-200"
+                : "text-on-surface-variant hover:text-primary"
+            )}
+          >
+            <MapPin size={14} className={activeRegion === 'krabi' ? "text-primary fill-primary/10" : ""} />
+            <span>甲米 (奥南地区)</span>
+          </button>
+          <button
+            onClick={() => setActiveRegion('lanta')}
+            className={cn(
+              "flex items-center gap-2 px-6 py-2.5 rounded-[1.5rem] text-xs font-bold transition-all duration-300",
+              activeRegion === 'lanta'
+                ? "bg-white text-primary shadow-sm ring-1 ring-slate-200"
+                : "text-on-surface-variant hover:text-primary"
+            )}
+          >
+            <MapPin size={14} className={activeRegion === 'lanta' ? "text-primary fill-primary/10" : ""} />
+            <span>兰塔 (全岛范围)</span>
+          </button>
+        </div>
       </div>
 
-      {/* Featured Restaurant */}
-      <section className="grid grid-cols-1 md:grid-cols-12 gap-6">
-        <motion.div 
-            initial={{ opacity: 0, scale: 0.98 }}
-            animate={{ opacity: 1, scale: 1 }}
-            className="md:col-span-8 group relative overflow-hidden rounded-[2rem] bg-white shadow-xl flex flex-col border border-outline-variant/30 hover:shadow-2xl transition-all duration-500"
-        >
-          <div className="aspect-[16/9] w-full overflow-hidden">
-            <img 
-                src={RESTAURANTS[0].image} 
-                alt="Featured Restaurant" 
-                className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110" 
-                referrerPolicy="no-referrer"
-            />
-          </div>
-          <div className="p-8 space-y-4">
-            <div className="flex justify-between items-start">
-              <div>
-                <span className="bg-secondary text-white px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest mb-3 inline-block shadow-md">Top Rated</span>
-                <h3 className="font-heading font-bold text-2xl text-on-surface tracking-tight text-left">{RESTAURANTS[0].name}</h3>
-              </div>
-              <div className="flex items-center text-tertiary font-bold gap-1 bg-tertiary/10 px-3 py-1.5 rounded-2xl">
-                <Star size={18} className="fill-tertiary" />
-                <span className="text-lg">4.9</span>
-              </div>
-            </div>
-            <p className="text-on-surface-variant font-medium text-sm leading-relaxed opacity-90 line-clamp-2 text-left">
-                {RESTAURANTS[0].description}
-            </p>
-            <div className="flex gap-3 flex-wrap pt-2">
-              <span className="bg-secondary/10 text-secondary px-4 py-1.5 rounded-full text-xs font-bold flex items-center gap-2">
-                <Heart size={14} className="fill-secondary" /> Team Favorite: 咖喱蟹
-              </span>
-              <span className="bg-primary/10 text-primary px-4 py-1.5 rounded-full text-xs font-bold italic tracking-wide">
-                #本地特色
-              </span>
-            </div>
-          </div>
-        </motion.div>
-
-        {/* Secondary Recommendations */}
-        <div className="md:col-span-4 space-y-6">
-            <SmallFoodCard 
-                img="https://lh3.googleusercontent.com/aida-public/AB6AXuATpXG5ZVS620h2ALK_Q4IoHJBY3XzPnfXZViTfos5jqgf0RQnzhmbncsYjcmXkdZ87Q70SthLTxCXQ7AjVPm8PMRauZhGbOrO1QSRmWDvBDFbgOpjSooiapMr7mQvxQYa5sxn3qqcVAHcY8ocNUso1QCQwSWaJ04rjZtJLGMUgi0TDANyZv0yA_-DRqp2vcpQ8twIW23TGjtON5A6wdzo63S-oammoRBFDcehUDUnQYF4GHP327AkxGcDEPu1gW_o00SGtpWJMFHs"
-                title="Krabi Town Night Market"
-                dist="1.2km"
-                cat="Street Food"
-            />
-            <SmallFoodCard 
-                img="https://lh3.googleusercontent.com/aida-public/AB6AXuAa2LuRwCsq5_toOAnDyrJrHn81ER9dOXGBAnRpamLbXD7RyUDDXQpC4qzMraUV9yipe1vBfwjhQmUcTiRFJjuxGndPW2Tj95WOi8F9Git0r2vqf1ovvJ2DK1yuSRvuU6jHZWGqCO79F9epznA8OezgigKqPiK1Q6CPHO8i6fzzOJbaKO9gbdTr_-3J0zl7_YQFY0jxZsVIXENRLyBLAEfU4g6lGGs4Rvi1XFaWtKqZl2_tC-JGhYSJJEfTto4Hn4lv0F_wiHm-3GQ"
-                title="Andaman Coffee Lab"
-                dist="450m"
-                cat="Best Coffee"
-            />
-        </div>
-      </section>
-
-      {/* Convenience Info */}
-      <section className="space-y-6">
-        <div className="flex justify-between items-end border-b border-outline-variant/30 pb-4">
-            <h3 className="font-heading font-bold text-2xl text-on-surface flex items-center gap-3 text-left">
-                <MapPin className="text-primary" size={28} /> 生活便利指南
-            </h3>
-            <a href="#" className="text-primary text-xs font-bold flex items-center gap-1 uppercase tracking-widest hover:underline transition-all group">
-                查看地图 <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
-            </a>
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="md:col-span-2 relative h-[320px] rounded-[2.5rem] overflow-hidden group shadow-lg border border-outline-variant/30">
-                <img 
-                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuB3KXiD_QBn4r8EfKWZ6BfWJYnWHfwgPQSawwyGcwTRh_rEtM8AH5Med1oMFrMsPs3yYP6GfKXkxI_EHBlZpQotPLFNP5RrdkBmglzgaLZymK84Egbr-moktXWc4kOCM0Uyv4A8qW06G5UCfKevdSIMNFfexlIlAyihF-7hg6yIDfGNuCt8xOMx6xFAJnboNa-TgPYArHMyXibttdm0Ms61mRjnzQyQRth3koslxqZYNQRAM9MnP1j02M7YG-uviCO4MSBaA1uuYb0" 
-                    alt="Map Info" 
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-[2000ms]"
-                    referrerPolicy="no-referrer"
-                />
-                <div className="absolute bottom-6 left-6 right-6 bg-white/95 backdrop-blur-md p-6 rounded-[2rem] shadow-2xl flex items-center justify-between border border-white/50">
-                    <div className="flex items-center gap-4">
-                        <div className="w-14 h-14 rounded-2xl bg-brand-coral/10 flex items-center justify-center text-brand-coral">
-                            <ShoppingCart size={28} />
-                        </div>
-                        <div className="text-left">
-                            <p className="font-heading font-bold text-on-surface text-lg">最近的 7-Eleven</p>
-                            <p className="text-on-surface-variant text-xs font-bold opacity-60">步行 5 分钟 (400m)</p>
-                        </div>
-                    </div>
-                    <button className="bg-primary text-white px-8 py-3 rounded-2xl font-bold hover:shadow-lg transition-all active:scale-95 text-sm uppercase tracking-widest cursor-pointer">
-                        导航
-                    </button>
-                </div>
-            </div>
+      {/* Grid Menu of Search Services */}
+      <motion.div 
+        layout
+        className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 pt-4"
+      >
+        <AnimatePresence mode="popLayout">
+          {SERVICES_DATA.map((service, index) => {
+            const Icon = service.icon;
+            const regionData = service.queries[activeRegion];
             
-            <div className="space-y-4">
-                <ConvenienceCard icon={<Star size={20} className="text-primary fill-primary/20" />} title="药店 & 医疗" desc="Krabi Pharmacy (08:00 - 22:00)" note="提供防蚊液、肠胃药等" color="border-primary" />
-                <ConvenienceCard icon={<Banknote size={20} className="text-secondary" />} title="ATM & 换汇" desc="SCB Bank ATM (24h)" note="出门右转 200m，支持银联" color="border-secondary" />
-                <ConvenienceCard icon={<Truck size={20} className="text-tertiary" />} title="洗衣服务" desc="Lanta Express Wash" note="次日达，50泰铢/公斤" color="border-tertiary" />
-            </div>
-        </div>
-      </section>
-    </div>
-  );
-}
+            return (
+              <motion.div
+                key={service.id}
+                layout
+                initial={{ opacity: 0, y: 15 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.95 }}
+                transition={{ duration: 0.4, delay: index * 0.05 }}
+                onClick={() => handleOpenMap(regionData.query)}
+                className={cn(
+                  "bg-white border border-slate-100 hover:border-primary/20",
+                  "rounded-[2.5rem] p-8 shadow-sm hover:shadow-xl",
+                  "transition-all duration-300 relative overflow-hidden flex flex-col justify-between",
+                  "group cursor-pointer hover:-translate-y-1 select-none",
+                  service.shadowColor
+                )}
+              >
+                {/* Background Huge Silhouette Icon */}
+                <Icon 
+                  size={120} 
+                  strokeWidth={0.5} 
+                  className={cn(
+                    "absolute right-[-14px] bottom-[-14px] rotate-[-12deg] pointer-events-none transition-all duration-500",
+                    "opacity-[0.04] group-hover:opacity-[0.07] group-hover:scale-110 group-hover:rotate-0",
+                    service.iconColor
+                  )} 
+                />
 
-interface FilterChipProps {
-  icon?: React.ReactNode;
-  label: string;
-  active: boolean;
-  onClick?: () => void;
-}
+                {/* Top Section */}
+                <div className="space-y-5">
+                  <div className="flex items-center justify-between">
+                    {/* Icon container */}
+                    <div className={cn(
+                      "w-14 h-14 rounded-2xl flex items-center justify-center transition-transform duration-300 group-hover:scale-105",
+                      service.iconBg,
+                      service.iconColor
+                    )}>
+                      <Icon size={26} strokeWidth={2.2} />
+                    </div>
 
-function FilterChip({ icon, label, active, onClick }: FilterChipProps) {
-  return (
-    <button 
-      onClick={onClick}
-      className={cn(
-        "flex items-center gap-2 px-8 py-3 rounded-full text-sm font-bold transition-all duration-300 shadow-sm active:scale-95 shrink-0 uppercase tracking-widest cursor-pointer",
-        active ? "bg-primary text-white shadow-primary/20" : "bg-white text-on-surface-variant hover:bg-surface-container border border-outline-variant/30"
-      )}
-    >
-      {icon} {label}
-    </button>
-  );
-}
+                    {/* Arrow sign */}
+                    <div className="w-8 h-8 rounded-full border border-slate-100 flex items-center justify-center text-slate-400 group-hover:text-primary group-hover:border-primary/20 group-hover:bg-primary/5 transition-all duration-300 shadow-sm">
+                      <ArrowUpRight size={14} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+                    </div>
+                  </div>
 
-function SmallFoodCard({ img, title, dist, cat }: any) {
-  return (
-    <div className="bg-white rounded-[2rem] shadow-sm border border-outline-variant/30 overflow-hidden group hover:shadow-xl transition-all duration-500 translate-y-0 hover:translate-y-[-8px]">
-        <div className="aspect-[4/3] relative overflow-hidden">
-            <img src={img} alt={title} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" referrerPolicy="no-referrer" />
-            <div className="absolute top-4 left-4 glass-effect px-3 py-1.5 rounded-xl text-[10px] text-primary font-bold shadow-lg uppercase tracking-widest border border-white/50">
-                {dist}
-            </div>
-        </div>
-        <div className="p-6">
-            <h4 className="font-heading font-bold text-base text-on-surface mb-2 text-left">{title}</h4>
-            <div className="flex gap-2">
-                <span className="bg-secondary/10 text-secondary px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest">{cat}</span>
-            </div>
-        </div>
-    </div>
-  );
-}
+                  {/* Title and description */}
+                  <div className="space-y-2 text-left">
+                    <h3 className="font-heading font-black text-xl text-on-surface tracking-tight group-hover:text-primary transition-colors">
+                      {service.title}
+                    </h3>
+                    <p className="text-on-surface-variant font-medium text-xs leading-relaxed opacity-85 min-h-[40px]">
+                      {regionData.desc}
+                    </p>
+                  </div>
+                </div>
 
-function ConvenienceCard({ icon, title, desc, note, color }: any) {
-  return (
-    <div className={cn("bg-surface-container rounded-3xl p-6 border-l-8 transition-all hover:bg-surface-container-high cursor-pointer shadow-sm text-left", color)}>
-        <div className="flex items-center gap-3 mb-3">
-            {icon}
-            <h4 className="font-heading font-bold text-sm text-on-surface uppercase tracking-wide">{title}</h4>
+                {/* Bottom Trigger Label */}
+                <div className="pt-6 mt-6 border-t border-slate-50 flex items-center justify-between text-left">
+                  <span className="flex items-center gap-1.5 text-xs font-bold text-on-surface-variant/70 group-hover:text-primary transition-colors">
+                    <Compass size={14} className="animate-spin-slow text-primary/70 group-hover:text-primary transition-colors" />
+                    <span>打开 Google Maps</span>
+                  </span>
+                  
+                  {/* Subtle hover badge indicating the active query location */}
+                  <span className="text-[9px] font-extrabold uppercase tracking-widest text-[#218276] bg-emerald-50 border border-emerald-100 px-2.5 py-0.5 rounded-full shadow-sm max-w-[120px] truncate">
+                    📍 {activeRegion === 'krabi' ? '甲米奥南' : '兰塔岛'}
+                  </span>
+                </div>
+              </motion.div>
+            );
+          })}
+        </AnimatePresence>
+      </motion.div>
+
+      {/* Usage Policy Note */}
+      <footer className="bg-slate-50 border border-slate-100 rounded-3xl p-6 flex flex-col md:flex-row items-center justify-between gap-4 mt-12">
+        <div className="flex items-start gap-4">
+          <div className="p-3 bg-primary/10 text-primary rounded-2xl shrink-0 mt-0.5">
+            <Compass size={22} className="animate-pulse" />
+          </div>
+          <div className="space-y-1">
+            <p className="font-heading font-extrabold text-sm text-on-surface">使用小技巧</p>
+            <p className="text-xs font-bold text-on-surface-variant opacity-75 leading-relaxed">
+              因泰国网络通讯及 iFrame 安全限制，本查询会直接拉起您系统自带的 Google Maps 应用程序（移动端）或新标签浏览器查询。体验流畅，实时获取路况与真评实价。
+            </p>
+          </div>
         </div>
-        <p className="text-xs font-bold text-on-surface-variant mb-1">{desc}</p>
-        <p className="text-[10px] text-on-surface-variant opacity-60 italic font-medium leading-relaxed">{note}</p>
+      </footer>
     </div>
   );
 }

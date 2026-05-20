@@ -55,6 +55,10 @@ export interface Attraction {
   cost?: string;
   warnings?: string[];
   mapsUrl?: string;
+  isWater?: string;
+  suitableFor?: string;
+  highlights?: string[];
+  webPosition?: string;
 }
 
 export interface Restaurant {

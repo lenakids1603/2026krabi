@@ -77,7 +77,7 @@ export default function Attractions() {
                   : "bg-white border-outline-variant/30 text-on-surface-variant hover:bg-surface-container-low"
               )}
             >
-              <Users size={14} /> 统一集体行程
+              <Users size={14} /> 统一安排
             </button>
             <button 
               id="filter-category-suggested"
@@ -89,7 +89,7 @@ export default function Attractions() {
                   : "bg-white border-outline-variant/30 text-on-surface-variant hover:bg-surface-container-low"
               )}
             >
-              <Sparkles size={14} /> 建议自主游玩
+              <Sparkles size={14} /> 自主游玩
             </button>
           </div>
         </div>
@@ -170,16 +170,26 @@ export default function Attractions() {
                     <div className="flex flex-wrap gap-2 items-center mb-3">
                       {attr.category === 'unified' ? (
                         <span className="bg-brand-coral/10 text-brand-coral border border-brand-coral/20 px-3 py-1 rounded-full text-[10px] font-bold tracking-wider uppercase">
-                          统一集体行程
+                          统一安排
                         </span>
                       ) : (
                         <span className="bg-[#2A9D8F]/10 text-[#218276] border border-[#2A9D8F]/20 px-3 py-1 rounded-full text-[10px] font-bold tracking-wider uppercase">
-                          建议自主游玩
+                          自主游玩
                         </span>
                       )}
                       {attr.region && (
                         <span className="bg-[#457B9D]/10 text-[#2A5270] border border-[#457B9D]/20 px-3 py-1 rounded-full text-[10px] font-bold tracking-wider uppercase flex items-center gap-1">
                           <MapPin size={11} /> {attr.region}地区
+                        </span>
+                      )}
+                      {attr.isWater && (
+                        <span className={cn(
+                          "px-3 py-1 rounded-full text-[10px] font-bold tracking-wider uppercase flex items-center gap-1 border",
+                          attr.isWater === '可下水' && "bg-sky-50 text-sky-700 border-sky-200",
+                          attr.isWater === '不下水' && "bg-amber-50 text-amber-700 border-amber-200",
+                          attr.isWater === '不一定下水' && "bg-slate-50 text-slate-700 border-slate-200"
+                        )}>
+                          🛶 {attr.isWater}
                         </span>
                       )}
                     </div>
@@ -323,6 +333,46 @@ export default function Attractions() {
                   </p>
                 </div>
 
+                {/* Suitable For & Highlights */}
+                <div className="space-y-4 text-left border-t border-outline-variant/10 pt-4">
+                  {selectedAttraction.suitableFor && (
+                    <div className="space-y-1.5 bg-sky-50/50 hover:bg-sky-50 border border-sky-100/50 rounded-2xl p-4 transition-all duration-300">
+                      <h4 className="font-heading font-semibold text-xs uppercase tracking-widest text-sky-800 flex items-center gap-1.5">
+                        💡 适合人群
+                      </h4>
+                      <p className="text-sm font-bold text-sky-900 leading-relaxed">
+                        {selectedAttraction.suitableFor}
+                      </p>
+                    </div>
+                  )}
+
+                  {selectedAttraction.highlights && selectedAttraction.highlights.length > 0 && (
+                    <div className="space-y-2">
+                      <h4 className="font-heading font-extrabold text-xs uppercase tracking-widest text-secondary flex items-center gap-2">
+                        🌟 核心玩乐亮点 / 景点特色
+                      </h4>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+                        {selectedAttraction.highlights.map((highlight, index) => (
+                          <div key={index} className="flex items-start gap-2.5 bg-slate-50 border border-slate-100 p-3.5 rounded-2xl text-xs font-bold text-secondary leading-normal shadow-sm">
+                            <span className="text-brand-coral font-bold text-sm">✦</span>
+                            <span>{highlight}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {selectedAttraction.webPosition && (
+                    <div className="space-y-1 bg-primary/5 hover:bg-primary/10 border border-primary/15 rounded-2xl p-3.5 flex items-center gap-2.5 text-left">
+                      <span className="text-lg">🎯</span>
+                      <div>
+                        <span className="text-[10px] font-bold text-primary/60 uppercase tracking-widest block">线路网页定位</span>
+                        <p className="text-xs font-bold text-primary leading-tight">{selectedAttraction.webPosition}</p>
+                      </div>
+                    </div>
+                  )}
+                </div>
+
                 {/* Requirements 6 & 7: Attendance Status Notice Banner */}
                 {selectedAttraction.category === 'unified' ? (
                   <div className="bg-brand-coral/5 border border-brand-coral/20 rounded-2xl p-4 flex items-start gap-3.5 text-left">
@@ -331,10 +381,10 @@ export default function Attractions() {
                     </div>
                     <div>
                       <p className="font-heading font-bold text-xs text-brand-coral uppercase tracking-wider mb-0.5">
-                        公司统一安排事件
+                        统一安排
                       </p>
                       <p className="text-on-surface-variant font-bold text-sm leading-relaxed">
-                        公司统一安排，所有员工默认参加，无需报名。全程提供专车及领队陪护。
+                        公司统一行程安排，全员统一参加。全程提供专属保驾专车、景区行游，员工完全免费参加。
                       </p>
                     </div>
                   </div>
@@ -345,10 +395,10 @@ export default function Attractions() {
                     </div>
                     <div>
                       <p className="font-heading font-bold text-xs text-[#218276] uppercase tracking-wider mb-0.5">
-                        建议自由活动自选
+                        自主游玩
                       </p>
                       <p className="text-on-surface-variant font-bold text-sm leading-relaxed">
-                        仅供自由活动时间参考，可自行选择是否游玩。交通及预定事宜需自行承担。
+                        个人自由活动自选推荐，可自行决定体验。对应车辆或预约结算需由出游人自理。
                       </p>
                     </div>
                   </div>
@@ -399,6 +449,19 @@ export default function Attractions() {
                       <p className="text-sm font-bold text-primary">{selectedAttraction.cost || '-'}</p>
                     </div>
                   </div>
+
+                  {/* Item 5: Water eligibility */}
+                  {selectedAttraction.isWater && (
+                    <div className="bg-surface-container-low p-4 rounded-2xl border border-outline-variant/10 text-left flex items-start gap-3 col-span-1 sm:col-span-2">
+                      <div className="p-2 bg-primary/5 text-primary rounded-xl shrink-0 mt-0.5">
+                        <Compass size={16} />
+                      </div>
+                      <div className="space-y-0.5">
+                        <span className="text-[10px] font-bold text-on-surface-variant/60 uppercase tracking-widest">水上活动要求 / 是否下水</span>
+                        <p className="text-sm font-bold text-primary">{selectedAttraction.isWater}</p>
+                      </div>
+                    </div>
+                  )}
                 </div>
 
                 {/* Packing List */}
