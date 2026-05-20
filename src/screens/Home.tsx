@@ -97,7 +97,7 @@ export default function Home() {
           <Link to="/travel-info"><NavCard icon={<PlaneTakeoff size={24} />} title="机酒信息" subtitle="航班号与度假村确认单" /></Link>
           <Link to="/attractions"><NavCard icon={<MapPin size={24} />} title="景点项目" subtitle="必玩项目与避坑指南" /></Link>
           <Link to="/dining"><NavCard icon={<Utensils size={24} />} title="餐饮便利" subtitle="当地美食与 7-11 推荐" /></Link>
-          <Link to="/weather"><NavCard icon={<Waves size={24} />} title="天气潮汐" subtitle="实时天气与出海建议" /></Link>
+          <Link to="/weather"><NavCard icon={<Waves size={24} />} title="天气和潮汐" subtitle="实时天气与出海建议" /></Link>
           <Link to="/gallery"><NavCard icon={<Camera size={24} />} title="共享相册" subtitle="上传你的团建瞬间" isBordered /></Link>
           <Link to="/more"><NavCard icon={<Info size={24} />} title="注意事项" subtitle="签证、换汇与防晒" className="bg-tertiary-container/10 text-tertiary border-tertiary-container/30" /></Link>
         </div>
