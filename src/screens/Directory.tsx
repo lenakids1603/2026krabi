@@ -46,7 +46,7 @@ export default function Directory() {
             CONTACT DIRECTORY
           </span>
         </motion.div>
-        <h2 className="font-heading font-black text-4xl text-[#00516E] tracking-tight text-left">随行通讯录</h2>
+        <h2 className="font-heading font-black text-4xl text-[#00516E] tracking-tight text-left">临时泰国号码通讯录</h2>
         <p className="text-on-surface-variant max-w-2xl font-medium text-sm leading-relaxed opacity-90 text-left">
           轻松跨国呼叫随队协调人员 & 24小时突发事件应急求助，一键连接沟通无忧。
         </p>
