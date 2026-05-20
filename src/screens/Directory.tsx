@@ -2,7 +2,7 @@ import React from 'react';
 import { motion } from 'motion/react';
 import { TEAM_MEMBERS } from '../data/teamMembers';
 import { EMERGENCY_CONTACTS } from '../data/emergencyContacts';
-import { Search, Filter, History, Activity, Phone, MessageSquare, Briefcase, MapPin, Shield, Landmark } from 'lucide-react';
+import { Search, Filter, Activity, Phone, MessageSquare, Briefcase, MapPin, Shield, Landmark } from 'lucide-react';
 import { cn } from '../lib/utils';
 import { useState } from 'react';
 import { MemberCard } from '../components/directory/MemberCard';
@@ -40,25 +40,16 @@ export default function Directory() {
 
   return (
     <div className="space-y-8 pb-12 text-left">
-      <header className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
-        <div className="space-y-4">
-          <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }}>
-            <span className="bg-[#E5EFF1] text-[#1D5E6B] border border-[#1D5E6B]/15 px-4 py-1.5 rounded-full text-[11px] font-extrabold tracking-[0.2em] uppercase mb-1 inline-block shadow-sm">
-              CONTACT DIRECTORY
-            </span>
-          </motion.div>
-          <h2 className="font-heading font-black text-4xl text-[#00516E] tracking-tight text-left">随行通讯录</h2>
-          <p className="text-on-surface-variant max-w-2xl font-medium text-sm leading-relaxed opacity-90 text-left">
-            轻松跨国呼叫随队协调人员 & 24小时突发事件应急求助，一键连接沟通无忧。
-          </p>
-        </div>
-        <button 
-          onClick={() => { setSearch(''); setActiveFilter('all'); }}
-          className="self-start sm:self-end p-3.5 bg-white shadow-md rounded-2xl text-[#1D5E6B] hover:text-[#00516E] hover:bg-[#E5EFF1]/40 transition-all active:scale-95 border border-outline-variant/30 cursor-pointer"
-          title="重置筛选"
-        >
-          <History size={20} />
-        </button>
+      <header className="space-y-4">
+        <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }}>
+          <span className="bg-[#E5EFF1] text-[#1D5E6B] border border-[#1D5E6B]/15 px-4 py-1.5 rounded-full text-[11px] font-extrabold tracking-[0.2em] uppercase mb-1 inline-block shadow-sm">
+            CONTACT DIRECTORY
+          </span>
+        </motion.div>
+        <h2 className="font-heading font-black text-4xl text-[#00516E] tracking-tight text-left">随行通讯录</h2>
+        <p className="text-on-surface-variant max-w-2xl font-medium text-sm leading-relaxed opacity-90 text-left">
+          轻松跨国呼叫随队协调人员 & 24小时突发事件应急求助，一键连接沟通无忧。
+        </p>
       </header>
 
       {/* Search Bar */}

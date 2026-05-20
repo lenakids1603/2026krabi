@@ -1,14 +1,12 @@
 import { motion, AnimatePresence } from 'motion/react';
-import { UserCheck, Landmark, Backpack, Coins, ShieldCheck, ChevronDown, Download, AlertTriangle, Info, MapPin } from 'lucide-react';
+import { UserCheck, Landmark, Backpack, Coins, ShieldCheck, ChevronDown, Download, AlertTriangle, Info } from 'lucide-react';
 import { useState } from 'react';
 import { cn } from '@/src/lib/utils';
 import { NOTES_HEADER_BG } from '@/src/assets/localImages';
-import { useDragToScroll } from '../hooks/useDragToScroll';
 
 export default function Notes() {
-  const dragScroll = useDragToScroll();
   return (
-    <div className="space-y-10 pb-40 text-left">
+    <div className="space-y-10 pb-20 text-left">
       <header className="space-y-4">
         <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }}>
           <span className="bg-[#E5EFF1] text-[#1D5E6B] border border-[#1D5E6B]/15 px-4 py-1.5 rounded-full text-[11px] font-extrabold tracking-[0.2em] uppercase mb-1 inline-block shadow-sm">
@@ -143,26 +141,6 @@ export default function Notes() {
           </p>
         </div>
       </section>
-
-      {/* Sticky Contacts Footer Replacement (Native Style Overlay) */}
-      <section className="fixed bottom-20 md:bottom-6 left-1/2 -translate-x-1/2 w-[calc(100%-2rem)] max-w-7xl z-40">
-        <div className="bg-white/90 backdrop-blur-3xl border border-outline-variant/30 rounded-3xl p-6 shadow-[0px_8px_40px_rgba(0,119,182,0.15)]">
-            <div className="flex items-center gap-2 mb-4 justify-center">
-                <div className="w-2 h-2 bg-error rounded-full animate-pulse" />
-                <span className="text-[10px] font-black text-on-surface-variant uppercase tracking-[0.3em] opacity-60">24/7 紧急联系人</span>
-            </div>
-            <div 
-              ref={dragScroll.ref}
-              onMouseDown={dragScroll.onMouseDown}
-              style={dragScroll.style}
-              className="flex gap-4 overflow-x-auto hide-scrollbar"
-            >
-                <StickyContact name="John Doe" label="领队" phone="+66 81-234-5678" color="bg-error-container text-error" />
-                <StickyContact name="Embassy" label="中国驻泰使馆" phone="+66 2245 0015" color="bg-primary-container text-white" />
-                <StickyContact name="Medical" label="紧急医疗" phone="1719" color="bg-secondary-container text-secondary" />
-            </div>
-        </div>
-      </section>
     </div>
   );
 }
@@ -202,18 +180,4 @@ function Accordion({ icon, title, color, children, defaultOpen = false }: any) {
       </AnimatePresence>
     </div>
   );
-}
-
-function StickyContact({ name, label, phone, color }: any) {
-    return (
-        <div className="flex-none bg-surface-container-low p-4 rounded-2xl border border-outline-variant/20 min-w-[220px] flex items-center gap-4 group hover:bg-white transition-all cursor-pointer">
-            <div className={cn("w-12 h-12 rounded-full flex items-center justify-center shadow-inner", color)}>
-                <MapPin size={22} />
-            </div>
-            <div>
-                <p className="text-[10px] font-black uppercase tracking-widest opacity-40 mb-1 leading-none">{label}</p>
-                <p className="font-heading font-bold text-on-surface text-base tracking-tighter leading-snug">{phone}</p>
-            </div>
-        </div>
-    );
 }
