@@ -1,5 +1,5 @@
 import { motion } from 'motion/react';
-import { Calendar, PlaneTakeoff, MapPin, Utensils, Waves, Camera, Info, ArrowRight, Users } from 'lucide-react';
+import { Calendar, PlaneTakeoff, Map, Compass, Waves, Camera, Info, ArrowRight, Users } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { NavCard } from '../components/home/NavCard';
 import heroImg from '../assets/images/krabi_hero_retreat_1779245216266.png';
@@ -96,8 +96,8 @@ export default function Home() {
           </Link>
 
           <Link to="/travel-info"><NavCard icon={<PlaneTakeoff size={24} />} title="机酒信息" subtitle="航班号与度假村确认单" /></Link>
-          <Link to="/attractions"><NavCard icon={<MapPin size={24} />} title="活动安排" subtitle="统一行程与建议游玩" /></Link>
-          <Link to="/dining"><NavCard icon={<Utensils size={24} />} title="餐饮便利" subtitle="当地美食与 7-11 推荐" /></Link>
+          <Link to="/attractions"><NavCard icon={<Map size={24} />} title="活动安排" subtitle="统一行程与建议游玩" /></Link>
+          <Link to="/dining"><NavCard icon={<Compass size={24} />} title="周边查询" subtitle="地图一键实时导航" /></Link>
           <Link to="/weather"><NavCard icon={<Waves size={24} />} title="天气和潮汐" subtitle="实时天气与出海建议" /></Link>
           <Link to="/gallery"><NavCard icon={<Camera size={24} />} title="共享相册" subtitle="上传你的团建瞬间" isBordered /></Link>
           <Link to="/directory"><NavCard icon={<Users size={24} />} title="临时泰国通讯录" subtitle="随队协调与应急置顶" /></Link>
