@@ -28,12 +28,13 @@ export interface NavItem {
 export interface TeamMember {
   id: string;
   name: string;
-  nameEn: string;
+  nameEn?: string;
   role: string;
-  roleEn: string;
-  phone: string;
+  roleEn?: string;
+  group: string;
+  phoneDisplay: string;
+  phoneRaw: string;
   avatar: string;
-  type: 'lead' | 'admin' | 'member';
 }
 
 export interface Attraction {
@@ -56,4 +57,13 @@ export interface Restaurant {
     dist: string;
     type: 'seafood' | 'street' | 'coffee';
     tags: string[];
+}
+
+export interface EmergencyContact {
+  id: string;
+  name: string;
+  role: string;
+  group: '领队' | '酒店' | '医院' | '旅游警察' | string;
+  phoneDisplay: string;
+  phoneRaw: string;
 }
