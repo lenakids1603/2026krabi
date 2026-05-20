@@ -3,10 +3,14 @@ import { useState, useEffect } from 'react';
 import { Plane, Hotel, Map, Phone, Calendar, ArrowRight, Navigation, MapPin, ExternalLink, ShieldCheck, HeartPulse, Sparkles, Globe } from 'lucide-react';
 import { cn } from '@/src/lib/utils';
 
+import changiWaterfall from '@/src/assets/images/changi_waterfall_one_1779244607786.png';
+import changiGarden from '@/src/assets/images/changi_indoor_garden_1779244634467.png';
+import krabiResort from '@/src/assets/images/krabi_luxury_resort_1779244650872.png';
+import krabiIslands from '@/src/assets/images/krabi_island_tour_1779244669020.png';
+
 const CHANGI_IMAGES = [
-  "https://images.unsplash.com/photo-1588668214407-6ea9a6d8c272?q=80&w=2070&auto=format&fit=crop",
-  "https://images.unsplash.com/photo-1542296332-2e4473faf563?q=80&w=2070&auto=format&fit=crop",
-  "https://images.unsplash.com/photo-1559599141-3816a0b7da11?q=80&w=2070&auto=format&fit=crop"
+  changiWaterfall,
+  changiGarden
 ];
 
 export default function TravelInfo() {
@@ -123,6 +127,7 @@ export default function TravelInfo() {
                   exit={{ opacity: 0, scale: 0.95 }}
                   transition={{ duration: 1.5, ease: "easeInOut" }}
                   className="absolute inset-0 w-full h-full object-cover"
+                  referrerPolicy="no-referrer"
                 />
               </AnimatePresence>
               <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-2">
@@ -195,7 +200,7 @@ export default function TravelInfo() {
             stay="甲米主岛 2晚" 
             addr="232 Moo 2, Ao Nang, Krabi 81180, Thailand" 
             dates="Jun 28 - Jun 30" 
-            img="https://lh3.googleusercontent.com/aida-public/AB6AXuCf5IZhIi22sYCNjiVBPCIC0mTgneWJdI5_2chpp3L0nbvYwVKx0g76EqQteGLnfICQjrMoreIyvTBgaJRuxzuP1lYWjeyHTJNNhvXO0oKwfp4Cp-CDGdnFaWUDyqsbIAmmHI_ac_2t3vqPj8YqppW2fca7eoNLmj61uiC-wcNaY1RTJxhF-y9_2Xj5mm_kZjrskGAwyzTA7KLODh9FGjoiuSYB-ejadwwoDZPwfpSHDcgHzGnPFAB2SV9EfO5MM31iBnPeTu627dI"
+            img={krabiResort}
             color="bg-primary"
           />
           <HotelCard 
@@ -203,7 +208,7 @@ export default function TravelInfo() {
             stay="兰塔岛 3晚" 
             addr="99 Moo 5, Ba Kantiang Bay, Koh Lanta, Krabi 81150" 
             dates="Jun 30 - Jul 03" 
-            img="https://lh3.googleusercontent.com/aida-public/AB6AXuC0kCUy6JgVvle4qZZKRxIBNIHBW48Cjal6Fp1gizkA__CKLGGEq5sgWgxGbYt5VYF2GNhC4RsvUcoSGYgdkOrQNMqFEpjeOh5nkV0-R1E0nWGDorwNBRVzM69WSdaUx28haXKMY6JAus1J1P97NuK3sWlqyhDdNOMqSxfCX1eZ7ZAeKCoxMf1Z1iU6g5ADo7LIG3l7VjHBS_E80bzwGC5okls9mrgMZng0n7P5YJbuxenomqXKcFu_D8Xkf7wEwjGVoxBh_1NzX5Y"
+            img={krabiIslands}
             color="bg-secondary"
           />
         </div>
@@ -280,8 +285,8 @@ function HotelCard({ title, stay, addr, dates, img, color }: any) {
   return (
     <div className="bg-white rounded-[2.5rem] shadow-xl overflow-hidden flex flex-col group hover:shadow-2xl transition-all duration-500 border border-outline-variant/20 h-full">
       <div className="h-64 relative overflow-hidden">
-        <img src={img} alt={title} className="w-full h-full object-cover transition-transform duration-[2000ms] group-hover:scale-110" />
-        <div className="absolute top-6 left-6">
+          <img src={img} alt={title} className="w-full h-full object-cover transition-transform duration-[2000ms] group-hover:scale-110" referrerPolicy="no-referrer" />
+          <div className="absolute top-6 left-6">
           <span className={cn("text-white px-5 py-2 rounded-2xl font-bold text-xs shadow-2xl backdrop-blur-md uppercase tracking-wider", color)}>
             {stay}
           </span>

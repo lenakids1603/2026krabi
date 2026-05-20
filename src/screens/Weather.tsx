@@ -1,6 +1,7 @@
 import { motion } from 'motion/react';
 import { Sun, CloudRain, Cloud, CloudLightning, Thermometer, Droplets, Wind, Eye, Waves, Navigation, ShieldAlert, CheckCircle2, AlertTriangle, Droplet, Calendar } from 'lucide-react';
 import { cn } from '@/src/lib/utils';
+import { WEATHER_HEADER_BG } from '@/src/assets/localImages';
 
 export default function Weather() {
   return (
@@ -8,9 +9,10 @@ export default function Weather() {
       {/* Background with blurred Image */}
       <div className="fixed inset-0 z-[-1] pointer-events-none">
           <img 
-            src="https://lh3.googleusercontent.com/aida-public/AB6AXuA7oVhIgDGYQXKQ_3yO390Yj50pILzeA7O3IRPWe4Q4YaMbv7M_ObpyqAruo8pVjf_Lbh0qPyrBqnRsV7HWgG_LHdw9kmaiwnnzDFlANCE9FT4G0ClXFAeEuRRMik5WHCqZqeQcjetnbteazX5UXdL9L1cTZ13XwXyR1w6cDAQzT0M7B5p_9crAy1HUv4st1XtjEo3oRwCcBjt_VWkCnIZOzhFkdjM-3al51wsLtTgVioZT8LJnDzu4Zdt_-MMWNL0wB3Craon5x9k" 
+            src={WEATHER_HEADER_BG} 
             alt="Weather BG" 
             className="w-full h-full object-cover blur-[80px] brightness-75 scale-125"
+            referrerPolicy="no-referrer"
           />
           <div className="absolute inset-0 bg-blue-900/10" />
       </div>

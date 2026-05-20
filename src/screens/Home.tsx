@@ -1,6 +1,8 @@
 import { motion } from 'motion/react';
 import { Calendar, PlaneTakeoff, MapPin, Utensils, Waves, Camera, Info, Navigation, ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import heroImg from '@/src/assets/images/krabi_hero_retreat_1779245216266.png';
+import foodImg from '@/src/assets/images/thai_beach_dinner_1779244685299.png';
 
 export default function Home() {
   return (
@@ -9,16 +11,17 @@ export default function Home() {
       <motion.section 
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="relative h-[380px] rounded-3xl overflow-hidden shadow-2xl"
+        className="relative h-[420px] rounded-3xl overflow-hidden shadow-2xl"
       >
         <img 
-          src="https://lh3.googleusercontent.com/aida-public/AB6AXuA8wAZn6GsaZ-I7Lb7NvSTjNrOG31PVaYx-0imz1DjUGSqITkjd2pJX8d1F3ESGkG52B5JUt-U7W52j-2Fo1y1WiNEvM9fTxvC-0a8e0mt9pcjrSJyToyMhKqG1q2OJMzdP1IV4j_aa5VWNkLKgu6jL9YUrJpjwmhoCbtxJBtVv9Ld4RdQTta6yN3LiOqsQGAsLUBY8rwPOSiblcPpSNkbS4vpXlQlMbG8FKYfKwmXISRP2qyG-BEB-xhRcQjybGKUlMtEczKezLxY" 
+          src={heroImg} 
           alt="Krabi Hero" 
           className="w-full h-full object-cover"
+          referrerPolicy="no-referrer"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent flex flex-col justify-end p-8">
           <span className="inline-block bg-brand-coral text-white px-4 py-1.5 rounded-full text-xs font-bold mb-4 w-fit shadow-lg uppercase tracking-widest">
-            LENAKDIS 2026 公司团建
+            LENAKIDS 公司团建 2026
           </span>
           <h2 className="font-heading font-bold text-4xl text-white mb-3 leading-tight tracking-tight">
             欢迎开启 2026<br />甲米 & 兰塔之旅
@@ -115,9 +118,10 @@ export default function Home() {
         </div>
         <div className="md:col-span-2 relative h-[180px] rounded-3xl overflow-hidden group cursor-pointer shadow-sm border border-outline-variant/20">
           <img 
-            src="https://lh3.googleusercontent.com/aida-public/AB6AXuCxQFZpKBROgThPcUO9SOU1aRtMovthDSCqGe7TqA3k6HVmTa1LZzrU-dJTpAM31R4npVix_JKRC8DutZKamh9fXiyZbEUgb5zNjpS_NbVjIJR-DCy8_vx0kNMGvWnEv1p_j0dBrT4mg66TLwkSq7LGfA41_AzCLNkM3Jc7mdXy01tnJ-eWQVV0wPCuvmlo3fAc0HRBfqi2UdZ-F82JIliWvOotNI27vg22lrANqZuy-2K5uNkUHLVFjcz-d_u2yKTcZfDfnFgbzYA" 
+            src={foodImg} 
             alt="Food" 
             className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
+            referrerPolicy="no-referrer"
           />
           <div className="absolute inset-0 bg-black/50 flex items-center px-10 group-hover:bg-black/40 transition-colors duration-500">
             <h4 className="text-white font-heading font-bold text-2xl tracking-tight leading-snug">

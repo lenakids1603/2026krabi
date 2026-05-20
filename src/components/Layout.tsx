@@ -88,8 +88,8 @@ export default function Layout({ children }: LayoutProps) {
             >
               <Menu size={24} />
             </button>
-            <h1 className="font-heading font-bold text-xl text-primary truncate max-w-[200px] md:max-w-none">
-              LENAKIDS 2026 公司团建
+            <h1 className="font-heading font-bold text-lg md:text-xl text-primary truncate max-w-[240px] xs:max-w-none">
+              Lenakids Retreat 2026
             </h1>
           </div>
         </div>

@@ -11,7 +11,7 @@ export default function Itinerary() {
         animate={{ opacity: 1, y: 0 }}
         className="text-center md:text-left"
       >
-        <span className="bg-secondary/10 text-secondary px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest mb-2 inline-block">Lenakids 2026 </span>
+        <span className="bg-secondary/10 text-secondary px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest mb-2 inline-block">Lenakids Retreat 2026 </span>
         <h2 className="font-heading font-bold text-3xl text-primary mb-4">团建行程列表</h2>
         <p className="text-on-surface-variant font-medium text-sm leading-relaxed">
           Krabi & Koh Lanta Excellence Trip

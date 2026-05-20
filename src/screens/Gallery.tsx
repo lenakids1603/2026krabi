@@ -2,13 +2,14 @@ import { motion } from 'motion/react';
 import { Camera, CloudUpload, Heart, MessageCircle, Filter, Plus, Maximize, User2 } from 'lucide-react';
 import { cn } from '@/src/lib/utils';
 import { useState } from 'react';
+import { GALLERY_ITINERARY, GALLERY_PARTY, GALLERY_HOTEL, GALLERY_BEACH, GALLERY_NATURE } from '@/src/assets/localImages';
 
 const PHOTOS = [
-    { id: '1', url: 'https://lh3.googleusercontent.com/aida-public/AB6AXuC-sQqmnJTSTqlpJETw8vzdhJs1-Td6_E4Q5oURsmGJkZ_NdSciryePQyFTHCCkFs6mfLsmJ5PvAR86b6lKx9UDcuWTDx6fbAR5QJ2mCLRnDViZJtwe7xdZjKxeRcIwAazw1pWy9jcx-Ni2RaqKhz1Pet5SnmeTWkbG7iADAp4sJhucKi1BtfxbuxWu4Ds2BnqAXiKYCuhC7cwXg1V09NZHZ-bFYD23c6ULiDRZ0xonKX2MDdq68xCgkGynJY0Aa_0cRy4G9zooK6s', likes: 42, comments: 5, category: 'itinerary' },
-    { id: '2', url: 'https://lh3.googleusercontent.com/aida-public/AB6AXuANm_Bra4tbB_SZ2aceCR7Al7A4f4LafI_w2j8HhUYRd_feWBAF-75bDXuQkVdIKnXzK9iCKFLgD5ImixN2qRzMy8B6iPEwJR1ezKrzaHAo1_qQQWs3G02jGPsJHznVj7kpB78U7co3B2btIGXh0jyR_U6GiqUBXjPhx0F3UMGH0Q3YKXvRYCihrpink1HcDuIQDQjryVEDURTiTNyxRO_pxD-S3essbM5gyD4FX3IM9N3g3TbmBhUCzly-o0vR-b6N4-S4fJAm0IQ', likes: 89, comments: 12, category: 'party' },
-    { id: '3', url: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCYCGGHbQnXIsTZftYI6pMG83vWCRn_oGxTfiMcDnE67eSmb6rK7YKgbVaVy7lSx69fLStXQHMyXydu5J8HbcWmHMRYyh3oMdi0EuX14PQix9MKycS-HzXmNL4JxQijdkBOq-DtiDAUVhf23NI7RRvVlJwzeLkAxP7abUj23bepa2-MKExSfgDIij04eNjYNIP3ghjhO6lR7s3sywNg3Fq40HTzgZRNiEnRd0mJi-hNtuObrLgmWM6DJd4Ewug3wT0PlcHa153mcU0', likes: 15, comments: 2, category: 'hotel' },
-    { id: '4', url: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDga07sVsZJ7qSMbQjIZP1X4X9XN1BgKAzVu86WcbF6XAUVS2lv_TTM1bODW_RNUhtxuNoo_E7tscSwazJ44pn0A5P3jO2fqP8gmtLPjubr7RxqK3TK6Ya-_afBntg3E2JZgKr96zZsYUfCF0dh9gnBtrBkX9_jHxIebrILYfGo1NHj-4ypa-mg4WWE2jtCoaHvOBB5IzsaOBeq5CNM4axwNGVPo3Y_kzMfVqswQqNavuzwTegFQZwyZjB7a8IVkwcPe48y0IJe2g4', likes: 56, comments: 8, category: 'beach' },
-    { id: '5', url: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAjjhJk-e31D_aGhwYWcWyarM7J9_cSF_2fbrnP6N-n4KAWOV33PclY_pKTttQH3aZ1tfMeQrNozKMssHC4xjCnWd13TVgCmaWHldP6aCPx3FWmCzvZ4C1C9_mnpBj-vNMV7xsvZYHBtouJbx6cctwuUEREVxrzS7DIyJJi1uUTYLgaCCTBobvd0IG1sajv39rQDSSN-KSt7-4K_T1vvF1GTAjgqivp7MiaWr3IPv_DwiMlexVpHSA6iGpZX6oAkfFkGPkEet-G8Cg', likes: 34, comments: 3, category: 'nature' }
+    { id: '1', url: GALLERY_ITINERARY, likes: 42, comments: 5, category: 'itinerary' },
+    { id: '2', url: GALLERY_PARTY, likes: 89, comments: 12, category: 'party' },
+    { id: '3', url: GALLERY_HOTEL, likes: 15, comments: 2, category: 'hotel' },
+    { id: '4', url: GALLERY_BEACH, likes: 56, comments: 8, category: 'beach' },
+    { id: '5', url: GALLERY_NATURE, likes: 34, comments: 3, category: 'nature' }
 ];
 
 export default function Gallery() {
@@ -50,7 +51,7 @@ export default function Gallery() {
             transition={{ delay: idx * 0.1 }}
             className="relative group rounded-3xl overflow-hidden shadow-lg bg-surface-container-low break-inside-avoid"
           >
-            <img src={photo.url} alt="Gallery" className="w-full h-auto object-cover transition-transform duration-700 group-hover:scale-105" />
+            <img src={photo.url} alt="Gallery" className="w-full h-auto object-cover transition-transform duration-700 group-hover:scale-105" referrerPolicy="no-referrer" />
             
             {/* Overlay */}
             <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-all duration-300 flex flex-col justify-end p-5">

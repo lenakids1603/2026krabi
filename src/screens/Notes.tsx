@@ -2,6 +2,7 @@ import { motion, AnimatePresence } from 'motion/react';
 import { UserCheck, Landmark, Backpack, Coins, ShieldCheck, ChevronDown, Download, AlertTriangle, Info, MapPin } from 'lucide-react';
 import { useState } from 'react';
 import { cn } from '@/src/lib/utils';
+import { NOTES_HEADER_BG } from '@/src/assets/localImages';
 
 export default function Notes() {
   return (
@@ -124,9 +125,10 @@ export default function Notes() {
       {/* Visual Break */}
       <section className="h-56 rounded-[2.5rem] overflow-hidden relative group shadow-2xl">
         <img 
-            src="https://lh3.googleusercontent.com/aida-public/AB6AXuBVM1sPMklzH9ARx6MqtZHU1k0fkDEfD1uZf-eErV_Ret_olgLG7ibJz4IBtuz-s59iaY4zPhJEsTl4WS6MUTvyclsQ4LSkc4NyxM2dH6ULvKpJNk2vqn60JbKJv188XOHPaeBizqp-0CEto_ttpjYVlcTiUPeJJ7Dilbeil1OfsdtvPOaPFWo8KFihetpWchBEpCzqb59imcYcQpZvMTOzobeEPI9hRo7GJ7rnZzAIww4ypQ6jRZbwRUZ4bTEQ5DG4RmRwP6XwdEE" 
+            src={NOTES_HEADER_BG} 
             alt="Temple" 
             className="w-full h-full object-cover transition-all duration-[3000ms] group-hover:scale-110" 
+            referrerPolicy="no-referrer"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent flex items-end p-10">
           <p className="text-white font-heading font-bold text-2xl italic tracking-tight leading-relaxed drop-shadow-xl">
