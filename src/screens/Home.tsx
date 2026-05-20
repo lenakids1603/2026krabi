@@ -12,6 +12,7 @@ export default function Home() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         className="relative h-[420px] rounded-3xl overflow-hidden shadow-2xl"
+        style={{ height: '420px' }}
       >
         <img 
           src={heroImg} 

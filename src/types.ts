@@ -15,6 +15,7 @@ export interface DayItinerary {
   activities: Activity[];
   tags?: string[];
   image?: string;
+  icon?: string;
 }
 
 export interface NavItem {

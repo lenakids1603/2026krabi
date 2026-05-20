@@ -1,9 +1,42 @@
 import { motion } from 'motion/react';
 import { ITINERARY } from '@/src/constants';
-import { MapPin, Clock, ChevronRight, PlaneTakeoff, Info, Utensils, Waves, Users, Brain } from 'lucide-react';
+import { 
+  MapPin, 
+  Clock, 
+  PlaneTakeoff, 
+  Utensils, 
+  Waves, 
+  Compass, 
+  Hotel, 
+  Bike, 
+  Navigation,
+  Sparkles
+} from 'lucide-react';
 import { cn } from '@/src/lib/utils';
 
 export default function Itinerary() {
+  // Helper to render dynamic icons for each day card header
+  const getDayIcon = (iconName?: string) => {
+    switch (iconName) {
+      case 'plane-takeoff':
+        return <PlaneTakeoff size={24} />;
+      case 'hotel':
+        return <Hotel size={24} />;
+      case 'waves':
+        return <Waves size={24} />;
+      case 'compass':
+        return <Compass size={24} />;
+      case 'utensils':
+        return <Utensils size={24} />;
+      case 'bike':
+        return <Bike size={24} />;
+      case 'navigation':
+        return <Navigation size={24} />;
+      default:
+        return <Sparkles size={24} />;
+    }
+  };
+
   return (
     <div className="space-y-8 max-w-2xl mx-auto pb-12">
       <motion.div 
@@ -51,25 +84,29 @@ export default function Itinerary() {
                 <div className="flex justify-between items-start mb-6">
                   <h3 className="font-heading font-bold text-xl text-on-surface leading-tight max-w-[200px] md:max-w-none">{day.title}</h3>
                   <div className="text-primary hover:scale-110 transition-transform">
-                    <PlaneTakeoff size={24} />
+                    {getDayIcon(day.icon)}
                   </div>
                 </div>
 
-                <div className="space-y-4">
-                  {day.activities.map(act => (
-                    <div key={act.id} className="space-y-3">
-                      <div className="flex items-start gap-3 text-on-surface-variant">
-                        <Clock size={16} className="mt-0.5 text-primary/60" />
-                        <span className="text-sm font-bold tracking-tight">{act.time}</span>
+                <div className="space-y-6 border-l-2 border-primary/10 pl-4 ml-1">
+                  {day.activities.map((act, actIdx) => (
+                    <div key={act.id} className="space-y-2">
+                      <div className="flex items-center gap-2 text-primary font-bold text-xs tracking-wide">
+                        <Clock size={14} />
+                        <span>{act.time}</span>
                       </div>
-                      <div className="flex items-start gap-3 text-on-surface-variant">
-                        <MapPin size={16} className="mt-0.5 text-primary/60" />
-                        <span className="text-sm font-semibold leading-relaxed underline decoration-sky-300 underline-offset-4">{act.location}</span>
+                      <h4 className="font-bold text-base text-on-surface">{act.title}</h4>
+                      <div className="flex items-center gap-2 text-on-surface-variant/80 text-xs">
+                        <MapPin size={14} className="text-secondary" />
+                        <span className="font-medium underline decoration-sky-300 underline-offset-4">{act.location}</span>
                       </div>
                       {act.description && (
-                        <p className="text-sm text-on-surface-variant/80 font-medium leading-relaxed pl-1 border-l-2 border-primary/10">
+                        <p className="text-xs text-on-surface-variant/70 font-medium leading-relaxed mt-1">
                           {act.description}
                         </p>
+                      )}
+                      {actIdx < day.activities.length - 1 && (
+                        <div className="border-t border-dashed border-outline-variant/30 my-4 pt-2" />
                       )}
                     </div>
                   ))}
@@ -77,7 +114,7 @@ export default function Itinerary() {
 
                 {day.image && (
                    <div className="mt-6 rounded-2xl overflow-hidden shadow-inner group">
-                      <img src={day.image} alt={day.title} className="w-full h-40 object-cover group-hover:scale-105 transition-transform duration-500" />
+                      <img src={day.image} alt={day.title} className="w-full h-40 object-cover group-hover:scale-105 transition-transform duration-500" referrerPolicy="no-referrer" />
                    </div>
                 )}
 
@@ -92,16 +129,6 @@ export default function Itinerary() {
             </div>
           </motion.div>
         ))}
-
-        {/* Future Days Summary (Day 4-8) */}
-        <motion.div 
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            className="grid grid-cols-1 md:grid-cols-2 gap-4"
-        >
-            <SummaryCard day="D4 - 07.01" icon={<Users size={20} />} title="兰塔岛跨海乔迁" desc="体验私家轮渡前往兰塔岛，开启海岛深度协作模式。" />
-            <SummaryCard day="D5-D8 - 兰塔周期" icon={<Brain size={20} />} title="战略研讨 & 自由探索" desc="战略会议与海岛骑行。享受这段纯粹的时光。" />
-        </motion.div>
       </div>
 
       <footer className="pt-12 text-center text-on-surface-variant/40 text-[10px] font-bold uppercase tracking-widest leading-loose">
@@ -109,21 +136,6 @@ export default function Itinerary() {
         Emergency: +66 (0) 75-123-456<br />
         Help Desk | Privacy Policy
       </footer>
-    </div>
-  );
-}
-
-function SummaryCard({ day, icon, title, desc }: any) {
-  return (
-    <div className="bg-surface-container-low rounded-3xl p-6 flex flex-col gap-3 group hover:bg-surface-container-high transition-colors cursor-pointer border border-transparent hover:border-primary/10">
-      <div className="flex justify-between items-center">
-        <span className="text-[10px] font-bold bg-primary/10 text-primary px-3 py-1 rounded-full uppercase tracking-widest">{day}</span>
-        <div className="text-primary/60 group-hover:scale-110 transition-transform">
-          {icon}
-        </div>
-      </div>
-      <h4 className="font-heading font-bold text-base">{title}</h4>
-      <p className="text-xs text-on-surface-variant leading-relaxed font-medium opacity-80">{desc}</p>
     </div>
   );
 }
