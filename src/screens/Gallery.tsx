@@ -5,8 +5,10 @@ import { cn } from '../lib/utils';
 import { getGalleryItems, uploadGalleryFile, GalleryItem } from '../api/galleryApi';
 import { GalleryGrid } from '../components/gallery/GalleryGrid';
 import { UploadButton } from '../components/gallery/UploadButton';
+import { useDragToScroll } from '../hooks/useDragToScroll';
 
 export default function Gallery() {
+  const dragScroll = useDragToScroll();
   const [photos, setPhotos] = useState<GalleryItem[]>([]);
   const [activeTab, setActiveTab] = useState('all');
   const [selectedPhoto, setSelectedPhoto] = useState<GalleryItem | null>(null);
@@ -60,16 +62,30 @@ export default function Gallery() {
 
   return (
     <div className="space-y-10 pb-12 text-left">
-      <header className="flex flex-col md:flex-row md:items-end justify-between gap-6">
-        <div className="space-y-3">
-          <motion.h2 initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} className="font-heading font-bold text-4xl text-on-surface tracking-tight text-left">共享相册</motion.h2>
-          <p className="text-on-surface-variant font-medium text-sm leading-relaxed max-w-sm opacity-90 text-left">记录甲米之行的每一个精彩瞬间</p>
+      <header className="flex flex-col sm:flex-row sm:items-end justify-between gap-6 pb-2">
+        <div className="space-y-4">
+          <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }}>
+            <span className="bg-[#E5EFF1] text-[#1D5E6B] border border-[#1D5E6B]/15 px-4 py-1.5 rounded-full text-[11px] font-extrabold tracking-[0.2em] uppercase inline-block shadow-sm">
+              TEAM GALLERY
+            </span>
+          </motion.div>
+          <h2 className="font-heading font-black text-4xl text-[#00516E] tracking-tight text-left">共享相册</h2>
+          <p className="text-on-surface-variant max-w-lg font-medium text-sm leading-relaxed opacity-90 text-left">
+            记录甲米之行的每一个精彩瞬间，每个人都可以自由上传和点赞属于大家的团建回忆。
+          </p>
         </div>
-        <UploadButton onUpload={handleUpload} />
+        <div className="self-start sm:self-end">
+          <UploadButton onUpload={handleUpload} />
+        </div>
       </header>
 
       {/* Categories Chips */}
-      <div className="flex gap-3 overflow-x-auto hide-scrollbar pb-2 -mx-4 px-4">
+      <div 
+        ref={dragScroll.ref}
+        onMouseDown={dragScroll.onMouseDown}
+        style={dragScroll.style}
+        className="flex gap-3 overflow-x-auto hide-scrollbar pb-2 -mx-4 px-4"
+      >
         <TabButton label="全部" active={activeTab === 'all'} onClick={() => setActiveTab('all')} />
         <TabButton label="Day 1 抵达" active={activeTab === 'Day 1 抵达'} onClick={() => setActiveTab('Day 1 抵达')} />
         <TabButton label="海滩派对" active={activeTab === '海滩派对'} onClick={() => setActiveTab('海滩派对')} />

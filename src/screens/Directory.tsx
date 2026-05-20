@@ -6,8 +6,10 @@ import { Search, Filter, History, Activity, Phone, MessageSquare, Briefcase, Map
 import { cn } from '../lib/utils';
 import { useState } from 'react';
 import { MemberCard } from '../components/directory/MemberCard';
+import { useDragToScroll } from '../hooks/useDragToScroll';
 
 export default function Directory() {
+  const dragScroll = useDragToScroll();
   const [search, setSearch] = useState('');
   const [activeFilter, setActiveFilter] = useState<string>('all');
 
@@ -38,22 +40,21 @@ export default function Directory() {
 
   return (
     <div className="space-y-8 pb-12 text-left">
-      <header className="flex items-center justify-between">
-        <div>
-          <motion.h2 
-            initial={{ opacity: 0, y: -10 }} 
-            animate={{ opacity: 1, y: 0 }} 
-            className="font-heading font-bold text-3xl text-primary tracking-tight text-left"
-          >
-            泰国旅游号码通讯录
-          </motion.h2>
-          <p className="text-on-surface-variant font-medium text-xs leading-relaxed max-w-sm mt-1 opacity-60 text-left">
-            轻松跨国呼叫随队协调人员 & 24小时突发事件应急求助
+      <header className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+        <div className="space-y-4">
+          <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }}>
+            <span className="bg-[#E5EFF1] text-[#1D5E6B] border border-[#1D5E6B]/15 px-4 py-1.5 rounded-full text-[11px] font-extrabold tracking-[0.2em] uppercase mb-1 inline-block shadow-sm">
+              CONTACT DIRECTORY
+            </span>
+          </motion.div>
+          <h2 className="font-heading font-black text-4xl text-[#00516E] tracking-tight text-left">随行通讯录</h2>
+          <p className="text-on-surface-variant max-w-2xl font-medium text-sm leading-relaxed opacity-90 text-left">
+            轻松跨国呼叫随队协调人员 & 24小时突发事件应急求助，一键连接沟通无忧。
           </p>
         </div>
         <button 
           onClick={() => { setSearch(''); setActiveFilter('all'); }}
-          className="p-3 bg-white shadow-md rounded-2xl text-on-surface-variant hover:text-primary transition-all active:scale-95 border border-outline-variant/30 cursor-pointer"
+          className="self-start sm:self-end p-3.5 bg-white shadow-md rounded-2xl text-[#1D5E6B] hover:text-[#00516E] hover:bg-[#E5EFF1]/40 transition-all active:scale-95 border border-outline-variant/30 cursor-pointer"
           title="重置筛选"
         >
           <History size={20} />
@@ -80,7 +81,12 @@ export default function Directory() {
       </div>
 
       {/* Filter Chips */}
-      <div className="flex gap-3 overflow-x-auto hide-scrollbar pb-2 -mx-4 px-4 sm:mx-0 sm:px-0">
+      <div 
+        ref={dragScroll.ref}
+        onMouseDown={dragScroll.onMouseDown}
+        style={dragScroll.style}
+        className="flex gap-3 overflow-x-auto hide-scrollbar pb-2 -mx-4 px-4 sm:mx-0 sm:px-0"
+      >
         <Chip 
           label="全部" 
           active={activeFilter === 'all'} 

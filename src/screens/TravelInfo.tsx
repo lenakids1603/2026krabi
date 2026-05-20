@@ -15,10 +15,15 @@ const CHANGI_IMAGES = [
 
 export default function TravelInfo() {
   return (
-    <div className="space-y-10 pb-12 overflow-x-hidden">
-      <header className="space-y-3">
-        <motion.h2 initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} className="font-heading font-bold text-3xl text-primary tracking-tight">航班与酒店信息</motion.h2>
-        <p className="text-on-surface-variant font-medium text-sm leading-relaxed max-w-lg opacity-90">请核对您的出行时间并提前在线值机。酒店入住时需出示护照。</p>
+    <div className="space-y-10 pb-12 overflow-x-hidden text-left">
+      <header className="space-y-4">
+        <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }}>
+          <span className="bg-[#E5EFF1] text-[#1D5E6B] border border-[#1D5E6B]/15 px-4 py-1.5 rounded-full text-[11px] font-extrabold tracking-[0.2em] uppercase mb-1 inline-block shadow-sm">
+            FLIGHT & HOTEL
+          </span>
+        </motion.div>
+        <h2 className="font-heading font-black text-4xl text-[#00516E] tracking-tight">航班与酒店</h2>
+        <p className="text-on-surface-variant font-medium text-sm leading-relaxed max-w-2xl opacity-90">请核对您的出行时间并提前在线值机。酒店入住时需出示全体护照，祝您旅途平安愉快。</p>
       </header>
 
       {/* Flight Section */}

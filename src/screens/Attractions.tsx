@@ -21,8 +21,11 @@ import {
 } from 'lucide-react';
 import { cn } from '../lib/utils';
 import { Attraction } from '../types';
+import { useDragToScroll } from '../hooks/useDragToScroll';
 
 export default function Attractions() {
+  const categoryDragScroll = useDragToScroll();
+  const regionDragScroll = useDragToScroll();
   const [categoryFilter, setCategoryFilter] = useState<'all' | 'unified' | 'suggested'>('all');
   const [regionFilter, setRegionFilter] = useState<'all' | '甲米' | '兰塔'>('all');
   const [selectedAttraction, setSelectedAttraction] = useState<Attraction | null>(null);
@@ -37,13 +40,13 @@ export default function Attractions() {
     <div className="space-y-10 pb-12 text-left relative">
       <header className="space-y-4">
         <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }}>
-            <span className="bg-secondary/10 text-secondary px-4 py-1.5 rounded-full text-[10px] font-bold tracking-[0.2em] uppercase mb-3 inline-block border border-secondary/20 shadow-sm">
-                Activity Schedule
-            </span>
+          <span className="bg-[#E5EFF1] text-[#1D5E6B] border border-[#1D5E6B]/15 px-4 py-1.5 rounded-full text-[11px] font-extrabold tracking-[0.2em] uppercase mb-3 inline-block shadow-sm">
+            ACTIVITY SCHEDULE
+          </span>
         </motion.div>
-        <h2 className="font-heading font-bold text-4xl text-primary tracking-tight text-left">活动安排</h2>
+        <h2 className="font-heading font-black text-4xl text-[#00516E] tracking-tight text-left">活动安排</h2>
         <p className="text-on-surface-variant max-w-2xl font-medium text-sm leading-relaxed opacity-90 text-left">
-            为您精选泰国的团队统一精彩行程与自由行建议游玩项目。请通过下方筛选器快速按活动类别和游玩地区进行划分筛选。
+          为您精选泰国的团队统一精彩行程与自由行建议游玩项目。请通过下方筛选器快速按活动类别和游玩地区进行划分筛选。
         </p>
       </header>
 
@@ -54,7 +57,12 @@ export default function Attractions() {
           <p className="text-secondary font-bold text-xs uppercase tracking-wider flex items-center gap-2 opacity-80">
             <span className="w-1.5 h-1.5 rounded-full bg-primary" /> 活动属性分类
           </p>
-          <div className="flex gap-3 overflow-x-auto hide-scrollbar pb-1 -mx-2 px-2">
+          <div 
+            ref={categoryDragScroll.ref}
+            onMouseDown={categoryDragScroll.onMouseDown}
+            style={categoryDragScroll.style}
+            className="flex gap-3 overflow-x-auto hide-scrollbar pb-1 -mx-2 px-2"
+          >
             <button 
               id="filter-category-all"
               onClick={() => setCategoryFilter('all')}
@@ -99,7 +107,12 @@ export default function Attractions() {
           <p className="text-secondary font-bold text-xs uppercase tracking-wider flex items-center gap-2 opacity-80">
             <span className="w-1.5 h-1.5 rounded-full bg-secondary" /> 甲米 / 兰塔地区
           </p>
-          <div className="flex gap-3 overflow-x-auto hide-scrollbar pb-1 -mx-2 px-2">
+          <div 
+            ref={regionDragScroll.ref}
+            onMouseDown={regionDragScroll.onMouseDown}
+            style={regionDragScroll.style}
+            className="flex gap-3 overflow-x-auto hide-scrollbar pb-1 -mx-2 px-2"
+          >
             <button 
               id="filter-region-all"
               onClick={() => setRegionFilter('all')}

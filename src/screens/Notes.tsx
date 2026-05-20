@@ -3,13 +3,20 @@ import { UserCheck, Landmark, Backpack, Coins, ShieldCheck, ChevronDown, Downloa
 import { useState } from 'react';
 import { cn } from '@/src/lib/utils';
 import { NOTES_HEADER_BG } from '@/src/assets/localImages';
+import { useDragToScroll } from '../hooks/useDragToScroll';
 
 export default function Notes() {
+  const dragScroll = useDragToScroll();
   return (
-    <div className="space-y-10 pb-40">
+    <div className="space-y-10 pb-40 text-left">
       <header className="space-y-4">
-        <motion.h2 initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} className="font-heading font-bold text-4xl text-primary tracking-tight">注意事项</motion.h2>
-        <p className="text-on-surface-variant font-medium text-sm leading-relaxed max-w-lg opacity-90">为了确保您的旅程顺利愉快，请仔细阅读以下信息。安全与尊重当地文化是我们的首要任务。</p>
+        <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }}>
+          <span className="bg-[#E5EFF1] text-[#1D5E6B] border border-[#1D5E6B]/15 px-4 py-1.5 rounded-full text-[11px] font-extrabold tracking-[0.2em] uppercase mb-1 inline-block shadow-sm">
+            IMPORTANT MEMO
+          </span>
+        </motion.div>
+        <h2 className="font-heading font-black text-4xl text-[#00516E] tracking-tight">注意事项</h2>
+        <p className="text-on-surface-variant font-medium text-sm leading-relaxed max-w-2xl opacity-90">为了确保您的旅程顺利愉快，请仔细阅读以下信息。安全与尊重当地文化是我们的首要任务。</p>
       </header>
 
       {/* Insurance Summary */}
@@ -144,7 +151,12 @@ export default function Notes() {
                 <div className="w-2 h-2 bg-error rounded-full animate-pulse" />
                 <span className="text-[10px] font-black text-on-surface-variant uppercase tracking-[0.3em] opacity-60">24/7 紧急联系人</span>
             </div>
-            <div className="flex gap-4 overflow-x-auto hide-scrollbar">
+            <div 
+              ref={dragScroll.ref}
+              onMouseDown={dragScroll.onMouseDown}
+              style={dragScroll.style}
+              className="flex gap-4 overflow-x-auto hide-scrollbar"
+            >
                 <StickyContact name="John Doe" label="领队" phone="+66 81-234-5678" color="bg-error-container text-error" />
                 <StickyContact name="Embassy" label="中国驻泰使馆" phone="+66 2245 0015" color="bg-primary-container text-white" />
                 <StickyContact name="Medical" label="紧急医疗" phone="1719" color="bg-secondary-container text-secondary" />

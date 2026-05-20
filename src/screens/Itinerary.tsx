@@ -4,6 +4,7 @@ import { ITINERARY } from '../data/itinerary';
 import { ItineraryDay } from '../components/itinerary/ItineraryDay';
 import { cn } from '../lib/utils';
 import { ChevronRight } from 'lucide-react';
+import { useDragToScroll } from '../hooks/useDragToScroll';
 
 // ==========================================
 // 💡 自定义左右滑动的日历小卡片内容 (您可以自由修改下方文字)
@@ -23,6 +24,7 @@ const CALENDAR_CARDS = [
 
 export default function Itinerary() {
   const [selectedDay, setSelectedDay] = useState<number | 'all'>('all');
+  const dragScroll = useDragToScroll();
 
   const filteredItinerary = selectedDay === 'all'
     ? ITINERARY
@@ -30,16 +32,17 @@ export default function Itinerary() {
 
   return (
     <div className="space-y-8 max-w-2xl mx-auto pb-12 text-left">
-      <motion.div 
-        initial={{ opacity: 0, y: 10 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="space-y-2 text-left"
-      >
-        <h2 className="font-heading font-black text-3xl text-primary tracking-tight">团建行程列表</h2>
-        <p className="text-on-surface-variant font-medium text-sm leading-relaxed">
-          Krabi & Koh Lanta Excellence Trip
+      <header className="space-y-4">
+        <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }}>
+          <span className="bg-[#E5EFF1] text-[#1D5E6B] border border-[#1D5E6B]/15 px-4 py-1.5 rounded-full text-[11px] font-extrabold tracking-[0.2em] uppercase mb-1 inline-block shadow-sm">
+            TRAVEL ITINERARY
+          </span>
+        </motion.div>
+        <h2 className="font-heading font-black text-4xl text-[#00516E] tracking-tight text-left">团建行程</h2>
+        <p className="text-on-surface-variant max-w-2xl font-medium text-sm leading-relaxed opacity-90 text-left">
+          甲米 & 兰塔岛 10 天 9 晚公司度夏游玩全纪实。伴随着海浪、落日与椰树，开启令人期待的探索之旅。
         </p>
-      </motion.div>
+      </header>
 
       {/* Slideable Calendar Cards Section */}
       <div className="space-y-3 bg-slate-50 border border-slate-100 p-4 rounded-3xl">
@@ -55,7 +58,12 @@ export default function Itinerary() {
         </div>
 
         {/* Horizontal Scroll Bar */}
-        <div className="flex gap-2.5 overflow-x-auto pb-2 snap-x scrollbar-none scroll-smooth">
+        <div 
+          ref={dragScroll.ref}
+          onMouseDown={dragScroll.onMouseDown}
+          style={dragScroll.style}
+          className="flex gap-2.5 overflow-x-auto pb-2 snap-x scrollbar-none scroll-smooth"
+        >
           {/* "ALL" Day Option */}
           <button
             onClick={() => setSelectedDay('all')}

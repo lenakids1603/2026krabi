@@ -157,23 +157,15 @@ export default function Dining() {
 
   return (
     <div className="space-y-8 pb-16 text-left">
-      {/* Dynamic Header */}
-      <header className="space-y-3">
-        <div className="flex items-center gap-2">
-          <span className="bg-primary/5 text-primary border border-primary/20 px-3 py-1 rounded-full text-[10px] font-bold tracking-widest uppercase">
-            🗺️ LBS 地理信息助手
+      <header className="space-y-4">
+        <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }}>
+          <span className="bg-[#E5EFF1] text-[#1D5E6B] border border-[#1D5E6B]/15 px-4 py-1.5 rounded-full text-[11px] font-extrabold tracking-[0.2em] uppercase mb-3 inline-block shadow-sm">
+            LOCAL SERVICES
           </span>
-        </div>
-        <motion.h2 
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="font-heading font-black text-3xl text-on-surface tracking-tight"
-        >
-          周边查询
-        </motion.h2>
-        <p className="text-on-surface-variant font-medium text-sm leading-relaxed max-w-2xl">
-          基于 Google Maps 开放导航！一键查找甲米奥南和兰塔岛最便捷的本地公共配套设施。
-          请选择您当前所在的区域，即可智能调配对应目的地的检索链接。
+        </motion.div>
+        <h2 className="font-heading font-black text-4xl text-[#00516E] tracking-tight text-left">周边查询</h2>
+        <p className="text-on-surface-variant max-w-2xl font-medium text-sm leading-relaxed opacity-90 text-left">
+          基于 Google Maps 开放导航！一键查找甲米奥南和兰塔岛最便捷的本地公共配套设施。请选择您当前所在的区域，即可智能调配对应目的地的检索链接。
         </p>
       </header>
 

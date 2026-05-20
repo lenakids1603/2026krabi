@@ -70,6 +70,18 @@ export default function Weather() {
         <div className="absolute inset-0 bg-sky-950/20" />
       </div>
 
+      <header className="space-y-4 px-4 pt-6">
+        <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }}>
+          <span className="bg-white/12 text-white border border-white/20 backdrop-blur-md px-4 py-1.5 rounded-full text-[11px] font-extrabold tracking-[0.2em] uppercase mb-1 inline-block shadow-sm">
+            WEATHER & TIDES
+          </span>
+        </motion.div>
+        <h2 className="font-heading font-black text-4xl text-white tracking-tight">天气与潮汐</h2>
+        <p className="text-white/85 max-w-2xl font-medium text-sm leading-relaxed">
+          实时监测甲米及兰塔岛的海岛天气和海洋潮汐。合理规划赶海、户外出行与浮潜嬉水，时刻保障人身安全。
+        </p>
+      </header>
+
       {/* City Switch Tab */}
       <div className="flex justify-center pt-6 px-4">
         <div className="flex bg-white/10 backdrop-blur-md p-1 rounded-full border border-white/20 relative shadow-lg">
