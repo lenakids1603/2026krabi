@@ -14,15 +14,6 @@ const CHANGI_IMAGES = [
 ];
 
 export default function TravelInfo() {
-  const [currentImgIndex, setCurrentImgIndex] = useState(0);
-
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setCurrentImgIndex((prev) => (prev + 1) % CHANGI_IMAGES.length);
-    }, 5000);
-    return () => clearInterval(timer);
-  }, []);
-
   return (
     <div className="space-y-10 pb-12 overflow-x-hidden">
       <header className="space-y-3">
@@ -116,31 +107,13 @@ export default function TravelInfo() {
         
         <div className="bg-white rounded-[2.5rem] shadow-xl overflow-hidden border border-outline-variant/20 group">
           <div className="grid grid-cols-1 md:grid-cols-2">
-            <div className="h-72 md:h-auto relative overflow-hidden bg-black">
-              <AnimatePresence mode="wait">
-                <motion.img 
-                  key={currentImgIndex}
-                  src={CHANGI_IMAGES[currentImgIndex]} 
-                  alt={`Changi Airport ${currentImgIndex}`} 
-                  initial={{ opacity: 0, scale: 1.1 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.95 }}
-                  transition={{ duration: 1.5, ease: "easeInOut" }}
-                  className="absolute inset-0 w-full h-full object-cover"
-                  referrerPolicy="no-referrer"
-                />
-              </AnimatePresence>
-              <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-2">
-                {CHANGI_IMAGES.map((_, idx) => (
-                  <div 
-                    key={idx} 
-                    className={cn(
-                      "w-2 h-2 rounded-full transition-all duration-500",
-                      currentImgIndex === idx ? "bg-white w-6" : "bg-white/40"
-                    )}
-                  />
-                ))}
-              </div>
+            <div className="h-72 md:h-auto relative overflow-hidden bg-black min-h-[250px]">
+              <img 
+                src={changiWaterfall} 
+                alt="Singapore Changi Airport" 
+                className="absolute inset-x-0 inset-y-0 w-full h-full object-cover"
+                referrerPolicy="no-referrer"
+              />
             </div>
             <div className="p-8 md:p-12 flex flex-col justify-center space-y-5">
               <h4 className="font-heading font-bold text-2xl text-on-surface">新加坡樟宜机场 (SIN)</h4>
@@ -161,23 +134,14 @@ export default function TravelInfo() {
                   放松娱乐：梦幻花园、免费电影院
                 </li>
               </ul>
-              <div className="pt-6 flex gap-4">
+              <div className="pt-6">
                 <a 
                   href="https://www.changiairport.com/" 
                   target="_blank" 
                   rel="noopener noreferrer"
-                  className="flex-1 px-6 py-4 bg-primary text-white font-bold rounded-2xl hover:brightness-110 transition-all active:scale-95 text-xs uppercase tracking-widest shadow-lg shadow-primary/20 flex items-center justify-center gap-3"
+                  className="w-full px-6 py-4 bg-primary text-white font-bold rounded-2xl hover:brightness-110 transition-all active:scale-95 text-xs uppercase tracking-widest shadow-lg shadow-primary/20 flex items-center justify-center gap-3"
                 >
                   <Globe size={18} /> 官方网站
-                </a>
-                <a 
-                  href="https://www.changiairport.com/en/maps.html" 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className="w-14 h-14 border-2 border-primary text-primary rounded-2xl flex items-center justify-center hover:bg-primary hover:text-white transition-all active:scale-95 shadow-md flex-shrink-0"
-                  title="查看机场地图"
-                >
-                   <Navigation size={24} />
                 </a>
               </div>
             </div>
@@ -202,6 +166,8 @@ export default function TravelInfo() {
             dates="Jun 28 - Jun 30" 
             img={krabiResort}
             color="bg-primary"
+            websiteUrl="https://www.krabiresort.com/"
+            mapUrl="https://www.google.com/maps/search/?api=1&query=Krabi+Resort+%26+Spa"
           />
           <HotelCard 
             title="Pimalai Resort & Spa" 
@@ -210,6 +176,8 @@ export default function TravelInfo() {
             dates="Jun 30 - Jul 03" 
             img={krabiIslands}
             color="bg-secondary"
+            websiteUrl="https://www.pimalai.com/"
+            mapUrl="https://www.google.com/maps/search/?api=1&query=Pimalai+Resort+%26+Spa"
           />
         </div>
       </section>
@@ -281,7 +249,7 @@ function FlightCard({ type, route, totalDuration, segments, color }: any) {
   );
 }
 
-function HotelCard({ title, stay, addr, dates, img, color }: any) {
+function HotelCard({ title, stay, addr, dates, img, color, websiteUrl, mapUrl }: any) {
   return (
     <div className="bg-white rounded-[2.5rem] shadow-xl overflow-hidden flex flex-col group hover:shadow-2xl transition-all duration-500 border border-outline-variant/20 h-full">
       <div className="h-64 relative overflow-hidden">
@@ -305,12 +273,23 @@ function HotelCard({ title, stay, addr, dates, img, color }: any) {
           </div>
         </div>
         <div className="flex gap-3">
-          <button className="flex-1 bg-primary text-white font-bold py-4 rounded-2xl hover:brightness-110 transition-all active:scale-95 text-xs uppercase tracking-widest shadow-lg shadow-primary/20 flex items-center justify-center gap-3">
-            <Navigation size={18} /> 查看地图
-          </button>
-          <button className="w-14 h-14 border-2 border-primary text-primary rounded-2xl flex items-center justify-center hover:bg-primary hover:text-white transition-all active:scale-95 shadow-md">
-            <Phone size={24} />
-          </button>
+          <a
+            href={websiteUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex-1 bg-primary text-white font-bold py-4 rounded-2xl hover:brightness-110 transition-all active:scale-95 text-xs uppercase tracking-widest shadow-lg shadow-primary/20 flex items-center justify-center gap-3 animate-none"
+          >
+            <Globe size={18} /> 访问官网
+          </a>
+          <a
+            href={mapUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="w-14 h-14 border-2 border-primary text-primary rounded-2xl flex items-center justify-center hover:bg-primary hover:text-white transition-all active:scale-95 shadow-md flex-shrink-0"
+            title="导航"
+          >
+            <Navigation size={22} className="rotate-45" />
+          </a>
         </div>
       </div>
     </div>
