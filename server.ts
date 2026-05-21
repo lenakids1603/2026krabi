@@ -20,7 +20,7 @@ interface GalleryItem {
 }
 
 const app = express();
-const PORT = 3000;
+const PORT = Number(process.env.PORT || 5188);
 
 // Setup directories
 const uploadsDir = path.join(process.cwd(), "uploads");
