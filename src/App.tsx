@@ -14,6 +14,8 @@ import Weather from './screens/Weather';
 import Directory from './screens/Directory';
 import Gallery from './screens/Gallery';
 import Notes from './screens/Notes';
+import SpotsSharing from './screens/SpotsSharing';
+import AddSpot from './screens/AddSpot';
 import ScrollToTop from './components/layout/ScrollToTop';
 
 export default function App() {
@@ -30,6 +32,8 @@ export default function App() {
           <Route path="/weather" element={<Weather />} />
           <Route path="/directory" element={<Directory />} />
           <Route path="/gallery" element={<Gallery />} />
+          <Route path="/checkin-spots" element={<SpotsSharing />} />
+          <Route path="/add-spot" element={<AddSpot />} />
           <Route path="/more" element={<Notes />} />
         </Routes>
       </Layout>

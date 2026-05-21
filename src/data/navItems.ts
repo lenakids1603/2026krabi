@@ -8,6 +8,7 @@ export const NAV_ITEMS: NavItem[] = [
   { id: 'dining', label: '周边查询', path: '/dining', icon: 'compass' },
   { id: 'weather', label: '天气和潮汐', path: '/weather', icon: 'waves' },
   { id: 'gallery', label: '共享相册', path: '/gallery', icon: 'camera' },
-  { id: 'directory', label: '临时泰国通讯录', path: '/directory', icon: 'users' },
+  { id: 'checkin-spots', label: '打卡点分享', path: '/checkin-spots', icon: 'compass' },
+  { id: 'directory', label: '临时泰国号码通讯录', path: '/directory', icon: 'users' },
   { id: 'notes', label: '注意事项', path: '/more', icon: 'info' },
 ];

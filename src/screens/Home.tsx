@@ -100,7 +100,8 @@ export default function Home() {
           <Link to="/dining"><NavCard icon={<Compass size={24} />} title="周边查询" subtitle="地图一键实时导航" /></Link>
           <Link to="/weather"><NavCard icon={<Waves size={24} />} title="天气和潮汐" subtitle="实时天气与出海建议" /></Link>
           <Link to="/gallery"><NavCard icon={<Camera size={24} />} title="共享相册" subtitle="上传你的团建瞬间" isBordered /></Link>
-          <Link to="/directory"><NavCard icon={<Users size={24} />} title="临时泰国通讯录" subtitle="随队协调与应急置顶" /></Link>
+          <Link to="/checkin-spots"><NavCard icon={<Compass size={24} className="text-[#FF7E53]" />} title="打卡点分享" subtitle="探索伙伴推荐的宝藏地" isBordered className="bg-[#FF7E53]/5 border-[#FF7E53]/20" /></Link>
+          <Link to="/directory"><NavCard icon={<Users size={24} />} title="临时泰国号码通讯录" subtitle="随队协调与应急置顶" /></Link>
           <Link to="/more"><NavCard icon={<Info size={24} />} title="注意事项" subtitle="签证、换汇与防晒" className="bg-tertiary-container/10 text-tertiary border-tertiary-container/30" /></Link>
         </div>
       </section>
