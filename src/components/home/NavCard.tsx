@@ -30,47 +30,47 @@ export function NavCard({
   // Map our themes to specific style blocks
   const themeClasses: Record<string, { card: string; iconContainer: string; iconColor: string }> = {
     blue: {
-      card: "bg-gradient-to-br from-white to-[#0077B6]/2 shadow-[0px_2px_12px_rgba(0,119,182,0.03)] border-[#0077B6]/10 hover:border-[#0077B6]/30 hover:shadow-[0px_10px_25px_-5px_rgba(0,119,182,0.08)]",
+      card: "bg-white shadow-[0px_2px_12px_rgba(0,119,182,0.03)] border-[#0077B6]/10 hover:border-[#0077B6]/30 hover:shadow-[0px_10px_25px_-5px_rgba(0,119,182,0.08)]",
       iconContainer: "bg-[#0077B6]/8 text-[#0077B6] group-hover:bg-[#0077B6] group-hover:text-white",
       iconColor: "text-[#0077B6]"
     },
     teal: {
-      card: "bg-gradient-to-br from-white to-teal-502/2 shadow-[0px_2px_12px_rgba(13,148,136,0.03)] border-teal-600/10 hover:border-teal-600/30 hover:shadow-[0px_10px_25px_-5px_rgba(13,148,136,0.08)]",
+      card: "bg-white shadow-[0px_2px_12px_rgba(13,148,136,0.03)] border-teal-600/10 hover:border-teal-600/30 hover:shadow-[0px_10px_25px_-5px_rgba(13,148,136,0.08)]",
       iconContainer: "bg-teal-600/8 text-teal-600 group-hover:bg-teal-600 group-hover:text-white",
       iconColor: "text-teal-600"
     },
     coral: {
-      card: "bg-gradient-to-br from-white to-[#FF7E53]/5 shadow-[0px_2px_12px_rgba(255,126,83,0.04)] border-[#FF7E53]/15 hover:border-[#FF7E53]/40 hover:shadow-[0px_10px_25px_-5px_rgba(255,126,83,0.12)]",
+      card: "bg-[#FF7E53]/5 shadow-[0px_2px_12px_rgba(255,126,83,0.04)] border-[#FF7E53]/15 hover:border-[#FF7E53]/40 hover:shadow-[0px_10px_25px_-5px_rgba(255,126,83,0.12)]",
       iconContainer: "bg-[#FF7E53]/10 text-[#FF7E53] group-hover:bg-[#FF7E53] group-hover:text-white",
       iconColor: "text-[#FF7E53]"
     },
     amber: {
-      card: "bg-gradient-to-br from-white to-amber-50/20 shadow-[0px_2px_12px_rgba(217,119,6,0.03)] border-amber-600/10 hover:border-amber-600/30 hover:shadow-[0px_10px_25px_-5px_rgba(217,119,6,0.08)]",
+      card: "bg-white shadow-[0px_2px_12px_rgba(217,119,6,0.03)] border-amber-600/10 hover:border-amber-600/30 hover:shadow-[0px_10px_25px_-5px_rgba(217,119,6,0.08)]",
       iconContainer: "bg-amber-600/8 text-amber-600 group-hover:bg-amber-600 group-hover:text-white",
       iconColor: "text-amber-600"
     },
     emerald: {
-      card: "bg-gradient-to-br from-white to-emerald-50/20 shadow-[0px_2px_12px_rgba(5,150,105,0.03)] border-emerald-600/10 hover:border-emerald-600/30 hover:shadow-[0px_10px_25px_-5px_rgba(5,150,105,0.08)]",
+      card: "bg-white shadow-[0px_2px_12px_rgba(5,150,105,0.03)] border-emerald-600/10 hover:border-emerald-600/30 hover:shadow-[0px_10px_25px_-5px_rgba(5,150,105,0.08)]",
       iconContainer: "bg-emerald-600/8 text-emerald-600 group-hover:bg-emerald-600 group-hover:text-white",
       iconColor: "text-emerald-600"
     },
     indigo: {
-      card: "bg-gradient-to-br from-white to-indigo-50/20 shadow-[0px_2px_12px_rgba(79,70,229,0.03)] border-indigo-600/10 hover:border-indigo-600/30 hover:shadow-[0px_10px_25px_-5px_rgba(79,70,229,0.08)]",
+      card: "bg-white shadow-[0px_2px_12px_rgba(79,70,229,0.03)] border-indigo-600/10 hover:border-indigo-600/30 hover:shadow-[0px_10px_25px_-5px_rgba(79,70,229,0.08)]",
       iconContainer: "bg-indigo-600/8 text-indigo-600 group-hover:bg-indigo-600 group-hover:text-white",
       iconColor: "text-indigo-600"
     },
     cyan: {
-      card: "bg-gradient-to-br from-white to-cyan-50/20 shadow-[0px_2px_12px_rgba(8,145,178,0.03)] border-cyan-600/10 hover:border-cyan-600/30 hover:shadow-[0px_10px_25px_-5px_rgba(8,145,178,0.08)]",
+      card: "bg-white shadow-[0px_2px_12px_rgba(8,145,178,0.03)] border-cyan-600/10 hover:border-cyan-600/30 hover:shadow-[0px_10px_25px_-5px_rgba(8,145,178,0.08)]",
       iconContainer: "bg-cyan-600/8 text-cyan-600 group-hover:bg-cyan-600 group-hover:text-white",
       iconColor: "text-cyan-600"
     },
     slate: {
-      card: "bg-gradient-to-br from-white to-slate-50/30 shadow-[0px_2px_12px_rgba(71,85,105,0.02)] border-slate-600/10 hover:border-slate-500/30 hover:shadow-[0px_10px_25px_-5px_rgba(71,85,105,0.06)]",
+      card: "bg-[#F8FAFC] shadow-[0px_2px_12px_rgba(71,85,105,0.02)] border-slate-200 hover:border-slate-400 hover:shadow-[0px_10px_25px_-5px_rgba(71,85,105,0.06)]",
       iconContainer: "bg-slate-600/8 text-slate-700 group-hover:bg-slate-800 group-hover:text-white",
       iconColor: "text-slate-700"
     },
     luxury: {
-      card: "bg-gradient-to-br from-amber-50/10 via-white to-amber-100/5 shadow-[0px_2px_14px_rgba(180,83,9,0.03)] border-[#B45309]/15 hover:border-[#B45309]/40 hover:shadow-[0px_10px_25px_-5px_rgba(180,83,9,0.08)]",
+      card: "bg-white shadow-[0px_2px_14px_rgba(180,83,9,0.03)] border-[#B45309]/15 hover:border-[#B45309]/40 hover:shadow-[0px_10px_25px_-5px_rgba(180,83,9,0.08)]",
       iconContainer: "bg-[#B45309]/8 text-[#B45309] group-hover:bg-[#B45309] group-hover:text-white",
       iconColor: "text-[#B45309]"
     }

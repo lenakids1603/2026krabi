@@ -83,7 +83,7 @@ export default function Home() {
         </div>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           {/* Main Hero Card: 团建行程 */}
-          <Link to="/itinerary" className="col-span-2 row-span-2 relative rounded-[32px] overflow-hidden group shadow-md hover:shadow-[0px_20px_40px_rgba(0,81,110,0.15)] transition-all duration-500 bg-gradient-to-br from-[#00516E] via-[#0077B6] to-[#1D5E6B] p-8 flex flex-col justify-between hover:-translate-y-1.5 cursor-pointer">
+          <Link to="/itinerary" className="col-span-2 row-span-2 relative rounded-[32px] overflow-hidden group shadow-md hover:shadow-[0px_20px_40px_rgba(0,81,110,0.15)] transition-all duration-500 bg-[#00516E] p-8 flex flex-col justify-between hover:-translate-y-1.5 cursor-pointer">
             {/* Ambient Map Grid Backplate */}
             <div className="absolute inset-0 opacity-15 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px]" />
             <div className="absolute -right-16 -top-16 w-48 h-48 rounded-full bg-white/5 blur-2xl group-hover:bg-white/10 transition-colors duration-500" />
