@@ -210,12 +210,43 @@ export async function getItinerary(): Promise<ItineraryDay[]> {
 // ==========================================
 // ☀️ 3. WEATHER & TIDE API
 // ==========================================
+function getThailandTimeString(): string {
+  try {
+    const now = new Date();
+    const options = { 
+      timeZone: 'Asia/Bangkok', 
+      year: 'numeric', 
+      month: '2-digit', 
+      day: '2-digit', 
+      hour: '2-digit', 
+      minute: '2-digit', 
+      hour12: false 
+    } as const;
+    const bkkFormatter = new Intl.DateTimeFormat('en-CA', options);
+    // en-CA format: YYYY-MM-DD, hh:mm or YYYY-MM-DD hh:mm or YYYY-MM-DD, HH:MM
+    const raw = bkkFormatter.format(now);
+    return raw.replace(',', '');
+  } catch (err) {
+    return "2026-05-21 09:00";
+  }
+}
+
 export async function getWeather(city: 'krabi' | 'lanta'): Promise<WeatherForecastResponse> {
-  return city === 'krabi' ? MOCK_WEATHER_KRABI : MOCK_WEATHER_LANTA;
+  const base = city === 'krabi' ? MOCK_WEATHER_KRABI : MOCK_WEATHER_LANTA;
+  return {
+    ...base,
+    lastUpdated: getThailandTimeString(),
+    source: 'mock'
+  };
 }
 
 export async function getTides(city: 'krabi' | 'lanta'): Promise<TideInfo> {
-  return city === 'krabi' ? MOCK_TIDE_KRABI : MOCK_TIDE_LANTA;
+  const base = city === 'krabi' ? MOCK_TIDE_KRABI : MOCK_TIDE_LANTA;
+  return {
+    ...base,
+    lastUpdated: getThailandTimeString(),
+    source: 'mock'
+  };
 }
 
 // ==========================================

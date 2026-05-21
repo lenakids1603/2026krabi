@@ -70,6 +70,8 @@ export interface WeatherForecastResponse {
   stats: WeatherCardStat[];
   forecast: WeatherForecast[];
   safety: WeatherAlertCard[];
+  lastUpdated?: string;
+  source?: 'mock' | 'api';
 }
 
 export interface TidePoint {
@@ -88,6 +90,8 @@ export interface TideInfo {
   cy: string;
   points: TidePoint[];
   tip: string;
+  lastUpdated?: string;
+  source?: 'mock' | 'api';
 }
 
 // --- Gallery Types ---

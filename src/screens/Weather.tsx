@@ -3,12 +3,14 @@ import { motion } from 'motion/react';
 import { Sun, CloudRain, Cloud, CloudLightning, Droplets, Wind, Eye, CheckCircle2, AlertTriangle, Droplet, ChevronLeft, ChevronRight } from 'lucide-react';
 import { cn } from '../lib/utils';
 import { WEATHER_HEADER_BG } from '../assets/localImages';
-import { getWeather, WeatherInfo } from '../api/weatherApi';
-import { getTides, TideData } from '../api/tideApi';
+import { getWeather, getTides } from '../services/api';
+import { WeatherForecastResponse as WeatherInfo, TideInfo as TideData } from '../types/api';
 import { StatCard } from '../components/weather/StatCard';
 import { TideCard } from '../components/weather/TideCard';
 import { ForecastCard } from '../components/weather/ForecastCard';
 import { SafetyCard } from '../components/weather/SafetyCard';
+import { MOCK_WEATHER_KRABI, MOCK_WEATHER_LANTA } from '../data/weather';
+import { MOCK_TIDE_KRABI, MOCK_TIDE_LANTA } from '../data/tides';
 
 // Utility to resolve string icon names into active Lucide JSX nodes
 const resolveWeatherIcon = (name: string, size = 20, customClass?: string) => {
@@ -33,18 +35,63 @@ export default function Weather() {
   const [lantaWeather, setLantaWeather] = useState<WeatherInfo | null>(null);
   const [krabiTide, setKrabiTide] = useState<TideData | null>(null);
   const [lantaTide, setLantaTide] = useState<TideData | null>(null);
+  const [isApiError, setIsApiError] = useState(false);
+  const [updateTime, setUpdateTime] = useState<string>('');
 
   useEffect(() => {
     async function loadData() {
-      const kw = await getWeather('krabi');
-      const lw = await getWeather('lanta');
-      const kt = await getTides('krabi');
-      const lt = await getTides('lanta');
+      let kw: WeatherInfo | null = null;
+      let lw: WeatherInfo | null = null;
+      let kt: TideData | null = null;
+      let lt: TideData | null = null;
+      let apiFailed = false;
+
+      const fallbackTimeString = () => {
+        try {
+          return new Date().toISOString().slice(0, 16).replace('T', ' ');
+        } catch {
+          return "2026-05-21 09:00";
+        }
+      };
+
+      try {
+        kw = await getWeather('krabi');
+      } catch (err) {
+        console.error("Failed to load Krabi weather:", err);
+        kw = { ...MOCK_WEATHER_KRABI, lastUpdated: fallbackTimeString(), source: 'mock' };
+        apiFailed = true;
+      }
+
+      try {
+        lw = await getWeather('lanta');
+      } catch (err) {
+        console.error("Failed to load Lanta weather:", err);
+        lw = { ...MOCK_WEATHER_LANTA, lastUpdated: fallbackTimeString(), source: 'mock' };
+        apiFailed = true;
+      }
+
+      try {
+        kt = await getTides('krabi');
+      } catch (err) {
+        console.error("Failed to load Krabi tides:", err);
+        kt = { ...MOCK_TIDE_KRABI, lastUpdated: fallbackTimeString(), source: 'mock' };
+        apiFailed = true;
+      }
+
+      try {
+        lt = await getTides('lanta');
+      } catch (err) {
+        console.error("Failed to load Lanta tides:", err);
+        lt = { ...MOCK_TIDE_LANTA, lastUpdated: fallbackTimeString(), source: 'mock' };
+        apiFailed = true;
+      }
 
       setKrabiWeather(kw);
       setLantaWeather(lw);
       setKrabiTide(kt);
       setLantaTide(lt);
+      setIsApiError(apiFailed);
+      setUpdateTime(kw?.lastUpdated || fallbackTimeString());
     }
     loadData();
   }, []);
@@ -80,6 +127,32 @@ export default function Weather() {
         <p className="text-white/85 max-w-2xl font-medium text-sm leading-relaxed">
           实时监测甲米及兰塔岛的海岛天气和海洋潮汐。合理规划赶海、户外出行与浮潜嬉水，时刻保障人身安全。
         </p>
+
+        {/* Lightweight Status, Data Source & Update Time */}
+        <div className="flex flex-col gap-2.5 pt-1">
+          {isApiError && (
+            <div className="bg-amber-500/15 border border-amber-500/30 backdrop-blur-md text-amber-200 text-xs px-3.5 py-2.5 rounded-2xl font-medium flex items-center gap-2 max-w-2xl shadow-lg">
+              <span className="text-base">⚠️</span>
+              <span>实时数据加载失败，已自动载入本地安全备份数据。</span>
+            </div>
+          )}
+          
+          <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
+            <span className="bg-white/10 text-white border border-white/10 backdrop-blur-sm px-3 py-1 rounded-full text-[11px] font-bold inline-flex items-center gap-1.5 shadow-sm">
+              <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse" />
+              当前为本地预览数据
+            </span>
+            {updateTime && (
+              <span className="text-white/70 text-xs font-medium">
+                更新时间：{updateTime} (泰国时间)
+              </span>
+            )}
+          </div>
+          
+          <p className="text-white/60 text-[11px] leading-relaxed max-w-xl">
+            * 提示：本页面当前渲染团队离线备份数据。后续可接入实时 OpenWeather 与 WXTide 潮汐计算通道。
+          </p>
+        </div>
       </header>
 
       {/* City Switch Tab */}
