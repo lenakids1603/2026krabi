@@ -118,12 +118,15 @@ export interface CheckinSpot {
   category: '餐厅' | '摄影位' | '酒吧' | '咖啡馆' | '其他';
   description: string;
   image: string;
+  image_url?: string;
   lat: number;
   lng: number;
   user: string;
   createdAt: string;
   address?: string; // Prearranged for address fields
   google_maps_url?: string; // Prearranged for Google Maps URLs
+  status?: 'active' | 'deleted';
+  is_seed?: boolean;
 }
 
 export interface CreateCheckinSpotInput {
