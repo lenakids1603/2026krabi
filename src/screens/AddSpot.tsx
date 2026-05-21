@@ -150,11 +150,11 @@ export default function AddSpot() {
               // Standard real Google Maps layout when API_KEY is present
               <APIProvider apiKey={API_KEY} version="weekly">
                 <Map
-                  defaultCenter={{ lat, lng }}
-                  center={{ lat, lng }}
+                  defaultCenter={{ lat: 7.8804, lng: 98.3923 }}
                   defaultZoom={11}
                   mapId="DEMO_MAP_ID"
-                  gestureHandling="greedy"
+                  gestureHandling="cooperative"
+                  reuseMaps
                   onClick={handleMapClick}
                   internalUsageAttributionIds={['gmp_mcp_codeassist_v1_aistudio']}
                   style={{ width: '100%', height: '100%' }}

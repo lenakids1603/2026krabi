@@ -47,29 +47,19 @@ export default function SpotsSharing() {
   return (
     <div className="space-y-8 pb-12 text-left">
       {/* Header Banner */}
-      <header className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div className="space-y-3">
-          <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }}>
-            <span className="bg-[#FF7E53]/10 text-[#FF7E53] border border-[#FF7E53]/20 px-4 py-1.5 rounded-full text-[11px] font-extrabold tracking-[0.2em] uppercase mb-1 inline-block shadow-sm">
-              SHARING HOTSPOTS
-            </span>
-          </motion.div>
-          <h2 className="font-heading font-black text-4xl text-[#00516E] tracking-tight flex items-center gap-2">
-            <Compass className="text-[#FF7E53] animate-spin-slow" size={32} />
-            打卡点分享
-          </h2>
-          <p className="text-on-surface-variant max-w-2xl font-medium text-sm leading-relaxed opacity-90">
-            伙伴们极力推荐的宝藏餐馆、拍摄机位、落日酒吧，带你打卡别样的甲米之旅。
-          </p>
-        </div>
-
-        {/* Home Back Shortcut */}
-        <Link 
-          to="/"
-          className="flex items-center gap-1.5 self-start text-xs font-bold text-[#1D5E6B] hover:text-[#00516E] pr-3 py-1"
-        >
-          <ArrowLeft size={16} /> 返回首页
-        </Link>
+      <header className="space-y-3">
+        <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }}>
+          <span className="bg-[#FF7E53]/10 text-[#FF7E53] border border-[#FF7E53]/20 px-4 py-1.5 rounded-full text-[11px] font-extrabold tracking-[0.2em] uppercase mb-1 inline-block shadow-sm">
+            SHARING HOTSPOTS
+          </span>
+        </motion.div>
+        <h2 className="font-heading font-black text-4xl text-[#00516E] tracking-tight flex items-center gap-2">
+          <Compass className="text-[#FF7E53] animate-spin-slow" size={32} />
+          打卡点分享
+        </h2>
+        <p className="text-on-surface-variant max-w-2xl font-medium text-sm leading-relaxed opacity-90">
+          伙伴们极力推荐的宝藏餐馆、拍摄机位、落日酒吧，带你打卡别样的甲米之旅。
+        </p>
       </header>
 
       {/* Primary Orange Call-To-Action Button */}

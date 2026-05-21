@@ -1,5 +1,5 @@
 import { motion } from 'motion/react';
-import { Calendar, PlaneTakeoff, Map, Compass, Waves, Camera, Info, ArrowRight, Users } from 'lucide-react';
+import { Calendar, PlaneTakeoff, Map, Compass, Waves, Camera, Info, ArrowRight, Users, Search } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { NavCard } from '../components/home/NavCard';
 import heroImg from '../assets/images/krabi_hero_retreat_1779245216266.png';
@@ -73,36 +73,129 @@ export default function Home() {
       {/* Navigation Grid */}
       <section>
         <div className="flex items-center justify-between mb-6">
-          <h3 className="font-heading font-bold text-2xl text-on-surface">探索行程指南</h3>
-          <Link to="/more" className="text-primary text-xs font-bold flex items-center gap-1 uppercase tracking-widest hover:underline transition-all">
-            查看全部 <ArrowRight size={14} />
+          <div className="text-left space-y-1">
+            <h3 className="font-heading font-black text-2xl text-slate-800 tracking-tight">探索行程指南</h3>
+            <p className="text-xs text-slate-400 font-medium">全方位工具箱为您在泰国的每分每秒保驾护航</p>
+          </div>
+          <Link to="/more" className="text-[#0077B6] text-xs font-extrabold flex items-center gap-1 uppercase tracking-widest hover:-translate-x-1 duration-300 transition-transform">
+            详情指南 <ArrowRight size={14} strokeWidth={2.5} />
           </Link>
         </div>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          <Link to="/itinerary" className="col-span-2 row-span-2 relative rounded-3xl overflow-hidden group shadow-lg bg-primary-container">
-            <div className="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] bg-repeat" />
-            <div className="relative h-full p-8 flex flex-col justify-between text-white z-10 text-left">
-              <div className="w-14 h-14 bg-white/20 rounded-2xl flex items-center justify-center backdrop-blur-md shadow-inner mb-6">
-                <Calendar size={32} />
+          {/* Main Hero Card: 团建行程 */}
+          <Link to="/itinerary" className="col-span-2 row-span-2 relative rounded-[32px] overflow-hidden group shadow-md hover:shadow-[0px_20px_40px_rgba(0,81,110,0.15)] transition-all duration-500 bg-gradient-to-br from-[#00516E] via-[#0077B6] to-[#1D5E6B] p-8 flex flex-col justify-between hover:-translate-y-1.5 cursor-pointer">
+            {/* Ambient Map Grid Backplate */}
+            <div className="absolute inset-0 opacity-15 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px]" />
+            <div className="absolute -right-16 -top-16 w-48 h-48 rounded-full bg-white/5 blur-2xl group-hover:bg-white/10 transition-colors duration-500" />
+            
+            <div className="relative h-full flex flex-col justify-between text-white z-10 text-left">
+              <div className="w-14 h-14 bg-white/10 rounded-2xl flex items-center justify-center backdrop-blur-md shadow-inner mb-8 group-hover:scale-110 group-hover:rotate-3 transition-transform duration-300 ring-1 ring-white/20">
+                <Calendar size={28} strokeWidth={2} />
               </div>
+              
               <div>
-                <h4 className="font-heading font-bold text-3xl mb-3">团建行程</h4>
-                <p className="text-white/80 text-sm leading-relaxed font-medium">从甲米落日到兰塔浮潜，10天完整日程安排</p>
+                <span className="bg-white/15 backdrop-blur-md text-white text-[9px] font-extrabold px-2.5 py-1 rounded-full mb-3 inline-block uppercase tracking-widest ring-1 ring-white/10">
+                  CRUISE MAP · 10 DAYS
+                </span>
+                <h4 className="font-heading font-black text-3xl mb-2.5 tracking-tight">团建日程安排</h4>
+                <p className="text-white/80 text-[11px] leading-relaxed font-semibold max-w-sm">从甲米落日、海边落日晚霞，到兰塔岛最深处的秘密泻湖，在这里探索 10 日完整官方日程。</p>
               </div>
             </div>
-            <div className="absolute top-6 right-6 opacity-0 group-hover:opacity-100 transition-all duration-300 translate-y-2 group-hover:translate-y-0">
-                <ArrowRight className="text-white" size={28} />
+            
+            {/* Visual Action Indicator */}
+            <div className="absolute bottom-8 right-8 w-10 h-10 rounded-full bg-white/10 group-hover:bg-white text-white group-hover:text-[#00516E] flex items-center justify-center backdrop-blur-md shadow-md transition-all duration-300">
+              <ArrowRight size={18} strokeWidth={2.5} />
             </div>
           </Link>
 
-          <Link to="/travel-info"><NavCard icon={<PlaneTakeoff size={24} />} title="机酒信息" subtitle="航班号与度假村确认单" /></Link>
-          <Link to="/attractions"><NavCard icon={<Map size={24} />} title="活动安排" subtitle="统一行程与建议游玩" /></Link>
-          <Link to="/dining"><NavCard icon={<Compass size={24} />} title="周边查询" subtitle="地图一键实时导航" /></Link>
-          <Link to="/weather"><NavCard icon={<Waves size={24} />} title="天气和潮汐" subtitle="实时天气与出海建议" /></Link>
-          <Link to="/gallery"><NavCard icon={<Camera size={24} />} title="共享相册" subtitle="上传你的团建瞬间" isBordered /></Link>
-          <Link to="/checkin-spots"><NavCard icon={<Compass size={24} className="text-[#FF7E53]" />} title="打卡点分享" subtitle="探索伙伴推荐的宝藏地" isBordered className="bg-[#FF7E53]/5 border-[#FF7E53]/20" /></Link>
-          <Link to="/directory"><NavCard icon={<Users size={24} />} title="临时泰国号码通讯录" subtitle="随队协调与应急置顶" /></Link>
-          <Link to="/more"><NavCard icon={<Info size={24} />} title="注意事项" subtitle="签证、换汇与防晒" className="bg-tertiary-container/10 text-tertiary border-tertiary-container/30" /></Link>
+          {/* Bento Sub-Cards with Tailored Themes & Delays */}
+          <Link to="/travel-info">
+            <NavCard 
+              icon={<PlaneTakeoff size={22} />} 
+              title="机酒信息" 
+              subtitle="航班号、座位与度假村凭证" 
+              theme="blue"
+              badge="必备"
+              badgeType="new"
+              delay={0.05}
+            />
+          </Link>
+
+          <Link to="/attractions">
+            <NavCard 
+              icon={<Map size={22} />} 
+              title="活动安排" 
+              subtitle="官方游玩路线与岛屿推荐" 
+              theme="teal"
+              delay={0.1}
+            />
+          </Link>
+
+          <Link to="/dining">
+            <NavCard 
+              icon={<Search size={22} />} 
+              title="周边查询" 
+              subtitle="精选餐馆、便利店实时导航" 
+              theme="indigo"
+              delay={0.15}
+            />
+          </Link>
+
+          <Link to="/weather">
+            <NavCard 
+              icon={<Waves size={22} />} 
+              title="天气和潮汐" 
+              subtitle="每日出海安全建议与潮水位" 
+              theme="cyan"
+              badge="实时"
+              badgeType="live"
+              delay={0.2}
+            />
+          </Link>
+
+          <Link to="/gallery">
+            <NavCard 
+              icon={<Camera size={22} />} 
+              title="共享相册" 
+              subtitle="团建高清大片、合照轻松传" 
+              theme="amber"
+              badge="共享中"
+              delay={0.25}
+            />
+          </Link>
+
+          <Link to="/checkin-spots" className="relative group/checkin">
+            <NavCard 
+              icon={<Compass size={22} />} 
+              title="打卡点分享" 
+              subtitle="精选落日、摄影位与咖啡馆" 
+              theme="coral"
+              badge="HOT"
+              badgeType="hot"
+              isBordered
+              delay={0.3}
+            />
+          </Link>
+
+          <Link to="/directory">
+            <NavCard 
+              icon={<Users size={22} />} 
+              title="临时号码簿" 
+              subtitle="领队、随队电话与泰方求助" 
+              theme="emerald"
+              delay={0.35}
+            />
+          </Link>
+
+          <Link to="/more">
+            <NavCard 
+              icon={<Info size={22} />} 
+              title="注意事项" 
+              subtitle="防晒指南、换汇攻略与签证" 
+              theme="slate"
+              delay={0.4}
+            />
+          </Link>
         </div>
       </section>
 
