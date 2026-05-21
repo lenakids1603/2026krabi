@@ -145,28 +145,6 @@ export default function AddSpot() {
           </label>
 
           <div className="relative h-72 md:h-80 w-full rounded-2xl overflow-hidden border border-outline-variant/40 bg-slate-50 shadow-inner group">
-            
-            {/* SEARCH BANNER OVERLAY */}
-            <div className="absolute top-4 left-4 right-4 z-10 flex gap-2">
-              <div className="flex-1 bg-white/95 backdrop-blur-md rounded-xl shadow-md border border-neutral-200/50 flex items-center px-4">
-                <Search size={16} className="text-on-surface-variant opacity-60 mr-2" />
-                <input
-                  type="text"
-                  placeholder="在普吉、甲米、兰塔寻宝 (例如：芭东、兰塔)..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  onKeyDown={(e) => e.key === 'Enter' && (e.preventDefault(), handleMockSearch())}
-                  className="w-full py-2.5 text-xs font-semibold focus:outline-none bg-transparent"
-                />
-              </div>
-              <button
-                type="button"
-                onClick={handleMockSearch}
-                className="px-4 bg-[#FF7E53] text-white font-bold text-xs rounded-xl shadow-md cursor-pointer hover:bg-[#E0633B] transition-colors"
-              >
-                搜索定位
-              </button>
-            </div>
 
             {hasValidKey ? (
               // Standard real Google Maps layout when API_KEY is present
@@ -176,6 +154,7 @@ export default function AddSpot() {
                   center={{ lat, lng }}
                   defaultZoom={11}
                   mapId="DEMO_MAP_ID"
+                  gestureHandling="greedy"
                   onClick={handleMapClick}
                   internalUsageAttributionIds={['gmp_mcp_codeassist_v1_aistudio']}
                   style={{ width: '100%', height: '100%' }}
@@ -236,7 +215,7 @@ export default function AddSpot() {
                 </div>
 
                 {/* Subtle coordinate adjust overlay at the right */}
-                <div className="absolute right-4 top-18 bg-white/95 backdrop-blur-md p-2 rounded-xl flex flex-col gap-2 shadow-md border border-outline-variant/20">
+                <div className="absolute right-4 top-4 bg-white/95 backdrop-blur-md p-2 rounded-xl flex flex-col gap-2 shadow-md border border-outline-variant/20">
                   <button 
                     type="button" 
                     onClick={() => { setLat(prev => prev + 0.005); }}
