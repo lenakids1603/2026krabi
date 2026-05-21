@@ -395,13 +395,25 @@ export default function AddSpot() {
         </div>
 
         {/* OUTLINE ALERT REGARDING API SETUP */}
-        {!hasValidKey && (
+        {hasValidKey ? (
+          <div className="bg-emerald-50 border border-emerald-100 text-emerald-950 rounded-xl p-4 flex gap-3 text-xs leading-relaxed text-left">
+            <div className="p-1 bg-emerald-100 text-emerald-700 rounded-lg shrink-0 h-fit mt-0.5">
+              <Check size={14} strokeWidth={3} />
+            </div>
+            <div className="space-y-1">
+              <span className="font-bold text-emerald-800">成功联通 Google Maps 平台内置服务！</span>
+              <p className="opacity-85 text-[11px]">
+                系统已识别到您的项目安全密钥：<code className="bg-emerald-200/40 px-1 py-0.5 rounded font-mono font-bold">{API_KEY.substring(0, 8)}...{API_KEY.substring(API_KEY.length - 4)}</code> (长度 {API_KEY.length} 字符)。现在正为您载入官方 API 原生地图。
+              </p>
+            </div>
+          </div>
+        ) : (
           <div className="bg-sky-50 border border-sky-100 text-sky-900 rounded-xl p-4 flex gap-3 text-xs leading-relaxed text-left animate-fadeIn">
             <HelpCircle size={18} className="text-[#0284C7] shrink-0 mt-0.5" />
             <div className="space-y-1">
-              <span className="font-bold">系统检测：您当前正在使用本地仿真沙盒进行位置存取</span>
+              <span className="font-bold text-[#00516E]">系统提示：您当前正在使用本地高保真 2D 拟真沙盒进行打卡</span>
               <p className="opacity-80">
-                如果要在沙盒中完美加载 Google Maps 的原生地图与高级标记，您可一键打开您的 <strong>Settings (⚙️ Gear icon) → Secrets → 新增 GOOGLE_MAPS_PLATFORM_KEY 为您的密钥。</strong>
+                若要联通真实 Google Maps 引擎，您可以一键打开编辑器右上角的 <strong>Settings (⚙️ 齿轮图标) → Secrets (密钥管理机制) → 添加配对的 GOOGLE_MAPS_PLATFORM_KEY</strong> 作为变量名称。
               </p>
             </div>
           </div>
