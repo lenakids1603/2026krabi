@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { ITINERARY } from '../data/itinerary';
+import { getItinerary, getThailandTripProgress } from '../services/api';
+import { ItineraryDay as ApiItineraryDay, TripProgress } from '../types/api';
 import { ItineraryDay } from '../components/itinerary/ItineraryDay';
 import { cn } from '../lib/utils';
 import { ChevronRight } from 'lucide-react';
@@ -24,11 +25,26 @@ const CALENDAR_CARDS = [
 
 export default function Itinerary() {
   const [selectedDay, setSelectedDay] = useState<number | 'all'>('all');
+  const [itineraryList, setItineraryList] = useState<ApiItineraryDay[]>([]);
+  const [tripProgress, setTripProgress] = useState<TripProgress | null>(null);
   const dragScroll = useDragToScroll();
 
+  useEffect(() => {
+    getItinerary().then(data => {
+      setItineraryList(data);
+      const progress = getThailandTripProgress();
+      setTripProgress(progress);
+      if (progress.status === 'during' && typeof progress.currentDay === 'number') {
+        setSelectedDay(progress.currentDay);
+      } else {
+        setSelectedDay('all');
+      }
+    });
+  }, []);
+
   const filteredItinerary = selectedDay === 'all'
-    ? ITINERARY
-    : ITINERARY.filter(day => day.day === selectedDay);
+    ? itineraryList
+    : itineraryList.filter(day => day.day === selectedDay);
 
   return (
     <div className="space-y-8 max-w-2xl mx-auto pb-12 text-left">
@@ -42,6 +58,26 @@ export default function Itinerary() {
         <p className="text-on-surface-variant max-w-2xl font-medium text-sm leading-relaxed opacity-90 text-left">
           甲米 & 兰塔岛 10 天 9 晚公司度夏游玩全纪实。伴随着海浪、落日与椰树，开启令人期待的探索之旅。
         </p>
+
+        {/* Lightweight time/range banners */}
+        {tripProgress?.status === 'before' && (
+          <div className="bg-amber-50 border border-amber-200 text-amber-800 text-xs px-3.5 py-2 rounded-2xl font-medium flex items-center gap-2">
+            <span>⏳</span>
+            <span>2026 团建行程尚未开始（预计 2026-06-28 启程，当前处于出行准备阶段）</span>
+          </div>
+        )}
+        {tripProgress?.status === 'after' && (
+          <div className="bg-slate-100 border border-slate-200 text-slate-600 text-xs px-3.5 py-2 rounded-2xl font-medium flex items-center gap-2">
+            <span>🎉</span>
+            <span>2026 团建行程已于 2026-07-07 圆满落幕，感谢同行！</span>
+          </div>
+        )}
+        {tripProgress?.status === 'during' && (
+          <div className="bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs px-3.5 py-2 rounded-2xl font-medium flex items-center gap-2">
+            <span>🌴</span>
+            <span>今日是 2026 团建 <b>第 {tripProgress.currentDay} 天</b>，泰国曼谷时间当前：<b>{tripProgress.formattedDate}</b></span>
+          </div>
+        )}
       </header>
 
       {/* Slideable Calendar Cards Section */}
@@ -107,50 +143,59 @@ export default function Itinerary() {
             </div>
           </button>
 
-          {CALENDAR_CARDS.map(card => (
-            <button
-              key={card.day}
-              onClick={() => setSelectedDay(card.day)}
-              className={cn(
-                "snap-center shrink-0 w-[114px] p-2.5 rounded-2xl border text-left flex flex-col justify-between transition-all duration-300",
-                selectedDay === card.day
-                  ? "bg-primary text-white border-primary shadow-md shadow-primary/20 scale-102"
-                  : "bg-white border-outline-variant/20 text-on-surface hover:bg-surface-container-high hover:border-outline-variant"
-              )}
-            >
-              <div className="space-y-0.5">
-                <div className="flex justify-between items-baseline gap-1">
-                  <span className={cn(
-                    "text-xs font-black tracking-tight",
-                    selectedDay === card.day ? "text-white" : "text-primary"
+          {CALENDAR_CARDS.map(card => {
+            const isToday = card.day === tripProgress?.currentDay;
+            return (
+              <button
+                key={card.day}
+                onClick={() => setSelectedDay(card.day)}
+                className={cn(
+                  "snap-center shrink-0 w-[114px] p-2.5 rounded-2xl border text-left flex flex-col justify-between transition-all duration-300 relative",
+                  selectedDay === card.day
+                    ? "bg-primary text-white border-primary shadow-md shadow-primary/20 scale-102"
+                    : isToday
+                      ? "bg-amber-50/50 border-amber-300 text-on-surface shadow-sm"
+                      : "bg-white border-outline-variant/20 text-on-surface hover:bg-surface-container-high hover:border-outline-variant"
+                )}
+              >
+                <div className="space-y-0.5 w-full">
+                  <div className="flex justify-between items-baseline gap-1">
+                    <span className={cn(
+                      "text-xs font-black tracking-tight",
+                      selectedDay === card.day ? "text-white" : "text-primary"
+                    )}>
+                      {card.date}
+                    </span>
+                    <span className={cn(
+                      "text-[8px] font-bold",
+                      selectedDay === card.day 
+                        ? "text-white/85 bg-white/20 px-1 rounded-sm" 
+                        : isToday
+                          ? "bg-red-500 text-white px-1 rounded-sm shadow-sm"
+                          : "text-on-surface-variant"
+                    )}>
+                      {isToday ? "今日" : card.weekday}
+                    </span>
+                  </div>
+                  <div className={cn(
+                    "text-[10px] font-extrabold uppercase tracking-widest",
+                    selectedDay === card.day ? "text-white/90" : "text-secondary"
                   )}>
-                    {card.date}
-                  </span>
-                  <span className={cn(
-                    "text-[8px] font-bold opacity-60",
-                    selectedDay === card.day ? "text-white/80" : "text-on-surface-variant"
-                  )}>
-                    {card.weekday}
-                  </span>
+                    Day {card.day}
+                  </div>
                 </div>
+                
                 <div className={cn(
-                  "text-[10px] font-extrabold uppercase tracking-widest",
-                  selectedDay === card.day ? "text-white/90" : "text-secondary"
+                  "text-[9px] font-medium leading-tight mt-1.5 border-t pt-1 line-clamp-2 w-full",
+                  selectedDay === card.day 
+                    ? "border-white/10 text-white/75" 
+                    : "border-outline-variant/10 text-on-surface-variant/70"
                 )}>
-                  Day {card.day}
+                  {card.note || '点击添加备注'}
                 </div>
-              </div>
-              
-              <div className={cn(
-                "text-[9px] font-medium leading-tight mt-1.5 border-t pt-1 line-clamp-2 w-full",
-                selectedDay === card.day 
-                  ? "border-white/10 text-white/75" 
-                  : "border-outline-variant/10 text-on-surface-variant/70"
-              )}>
-                {card.note || '点击添加备注'}
-              </div>
-            </button>
-          ))}
+              </button>
+            );
+          })}
         </div>
       </div>
 

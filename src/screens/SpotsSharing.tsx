@@ -2,33 +2,17 @@ import { useState, useEffect } from 'react';
 import { motion } from 'motion/react';
 import { Link } from 'react-router-dom';
 import { MapPin, Compass, Plus, Navigation, Heart, Share2, ArrowLeft } from 'lucide-react';
-import { DEFAULT_SPOTS, Spot } from '../data/spots';
+import { getCheckinSpots } from '../services/api';
+import { CheckinSpot } from '../types/api';
 import { cn } from '../lib/utils';
 
 export default function SpotsSharing() {
-  const [spots, setSpots] = useState<Spot[]>([]);
+  const [spots, setSpots] = useState<CheckinSpot[]>([]);
   const [activeFilter, setActiveFilter] = useState<string>('全部');
 
-  // Load spots from localStorage merged with default spots
+  // Load spots from API layer
   useEffect(() => {
-    const saved = localStorage.getItem('lenakids_shared_spots');
-    if (saved) {
-      try {
-        const parsed = JSON.parse(saved);
-        // Combine keeping defaults unique
-        const merged = [...parsed];
-        DEFAULT_SPOTS.forEach(defSpot => {
-          if (!merged.some(s => s.id === defSpot.id)) {
-            merged.push(defSpot);
-          }
-        });
-        setSpots(merged);
-      } catch (err) {
-        setSpots(DEFAULT_SPOTS);
-      }
-    } else {
-      setSpots(DEFAULT_SPOTS);
-    }
+    getCheckinSpots().then(data => setSpots(data));
   }, []);
 
   const categories = ['全部', '餐厅', '摄影位', '酒吧', '咖啡馆', '其他'];
@@ -38,7 +22,7 @@ export default function SpotsSharing() {
     return spot.category === activeFilter;
   });
 
-  const handleNavigate = (spot: Spot) => {
+  const handleNavigate = (spot: CheckinSpot) => {
     // Open real-world Google Maps directions/navigation
     const url = `https://www.google.com/maps/search/?api=1&query=${spot.lat},${spot.lng}`;
     window.open(url, '_blank');

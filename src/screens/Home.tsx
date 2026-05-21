@@ -1,11 +1,20 @@
+import { useState, useEffect } from 'react';
 import { motion } from 'motion/react';
 import { Calendar, PlaneTakeoff, Map, Compass, Waves, Camera, Info, ArrowRight, Users, Search } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { NavCard } from '../components/home/NavCard';
+import { getHomeStatus } from '../services/api';
+import { HomeStatus } from '../types/api';
 import heroImg from '../assets/images/krabi_hero_retreat_1779245216266.png';
 import foodImg from '../assets/images/thai_beach_dinner_1779244685299.png';
 
 export default function Home() {
+  const [status, setStatus] = useState<HomeStatus | null>(null);
+
+  useEffect(() => {
+    getHomeStatus().then(data => setStatus(data));
+  }, []);
+
   return (
     <div className="space-y-8 pb-12">
       {/* Hero Section */}
@@ -43,14 +52,28 @@ export default function Home() {
         <div className="bg-white rounded-3xl p-6 shadow-[0px_4px_20px_rgba(0,119,182,0.06)] border border-outline-variant/30 flex flex-col md:flex-row gap-8 items-center">
           <div className="flex-1 md:border-r border-outline-variant pr-0 md:pr-8 w-full block">
             <div className="text-on-surface-variant text-[10px] uppercase font-bold tracking-[0.2em] mb-2 opacity-60 text-left">行程状态</div>
-            <div className="flex items-baseline gap-2">
-              <span className="text-primary font-heading font-bold text-5xl">Day 1</span>
-              <span className="text-on-surface-variant text-sm font-medium">/ 10 Days</span>
+            <div className="flex items-baseline gap-2 text-left">
+              {status?.tripStatus === 'before' ? (
+                <span className="text-amber-600 font-heading font-bold text-2xl">行前准备中</span>
+              ) : status?.tripStatus === 'after' ? (
+                <span className="text-slate-500 font-heading font-bold text-2xl">行程已完美结束</span>
+              ) : (
+                <>
+                  <span className="text-primary font-heading font-bold text-5xl">Day {status?.dayNumber || 1}</span>
+                  <span className="text-on-surface-variant text-sm font-medium">/ {status?.totalDays || 10} Days</span>
+                </>
+              )}
             </div>
             <div className="mt-4 flex items-center gap-2 text-secondary font-semibold bg-secondary/10 px-3 py-1.5 rounded-full w-fit text-sm">
                 <Waves size={16} />
-                今日启程：杭州 - 甲米
+                <span>
+                  {status?.tripStatus === 'before' ? '首站集结：' : status?.tripStatus === 'after' ? '收官谢幕：' : '今日启程：'}
+                  {status?.currentDayTitle || '加载中...'}
+                </span>
             </div>
+            {status?.message && (
+              <p className="text-xs text-on-surface-variant/70 mt-2.5 font-medium text-left">{status.message}</p>
+            )}
           </div>
           <div className="flex-[2] w-full">
             <div className="text-on-surface-variant text-[10px] uppercase font-bold tracking-[0.2em] mb-4 opacity-60 text-left">下一项活动</div>
@@ -60,8 +83,8 @@ export default function Home() {
                   <PlaneTakeoff size={28} />
                 </div>
                 <div className="text-left">
-                  <h4 className="font-heading font-bold text-lg text-primary">团队集结 & 登机</h4>
-                  <p className="text-on-surface-variant text-xs font-medium mt-0.5">23:00 · 萧山国际机场 T4</p>
+                  <h4 className="font-heading font-bold text-lg text-primary">{status?.nextActivity?.title || '团队集结 & 登机'}</h4>
+                  <p className="text-on-surface-variant text-xs font-medium mt-0.5">{status?.nextActivity?.time || '23:00'} · {status?.nextActivity?.location || '港口航站'}</p>
                 </div>
               </div>
               <ArrowRight className="text-outline-variant group-hover:text-primary transition-colors group-hover:translate-x-1 duration-300" size={20} />
