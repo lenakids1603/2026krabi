@@ -290,8 +290,8 @@ export default function Weather() {
           </div>
           
           <p className="text-white/60 text-[11px] leading-relaxed max-w-xl">
-            * 提示：本页面当前渲染团队离线备份数据。后续可接入实时 OpenWeather 与 WXTide 潮汐计算通道。
-          </p>
+            * 提示：刷新后请稍等片刻，数据更新可能需要1-2分钟时间，并刷新网页，若持续10分钟无法获取实时数据，请退出浏览器清理缓存或稍后再试。  
+            </p>
         </div>
       </header>
 
