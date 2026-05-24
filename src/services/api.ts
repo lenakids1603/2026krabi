@@ -231,22 +231,58 @@ function getThailandTimeString(): string {
   }
 }
 
-export async function getWeather(city: 'krabi' | 'lanta'): Promise<WeatherForecastResponse> {
-  const base = city === 'krabi' ? MOCK_WEATHER_KRABI : MOCK_WEATHER_LANTA;
-  return {
-    ...base,
-    lastUpdated: getThailandTimeString(),
-    source: 'mock'
-  };
+export async function getWeather(city: 'krabi' | 'lanta', options?: RealtimeRequestOptions): Promise<WeatherForecastResponse> {
+  return getWeatherWithOptions(city, options);
 }
 
-export async function getTides(city: 'krabi' | 'lanta'): Promise<TideInfo> {
-  const base = city === 'krabi' ? MOCK_TIDE_KRABI : MOCK_TIDE_LANTA;
-  return {
-    ...base,
-    lastUpdated: getThailandTimeString(),
-    source: 'mock'
-  };
+export async function getTides(city: 'krabi' | 'lanta', options?: RealtimeRequestOptions): Promise<TideInfo> {
+  return getTidesWithOptions(city, options);
+}
+
+type RealtimeRequestOptions = {
+  refresh?: boolean;
+};
+
+function buildRealtimeUrl(path: '/api/weather' | '/api/tides', city: 'krabi' | 'lanta', options?: RealtimeRequestOptions): string {
+  const params = new URLSearchParams({ city });
+  if (options?.refresh) {
+    params.set('refresh', '1');
+  }
+  return `${path}?${params.toString()}`;
+}
+
+export async function getWeatherWithOptions(city: 'krabi' | 'lanta', options?: RealtimeRequestOptions): Promise<WeatherForecastResponse> {
+  try {
+    const response = await fetch(buildRealtimeUrl('/api/weather', city, options), { cache: 'no-store' });
+    if (!response.ok) {
+      throw new Error('Failed to load weather');
+    }
+    return await response.json() as WeatherForecastResponse;
+  } catch {
+    const base = city === 'krabi' ? MOCK_WEATHER_KRABI : MOCK_WEATHER_LANTA;
+    return {
+      ...base,
+      lastUpdated: getThailandTimeString(),
+      source: 'fallback'
+    };
+  }
+}
+
+export async function getTidesWithOptions(city: 'krabi' | 'lanta', options?: RealtimeRequestOptions): Promise<TideInfo> {
+  try {
+    const response = await fetch(buildRealtimeUrl('/api/tides', city, options), { cache: 'no-store' });
+    if (!response.ok) {
+      throw new Error('Failed to load tides');
+    }
+    return await response.json() as TideInfo;
+  } catch {
+    const base = city === 'krabi' ? MOCK_TIDE_KRABI : MOCK_TIDE_LANTA;
+    return {
+      ...base,
+      lastUpdated: getThailandTimeString(),
+      source: 'fallback'
+    };
+  }
 }
 
 // ==========================================

@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { motion } from 'motion/react';
 import { ArrowLeft, MapPin, Camera, Info, Check, Plus, Search, HelpCircle, Compass } from 'lucide-react';
 import { APIProvider, Map, AdvancedMarker, Pin } from '@vis.gl/react-google-maps';
-import { Spot } from '../data/spots';
+import { createCheckinSpot } from '../services/api';
 import { cn } from '../lib/utils';
 
 // Read Maps Platform key as specified in the GMP skill
@@ -52,8 +52,8 @@ export default function AddSpot() {
     }
   };
 
-  // Safe submission of spot to localStorage
-  const handleSubmit = (e: FormEvent) => {
+  // Safe submission through the API gateway with local fallback inside the service layer
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     if (!name.trim()) return;
 
@@ -70,30 +70,15 @@ export default function AddSpot() {
       finalImage = defaultSceneries[selectedCategory];
     }
 
-    const newSpot: Spot = {
-      id: 'spot-' + Date.now(),
+    await createCheckinSpot({
       name: name.trim(),
       category: selectedCategory,
       description: description.trim() || '随行打卡，风光无限。',
-      image: finalImage,
+      image_url: finalImage,
       lat,
       lng,
-      user: user.trim() || '旅行同伴',
-      createdAt: new Date().toISOString()
-    };
-
-    // Save
-    const saved = localStorage.getItem('lenakids_shared_spots');
-    let spotsList: Spot[] = [];
-    if (saved) {
-      try {
-        spotsList = JSON.parse(saved);
-      } catch (err) {
-        spotsList = [];
-      }
-    }
-    spotsList.unshift(newSpot);
-    localStorage.setItem('lenakids_shared_spots', JSON.stringify(spotsList));
+      user: user.trim() || '旅行同伴'
+    });
 
     // Redirect to list
     navigate('/checkin-spots');
