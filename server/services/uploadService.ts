@@ -26,10 +26,11 @@ export interface UploadedFileInfo {
 }
 
 export function createGalleryUploader(uploadDir = config.uploadDir) {
-  fs.mkdirSync(uploadDir, { recursive: true });
+  const resolvedUploadDir = path.resolve(uploadDir);
+  fs.mkdirSync(resolvedUploadDir, { recursive: true });
 
   const storage = multer.diskStorage({
-    destination: (_req, _file, cb) => cb(null, uploadDir),
+    destination: (_req, _file, cb) => cb(null, resolvedUploadDir),
     filename: (_req, file, cb) => {
       const ext = path.extname(file.originalname).toLowerCase();
       cb(null, `${crypto.randomUUID()}${ext}`);
@@ -68,6 +69,12 @@ function validateExtensionAndMime(originalName: string, mimeType: string) {
   }
 
   return { ok: false, error: "只允许上传 JPG/PNG/WebP 图片或 MP4/MOV/WebM 视频" } as const;
+}
+
+function isInsideUploadDir(filePath: string, uploadDir = config.uploadDir) {
+  const resolvedFile = path.resolve(filePath);
+  const resolvedRoot = path.resolve(uploadDir);
+  return resolvedFile.startsWith(resolvedRoot + path.sep);
 }
 
 function validateMagicNumber(filePath: string, mediaType: MediaType, mimeType: string): boolean {
@@ -126,24 +133,29 @@ export function finalizeUploadedGalleryFile(
   thumbnailBase64: unknown,
   uploadDir = config.uploadDir
 ): { ok: true; file: UploadedFileInfo } | { ok: false; error: string } {
+  if (!isInsideUploadDir(file.path, uploadDir)) {
+    removeFileIfExists(file.path, uploadDir);
+    return { ok: false, error: "上传路径安全校验失败" };
+  }
+
   const validation = validateExtensionAndMime(file.originalname, file.mimetype);
   if (!validation.ok) {
-    removeFileIfExists(file.path);
+    removeFileIfExists(file.path, uploadDir);
     return { ok: false, error: validation.error };
   }
 
   if (validation.mediaType === "image" && file.size > 10 * 1024 * 1024) {
-    removeFileIfExists(file.path);
+    removeFileIfExists(file.path, uploadDir);
     return { ok: false, error: "图片文件大小不能超过 10MB" };
   }
 
   if (validation.mediaType === "video" && file.size > 100 * 1024 * 1024) {
-    removeFileIfExists(file.path);
+    removeFileIfExists(file.path, uploadDir);
     return { ok: false, error: "视频文件大小不能超过 100MB" };
   }
 
   if (!validateMagicNumber(file.path, validation.mediaType, file.mimetype.toLowerCase())) {
-    removeFileIfExists(file.path);
+    removeFileIfExists(file.path, uploadDir);
     return { ok: false, error: "安全校验失败：文件内容与扩展名或 MIME 类型不符" };
   }
 
@@ -155,6 +167,10 @@ export function finalizeUploadedGalleryFile(
   if (parsedThumbnail) {
     const thumbnailName = `thumb_${id}${parsedThumbnail.ext}`;
     thumbnailPath = path.join(uploadDir, thumbnailName);
+    if (!isInsideUploadDir(thumbnailPath, uploadDir)) {
+      removeFileIfExists(file.path, uploadDir);
+      return { ok: false, error: "缩略图路径安全校验失败" };
+    }
     fs.writeFileSync(thumbnailPath, parsedThumbnail.buffer);
     thumbnailUrl = normalizeLocalUploadUrl(thumbnailName);
   }
@@ -176,18 +192,25 @@ export function finalizeUploadedGalleryFile(
   };
 }
 
-export function removeFileIfExists(filePath: string | null | undefined) {
+export function removeFileIfExists(filePath: string | null | undefined, uploadDir = config.uploadDir): string | null {
   if (!filePath) {
-    return;
+    return null;
   }
 
   const resolved = path.resolve(filePath);
-  const uploadRoot = path.resolve(config.uploadDir);
+  const uploadRoot = path.resolve(uploadDir);
   if (!resolved.startsWith(uploadRoot + path.sep)) {
-    return;
+    return `Refused to remove file outside upload directory: ${resolved}`;
   }
 
   if (fs.existsSync(resolved)) {
-    fs.unlinkSync(resolved);
+    try {
+      fs.unlinkSync(resolved);
+    } catch (error) {
+      const message = error instanceof Error ? error.message : String(error);
+      return `Failed to remove ${resolved}: ${message}`;
+    }
   }
+
+  return null;
 }

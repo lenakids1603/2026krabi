@@ -40,6 +40,11 @@ interface LegacyGalleryItem {
   comments?: number;
 }
 
+interface ListGalleryMediaOptions {
+  limit?: number;
+  offset?: number;
+}
+
 const legacyGalleryPath = path.join(config.rootDir, "gallery_db.json");
 
 const defaultItems: LegacyGalleryItem[] = [
@@ -224,16 +229,34 @@ function toPublicMedia(row: GalleryMediaRow, ownerToken = "") {
   };
 }
 
-export function listGalleryMedia(ownerToken = "") {
-  const rows = getDb()
-    .prepare(
-      `
+export function countActiveGalleryMedia() {
+  const row = getDb()
+    .prepare("SELECT COUNT(*) AS count FROM gallery_media WHERE deleted_at IS NULL")
+    .get() as { count: number };
+  return row.count;
+}
+
+export function listGalleryMedia(ownerToken = "", options: ListGalleryMediaOptions = {}) {
+  const hasPaging = Number.isFinite(options.limit) || Number.isFinite(options.offset);
+  const limit = Math.max(1, Math.min(Number(options.limit || 100), 200));
+  const offset = Math.max(0, Number(options.offset || 0));
+
+  const sql = hasPaging
+    ? `
       SELECT * FROM gallery_media
       WHERE deleted_at IS NULL
       ORDER BY datetime(created_at) DESC
+      LIMIT ? OFFSET ?
     `
-    )
-    .all() as GalleryMediaRow[];
+    : `
+      SELECT * FROM gallery_media
+      WHERE deleted_at IS NULL
+      ORDER BY datetime(created_at) DESC
+    `;
+
+  const rows = hasPaging
+    ? (getDb().prepare(sql).all(limit, offset) as GalleryMediaRow[])
+    : (getDb().prepare(sql).all() as GalleryMediaRow[]);
 
   return rows.map((row) => toPublicMedia(row, ownerToken));
 }
@@ -295,16 +318,6 @@ export function deleteGalleryMedia(id: string, options: { ownerToken?: string; i
     return { status: 403, error: "你只能删除自己上传的内容" } as const;
   }
 
-  try {
-    removeFileIfExists(row.file_path);
-    if (row.thumbnail_path && row.thumbnail_path !== row.file_path) {
-      removeFileIfExists(row.thumbnail_path);
-    }
-  } catch (error) {
-    console.error("[gallery] Failed to remove media file from disk:", error);
-    return { status: 500, error: "文件删除失败，数据库记录未变更" } as const;
-  }
-
   getDb()
     .prepare(
       `
@@ -315,5 +328,75 @@ export function deleteGalleryMedia(id: string, options: { ownerToken?: string; i
     )
     .run(new Date().toISOString(), id);
 
-  return { status: 200, success: true } as const;
+  const warnings = [
+    removeFileIfExists(row.file_path),
+    row.thumbnail_path && row.thumbnail_path !== row.file_path ? removeFileIfExists(row.thumbnail_path) : null,
+  ].filter((warning): warning is string => Boolean(warning));
+
+  for (const warning of warnings) {
+    console.warn(`[gallery] ${warning}`);
+  }
+
+  return { status: 200, success: true, warnings } as const;
+}
+
+function getAllReferencedUploadPaths() {
+  const rows = getDb()
+    .prepare(
+      `
+      SELECT id, file_path, thumbnail_path FROM gallery_media
+      WHERE file_path IS NOT NULL OR thumbnail_path IS NOT NULL
+    `
+    )
+    .all() as Array<{ id: string; file_path: string | null; thumbnail_path: string | null }>;
+
+  const references = new Map<string, Array<{ id: string; field: "file_path" | "thumbnail_path" }>>();
+  for (const row of rows) {
+    for (const field of ["file_path", "thumbnail_path"] as const) {
+      const value = row[field];
+      if (!value) {
+        continue;
+      }
+      const resolved = path.resolve(value);
+      const existing = references.get(resolved) || [];
+      existing.push({ id: row.id, field });
+      references.set(resolved, existing);
+    }
+  }
+  return references;
+}
+
+export function getGalleryStorageReport() {
+  const db = getDb();
+  const active = db
+    .prepare("SELECT COUNT(*) AS count FROM gallery_media WHERE deleted_at IS NULL")
+    .get() as { count: number };
+  const softDeleted = db
+    .prepare("SELECT COUNT(*) AS count FROM gallery_media WHERE deleted_at IS NOT NULL")
+    .get() as { count: number };
+
+  const uploadRoot = path.resolve(config.uploadDir);
+  const diskFiles = fs.existsSync(uploadRoot)
+    ? fs
+        .readdirSync(uploadRoot, { withFileTypes: true })
+        .filter((entry) => entry.isFile())
+        .map((entry) => path.join(uploadRoot, entry.name))
+    : [];
+
+  const references = getAllReferencedUploadPaths();
+  const referencedPaths = new Set(references.keys());
+  const databaseReferencedMissingFiles = Array.from(references.entries())
+    .filter(([filePath]) => !fs.existsSync(filePath))
+    .flatMap(([filePath, refs]) => refs.map((ref) => ({ ...ref, path: filePath })));
+
+  const orphanFiles = diskFiles.filter((filePath) => !referencedPaths.has(path.resolve(filePath)));
+
+  return {
+    activeMediaCount: active.count,
+    softDeletedMediaCount: softDeleted.count,
+    uploadDirectory: uploadRoot,
+    uploadDirectoryFileCount: diskFiles.length,
+    databaseReferencedMissingFiles,
+    orphanFiles,
+  };
 }

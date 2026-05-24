@@ -7,8 +7,10 @@ import {
   revokeAdminSession,
 } from "../services/authService";
 import {
+  countActiveGalleryMedia,
   createGalleryMedia,
   deleteGalleryMedia,
+  getGalleryStorageReport,
   listGalleryMedia,
 } from "../services/galleryService";
 import {
@@ -43,6 +45,16 @@ function hasAdminSession(req: express.Request) {
   return isAdminSessionValid(getSignedAdminToken(req));
 }
 
+function readPaging(req: express.Request) {
+  const limit = typeof req.query.limit === "string" ? Number(req.query.limit) : undefined;
+  const offset = typeof req.query.offset === "string" ? Number(req.query.offset) : undefined;
+  return {
+    hasPaging: Number.isFinite(limit) || Number.isFinite(offset),
+    limit: Number.isFinite(limit) ? limit : undefined,
+    offset: Number.isFinite(offset) ? offset : undefined,
+  };
+}
+
 function rateLimitMiddleware(req: express.Request, res: express.Response, next: express.NextFunction) {
   const ip = (req.headers["x-forwarded-for"] as string) || req.socket.remoteAddress || "unknown_ip";
   const now = Date.now();
@@ -71,7 +83,13 @@ export function registerLegacyGalleryRoutes(app: express.Express, uploadsDir: st
   const upload = createGalleryUploader(uploadsDir);
 
   app.get("/api/gallery", (req, res) => {
-    res.json(listGalleryMedia(getOwnerToken(req)));
+    const paging = readPaging(req);
+    if (paging.hasPaging) {
+      res.setHeader("X-Total-Count", String(countActiveGalleryMedia()));
+      res.setHeader("X-Limit", String(paging.limit || 100));
+      res.setHeader("X-Offset", String(paging.offset || 0));
+    }
+    res.json(listGalleryMedia(getOwnerToken(req), paging));
   });
 
   app.post("/api/gallery/upload", rateLimitMiddleware, (req, res) => {
@@ -87,7 +105,7 @@ export function registerLegacyGalleryRoutes(app: express.Express, uploadsDir: st
 
       const ownerToken = getOwnerToken(req);
       if (!ownerToken) {
-        removeFileIfExists(req.file.path);
+        removeFileIfExists(req.file.path, uploadsDir);
         return res.status(400).json({ error: "需要携带合法的匿名识别符" });
       }
 
@@ -99,8 +117,8 @@ export function registerLegacyGalleryRoutes(app: express.Express, uploadsDir: st
       try {
         return res.json(createGalleryMedia(finalized.file, ownerToken));
       } catch (error) {
-        removeFileIfExists(finalized.file.filePath);
-        removeFileIfExists(finalized.file.thumbnailPath);
+        removeFileIfExists(finalized.file.filePath, uploadsDir);
+        removeFileIfExists(finalized.file.thumbnailPath, uploadsDir);
         console.error("Server upload handler exception:", error);
         return res.status(500).json({ error: "服务端发生异常" });
       }
@@ -117,7 +135,31 @@ export function registerLegacyGalleryRoutes(app: express.Express, uploadsDir: st
       return res.status(result.status).json({ error: result.error });
     }
 
-    return res.json({ success: true, message: "删除成功！" });
+    return res.json({ success: true, message: "删除成功！", warnings: result.warnings });
+  });
+
+  app.delete("/api/admin/gallery/:id", (req, res) => {
+    if (!hasAdminSession(req)) {
+      return res.status(401).json({ error: "管理员登录已失效" });
+    }
+
+    const result = deleteGalleryMedia(req.params.id, {
+      isAdmin: true,
+    });
+
+    if ("error" in result) {
+      return res.status(result.status).json({ error: result.error });
+    }
+
+    return res.json({ success: true, message: "删除成功！", warnings: result.warnings });
+  });
+
+  app.get("/api/admin/gallery/storage-report", (req, res) => {
+    if (!hasAdminSession(req)) {
+      return res.status(401).json({ error: "管理员登录已失效" });
+    }
+
+    return res.json(getGalleryStorageReport());
   });
 
   app.post("/api/gallery/admin/login", (req, res) => {
@@ -136,6 +178,7 @@ export function registerLegacyGalleryRoutes(app: express.Express, uploadsDir: st
       signed: true,
       maxAge: session.maxAgeMs,
       sameSite: "lax",
+      secure: config.nodeEnv === "production",
       path: "/",
     });
 

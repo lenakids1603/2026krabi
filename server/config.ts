@@ -21,7 +21,7 @@ export const config = {
   port: readNumber(process.env.PORT, 5188),
   databasePath: resolveRuntimePath(process.env.DATABASE_PATH, "server/db/data/krabi.sqlite"),
   uploadDir: resolveRuntimePath(process.env.UPLOAD_DIR, "server/uploads"),
-  adminPassword: process.env.ADMIN_PASSWORD || process.env.GALLERY_ADMIN_PASSWORD || "krabi2026",
+  adminPassword: process.env.ADMIN_PASSWORD || "",
   sessionSecret: process.env.SESSION_SECRET || process.env.ADMIN_SESSION_SECRET || "default_krabi_2026_salt_secret",
   ownerTokenSecret:
     process.env.OWNER_TOKEN_SECRET ||
@@ -34,7 +34,7 @@ export const config = {
 
 if (config.nodeEnv === "production") {
   const missingRequired = [
-    !process.env.ADMIN_PASSWORD && !process.env.GALLERY_ADMIN_PASSWORD ? "ADMIN_PASSWORD" : "",
+    !process.env.ADMIN_PASSWORD ? "ADMIN_PASSWORD" : "",
     !process.env.SESSION_SECRET && !process.env.ADMIN_SESSION_SECRET ? "SESSION_SECRET" : "",
     !process.env.OWNER_TOKEN_SECRET ? "OWNER_TOKEN_SECRET" : "",
   ].filter(Boolean);
