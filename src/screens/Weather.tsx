@@ -35,6 +35,9 @@ type WeatherTheme = {
   accent: string;
 };
 
+type City = 'krabi' | 'lanta';
+type ApiStatusByCity = Record<City, boolean>;
+
 const WEATHER_THEME: Record<'sunny' | 'cloudy' | 'rainy' | 'night' | 'default', WeatherTheme> = {
   sunny: {
     background: 'radial-gradient(circle at 18% 12%, rgba(253, 224, 71, 0.45), transparent 30%), linear-gradient(135deg, #075985 0%, #0284c7 45%, #f59e0b 100%)',
@@ -126,7 +129,8 @@ export default function Weather() {
   const [lantaWeather, setLantaWeather] = useState<WeatherInfo | null>(null);
   const [krabiTide, setKrabiTide] = useState<TideData | null>(null);
   const [lantaTide, setLantaTide] = useState<TideData | null>(null);
-  const [isApiError, setIsApiError] = useState(false);
+  const [weatherApiFailed, setWeatherApiFailed] = useState<ApiStatusByCity>({ krabi: false, lanta: false });
+  const [tideApiFailed, setTideApiFailed] = useState<ApiStatusByCity>({ krabi: false, lanta: false });
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [updateTime, setUpdateTime] = useState<string>('');
 
@@ -136,14 +140,15 @@ export default function Weather() {
       let lw: WeatherInfo | null = null;
       let kt: TideData | null = null;
       let lt: TideData | null = null;
-      let apiFailed = false;
+      const weatherFailed: ApiStatusByCity = { krabi: false, lanta: false };
+      const tideFailed: ApiStatusByCity = { krabi: false, lanta: false };
 
       try {
         kw = await getWeather('krabi');
       } catch (err) {
         console.error("Failed to load Krabi weather:", err);
         kw = { ...MOCK_WEATHER_KRABI, lastUpdated: getFallbackTimeString(), source: 'fallback' };
-        apiFailed = true;
+        weatherFailed.krabi = true;
       }
 
       try {
@@ -151,7 +156,7 @@ export default function Weather() {
       } catch (err) {
         console.error("Failed to load Lanta weather:", err);
         lw = { ...MOCK_WEATHER_LANTA, lastUpdated: getFallbackTimeString(), source: 'fallback' };
-        apiFailed = true;
+        weatherFailed.lanta = true;
       }
 
       try {
@@ -159,7 +164,7 @@ export default function Weather() {
       } catch (err) {
         console.error("Failed to load Krabi tides:", err);
         kt = { ...MOCK_TIDE_KRABI, lastUpdated: getFallbackTimeString(), source: 'fallback' };
-        apiFailed = true;
+        tideFailed.krabi = true;
       }
 
       try {
@@ -167,14 +172,21 @@ export default function Weather() {
       } catch (err) {
         console.error("Failed to load Lanta tides:", err);
         lt = { ...MOCK_TIDE_LANTA, lastUpdated: getFallbackTimeString(), source: 'fallback' };
-        apiFailed = true;
+        tideFailed.lanta = true;
       }
 
       setKrabiWeather(kw);
       setLantaWeather(lw);
       setKrabiTide(kt);
       setLantaTide(lt);
-      setIsApiError(apiFailed || [kw, lw, kt, lt].some(item => item?.source !== 'api'));
+      setWeatherApiFailed({
+        krabi: weatherFailed.krabi || kw?.source !== 'api',
+        lanta: weatherFailed.lanta || lw?.source !== 'api',
+      });
+      setTideApiFailed({
+        krabi: tideFailed.krabi || kt?.source !== 'api',
+        lanta: tideFailed.lanta || lt?.source !== 'api',
+      });
       setUpdateTime(kw?.lastUpdated || getFallbackTimeString());
     }
     loadData();
@@ -185,29 +197,40 @@ export default function Weather() {
       return;
     }
 
-    const city = activeIndex === 0 ? 'krabi' : 'lanta';
+    const city: City = activeIndex === 0 ? 'krabi' : 'lanta';
     setIsRefreshing(true);
-    setIsApiError(false);
+    setWeatherApiFailed(prev => ({ ...prev, [city]: false }));
+    setTideApiFailed(prev => ({ ...prev, [city]: false }));
 
     try {
-      const [weather, tide] = await Promise.all([
+      const [weatherResult, tideResult] = await Promise.allSettled([
         getWeather(city, { refresh: true }),
         getTides(city, { refresh: true }),
       ]);
+      const weather = weatherResult.status === 'fulfilled' ? weatherResult.value : null;
+      const tide = tideResult.status === 'fulfilled' ? tideResult.value : null;
 
       if (city === 'krabi') {
-        setKrabiWeather(weather);
-        setKrabiTide(tide);
+        if (weather) setKrabiWeather(weather);
+        if (tide) setKrabiTide(tide);
       } else {
-        setLantaWeather(weather);
-        setLantaTide(tide);
+        if (weather) setLantaWeather(weather);
+        if (tide) setLantaTide(tide);
       }
 
-      setUpdateTime(weather.lastUpdated || tide.lastUpdated || getFallbackTimeString());
-      setIsApiError(weather.source !== 'api' || tide.source !== 'api');
+      setUpdateTime(weather?.lastUpdated || tide?.lastUpdated || getFallbackTimeString());
+      setWeatherApiFailed(prev => ({
+        ...prev,
+        [city]: !weather || weather.source !== 'api',
+      }));
+      setTideApiFailed(prev => ({
+        ...prev,
+        [city]: !tide || tide.source !== 'api',
+      }));
     } catch (err) {
       console.error("Failed to refresh realtime weather and tides:", err);
-      setIsApiError(true);
+      setWeatherApiFailed(prev => ({ ...prev, [city]: true }));
+      setTideApiFailed(prev => ({ ...prev, [city]: true }));
     } finally {
       setIsRefreshing(false);
     }
@@ -223,13 +246,20 @@ export default function Weather() {
 
   const activeWeather = activeIndex === 0 ? krabiWeather : lantaWeather;
   const activeTide = activeIndex === 0 ? krabiTide : lantaTide;
+  const activeCity: City = activeIndex === 0 ? 'krabi' : 'lanta';
   const weatherTheme = getWeatherTheme(activeWeather);
-  const activeDataIsApi = activeWeather.source === 'api' && activeTide.source === 'api';
+  const activeWeatherIsOffline = weatherApiFailed[activeCity] || activeWeather.source !== 'api';
+  const activeTideIsOffline = tideApiFailed[activeCity] || activeTide.source !== 'api';
+  const activeDataIsApi = !activeWeatherIsOffline && !activeTideIsOffline;
   const dataSourceLabel = isRefreshing
     ? '正在刷新实时数据...'
     : activeDataIsApi
       ? '当前为实时外部数据'
-      : '实时数据加载失败，当前显示离线备份数据。';
+      : activeWeatherIsOffline && activeTideIsOffline
+        ? '天气和潮汐当前显示离线备份数据'
+        : activeWeatherIsOffline
+          ? '天气当前显示离线备份数据'
+          : '潮汐当前显示离线备份数据';
   const displayUpdateTime = activeWeather.lastUpdated || activeTide.lastUpdated || updateTime;
 
   return (
@@ -258,10 +288,17 @@ export default function Weather() {
 
         {/* Lightweight Status, Data Source & Update Time */}
         <div className="flex flex-col gap-2.5 pt-1">
-          {(isApiError || !activeDataIsApi) && !isRefreshing && (
+          {activeWeatherIsOffline && !isRefreshing && (
             <div className="bg-amber-500/15 border border-amber-500/30 backdrop-blur-md text-amber-200 text-xs px-3.5 py-2.5 rounded-2xl font-medium flex items-center gap-2 max-w-2xl shadow-lg">
               <span className="text-base">⚠️</span>
-              <span>实时数据加载失败，当前显示离线备份数据。</span>
+              <span>天气实时数据加载失败，当前显示离线备份数据。</span>
+            </div>
+          )}
+
+          {activeTideIsOffline && !isRefreshing && (
+            <div className="bg-sky-500/15 border border-sky-400/30 backdrop-blur-md text-sky-100 text-xs px-3.5 py-2.5 rounded-2xl font-medium flex items-center gap-2 max-w-2xl shadow-lg">
+              <span className="text-base">⚠️</span>
+              <span>潮汐实时数据加载失败，当前显示离线备份数据。</span>
             </div>
           )}
           
@@ -290,8 +327,8 @@ export default function Weather() {
           </div>
           
           <p className="text-white/60 text-[11px] leading-relaxed max-w-xl">
-            * 提示：刷新后请稍等片刻，数据更新可能需要1-2分钟时间，并刷新网页，若持续10分钟无法获取实时数据，请退出浏览器清理缓存或稍后再试。  
-            </p>
+            * 提示：本页面当前渲染团队离线备份数据。后续可接入实时 OpenWeather 与 WXTide 潮汐计算通道。
+          </p>
         </div>
       </header>
 

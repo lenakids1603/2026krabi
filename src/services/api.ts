@@ -52,7 +52,7 @@ export async function getHomeStatus(): Promise<HomeStatus> {
 
     return {
       dayNumber: 1,
-      totalDays: ITINERARY.length,
+      totalDays: 10,
       currentDayTitle: '全员集结，准备启程',
       tripStatus: 'before',
       message: '行前准备中，2026-06-28 启程！',
@@ -68,13 +68,13 @@ export async function getHomeStatus(): Promise<HomeStatus> {
   }
 
   if (progress.status === 'after') {
-    // Late fallback to the last event
-    const lastDay = ITINERARY[ITINERARY.length - 1];
+    // Late fallback to the last event of Day 10
+    const lastDay = ITINERARY[9];
     const lastAct = lastDay.activities[lastDay.activities.length - 1];
 
     return {
-      dayNumber: ITINERARY.length,
-      totalDays: ITINERARY.length,
+      dayNumber: 10,
+      totalDays: 10,
       currentDayTitle: '行程已圆满结束',
       tripStatus: 'after',
       message: '全部行程精彩收官，感谢同行！',
@@ -147,7 +147,7 @@ export async function getHomeStatus(): Promise<HomeStatus> {
 
   return {
     dayNumber: todayDay,
-    totalDays: ITINERARY.length,
+    totalDays: 10,
     currentDayTitle: todayItinerary.title,
     tripStatus: 'during',
     message: `第 ${todayDay} 天火热畅游中`,
@@ -175,7 +175,7 @@ export function getThailandTripProgress(): TripProgress {
     const dateStr = formatter.format(new Date()); // Format: YYYY-MM-DD
     
     const startDate = "2026-06-28";
-    const endDate = "2026-07-06";
+    const endDate = "2026-07-07";
 
     const parts = dateStr.split('-');
     const todayMMDD = parts.length === 3 ? `${parts[1]}.${parts[2]}` : ""; // "06.28"
@@ -231,14 +231,6 @@ function getThailandTimeString(): string {
   }
 }
 
-export async function getWeather(city: 'krabi' | 'lanta', options?: RealtimeRequestOptions): Promise<WeatherForecastResponse> {
-  return getWeatherWithOptions(city, options);
-}
-
-export async function getTides(city: 'krabi' | 'lanta', options?: RealtimeRequestOptions): Promise<TideInfo> {
-  return getTidesWithOptions(city, options);
-}
-
 type RealtimeRequestOptions = {
   refresh?: boolean;
 };
@@ -251,7 +243,7 @@ function buildRealtimeUrl(path: '/api/weather' | '/api/tides', city: 'krabi' | '
   return `${path}?${params.toString()}`;
 }
 
-export async function getWeatherWithOptions(city: 'krabi' | 'lanta', options?: RealtimeRequestOptions): Promise<WeatherForecastResponse> {
+export async function getWeather(city: 'krabi' | 'lanta', options?: RealtimeRequestOptions): Promise<WeatherForecastResponse> {
   try {
     const response = await fetch(buildRealtimeUrl('/api/weather', city, options), { cache: 'no-store' });
     if (!response.ok) {
@@ -268,7 +260,7 @@ export async function getWeatherWithOptions(city: 'krabi' | 'lanta', options?: R
   }
 }
 
-export async function getTidesWithOptions(city: 'krabi' | 'lanta', options?: RealtimeRequestOptions): Promise<TideInfo> {
+export async function getTides(city: 'krabi' | 'lanta', options?: RealtimeRequestOptions): Promise<TideInfo> {
   try {
     const response = await fetch(buildRealtimeUrl('/api/tides', city, options), { cache: 'no-store' });
     if (!response.ok) {

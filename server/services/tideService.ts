@@ -50,18 +50,10 @@ export function isTideCity(value: unknown): value is TideCity {
   return value === "krabi" || value === "lanta";
 }
 
-export async function getTides(city: TideCity, options: { refresh?: boolean } = {}): Promise<TideInfo> {
+export async function getTides(city: TideCity): Promise<TideInfo> {
   const cached = cache.get(city);
-  if (!options.refresh && cached && cached.expiresAt > Date.now()) {
-    return {
-      ...cached.payload,
-      cacheHit: true,
-      cacheExpiresAt: formatThailandTime(cached.expiresAt),
-    };
-  }
-
-  if (cached && cached.expiresAt <= Date.now()) {
-    cache.delete(city);
+  if (cached && cached.expiresAt > Date.now()) {
+    return cached.payload;
   }
 
   if (!process.env.WORLD_TIDES_API_KEY) {
@@ -71,15 +63,10 @@ export async function getTides(city: TideCity, options: { refresh?: boolean } = 
   try {
     const location = LOCATIONS[city];
     const data = await fetchWorldTides(location);
-    const expiresAt = Date.now() + getTideCacheTtlMs();
-    const payload = {
-      ...mapWorldTides(city, data),
-      cacheHit: false,
-      cacheExpiresAt: formatThailandTime(expiresAt),
-    };
+    const payload = mapWorldTides(city, data);
     cache.set(city, {
       payload,
-      expiresAt,
+      expiresAt: Date.now() + readNumber(process.env.TIDE_CACHE_TTL_MINUTES, 360) * 60 * 1000,
     });
     return payload;
   } catch (error) {
@@ -93,9 +80,7 @@ function getMockTide(city: TideCity): TideInfo {
   return {
     ...base,
     lastUpdated: getThailandTimeString(),
-    source: "fallback",
-    cacheHit: false,
-    cacheExpiresAt: null,
+    source: "mock",
   };
 }
 
@@ -286,27 +271,4 @@ function getThailandTimeString(): string {
 function readNumber(value: string | undefined, fallback: number): number {
   const parsed = Number(value);
   return Number.isFinite(parsed) ? parsed : fallback;
-}
-
-function getTideCacheTtlMs(): number {
-  const minutes = Math.min(Math.max(readNumber(process.env.TIDE_CACHE_TTL_MINUTES, 60), 1), 60);
-  return minutes * 60 * 1000;
-}
-
-function formatThailandTime(timestamp: number): string {
-  try {
-    return new Intl.DateTimeFormat("en-CA", {
-      timeZone: "Asia/Bangkok",
-      year: "numeric",
-      month: "2-digit",
-      day: "2-digit",
-      hour: "2-digit",
-      minute: "2-digit",
-      hour12: false,
-    })
-      .format(new Date(timestamp))
-      .replace(",", "");
-  } catch {
-    return new Date(timestamp).toISOString().slice(0, 16).replace("T", " ");
-  }
 }
