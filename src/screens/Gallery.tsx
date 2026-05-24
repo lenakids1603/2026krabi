@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { X, Shield, RefreshCw, Film, Image as ImageIcon, CheckCircle, AlertCircle, Trash2, ArrowRight, Heart, Download } from 'lucide-react';
+import { X, Shield, RefreshCw, Film, Image as ImageIcon, CheckCircle, AlertCircle, Trash2, ArrowRight, Download } from 'lucide-react';
 import { cn } from '../lib/utils';
 import { getGalleryItems, uploadGalleryFile, deleteGalleryItem, checkAdminStatus, GalleryItem } from '../api/galleryApi';
 import { GalleryGrid } from '../components/gallery/GalleryGrid';
@@ -430,20 +430,11 @@ export default function Gallery() {
                 <div className="flex flex-wrap items-center gap-3 text-xs font-bold self-start sm:self-auto text-slate-300">
                   <button 
                     onClick={() => handleDownload(selectedPhoto)}
-                    className="flex items-center gap-2 bg-[#0077B6] hover:bg-[#00516E] text-white px-4 py-2.5 rounded-xl transition-all shadow-md active:scale-95 cursor-pointer"
+                    className="flex items-center gap-2 bg-[#0077B6] hover:bg-[#00516E] text-white px-5 py-3 rounded-2xl transition-all shadow-md active:scale-95 cursor-pointer"
                   >
-                    <Download size={14} />
+                    <Download size={15} />
                     <span>下载原文件</span>
                   </button>
-                  <button 
-                    onClick={() => handleLike(selectedPhoto.id)}
-                    className="flex items-center gap-2 bg-[#FF7E53]/10 hover:bg-[#FF7E53]/20 text-[#FF7E53] border border-[#FF7E53]/20 px-4 py-2.5 rounded-xl transition-all active:scale-95 cursor-pointer"
-                  >
-                    <Heart size={14} className="fill-[#FF7E53]" />
-                    <span>点赞 {selectedPhoto.likes}</span>
-                  </button>
-                  <span className="text-slate-500">·</span>
-                  <span>评论量: {selectedPhoto.comments}</span>
                 </div>
               </div>
             </motion.div>

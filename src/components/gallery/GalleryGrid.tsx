@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { motion } from 'motion/react';
-import { Heart, MessageCircle, Maximize, Trash2, Play } from 'lucide-react';
+import { Maximize, Trash2, Play } from 'lucide-react';
 import { GalleryItem, getUploaderId, getUploaderHash } from '../../api/galleryApi';
 
 interface GalleryGridProps {
@@ -61,7 +61,7 @@ export function GalleryGrid({ photos, isAdmin, onLike, onSelect, onDelete }: Gal
               {/* Video Play Indicator Overlay */}
               {isVideo && (
                 <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                  <div className="w-12 h-12 rounded-full bg-black/60 backdrop-blur-md flex items-center justify-center text-white border border-white/20 shadow-md group-hover:scale-110 group-hover:bg-brand-coral transition-transform duration-300">
+                  <div className="w-12 h-12 rounded-full bg-black/60 backdrop-blur-md flex items-center justify-center text-white border border-white/20 shadow-md group-hover:scale-110 group-hover:bg-[#FF7E53] transition-transform duration-300">
                     <Play size={20} className="fill-current ml-0.5" />
                   </div>
                 </div>
@@ -99,25 +99,12 @@ export function GalleryGrid({ photos, isAdmin, onLike, onSelect, onDelete }: Gal
               </p>
               
               <div className="flex items-center justify-between text-white">
-                <div className="flex items-center gap-4">
-                  <button 
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      onLike?.(photo.id);
-                    }}
-                    className="flex items-center gap-1.5 hover:scale-110 transition-transform"
-                  >
-                    <Heart size={16} className="fill-brand-coral text-brand-coral" />
-                    <span className="text-xs font-bold">{photo.likes}</span>
-                  </button>
-                  <div className="flex items-center gap-1.5">
-                    <MessageCircle size={16} className="text-white" />
-                    <span className="text-xs font-bold">{photo.comments}</span>
-                  </div>
-                </div>
+                <span className="text-white/60 text-[9.5px] font-medium">
+                  {isVideo ? '视频格式' : '图片格式'}
+                </span>
                 
                 {photo.uploader_token_hash === currentUserHash && (
-                  <span className="bg-brand-coral/20 border border-brand-coral/30 text-brand-coral px-2.5 py-0.5 rounded-full text-[9px] font-black tracking-wider uppercase">
+                  <span className="bg-[#FF7E53]/20 border border-[#FF7E53]/30 text-[#FF7E53] px-2.5 py-0.5 rounded-full text-[9px] font-black tracking-wider uppercase">
                     我的上传
                   </span>
                 )}
