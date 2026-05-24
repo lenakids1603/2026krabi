@@ -266,7 +266,7 @@ export default function Weather() {
           </div>
           
           <p className="text-white/60 text-[11px] leading-relaxed max-w-xl">
-            * 提示：天气、海况与潮汐信息仅供出行参考，请以当地官方通知、酒店前台、船公司和现场情况为准。
+            * 提示：天气、海况与潮汐信息来自于openweather和worldtides API，请以当地官方通知、酒店前台、船公司和现场情况为准。
           </p>
         </div>
       </header>
