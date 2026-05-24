@@ -45,19 +45,32 @@ export function isWeatherCity(value: unknown): value is WeatherCity {
   return value === "krabi" || value === "lanta";
 }
 
-export async function getWeather(city: WeatherCity): Promise<WeatherForecastResponse> {
+export async function getWeather(city: WeatherCity, options: { refresh?: boolean } = {}): Promise<WeatherForecastResponse> {
   const cached = cache.get(city);
-  if (cached && cached.expiresAt > Date.now()) {
-    return cached.payload;
+  if (!options.refresh && cached && cached.expiresAt > Date.now()) {
+    return {
+      ...cached.payload,
+      cacheHit: true,
+      cacheExpiresAt: formatThailandTime(cached.expiresAt),
+    };
+  }
+
+  if (cached && cached.expiresAt <= Date.now()) {
+    cache.delete(city);
   }
 
   try {
     const location = LOCATIONS[city];
     const data = await fetchOpenMeteo(location);
-    const payload = mapOpenMeteo(city, data);
+    const expiresAt = Date.now() + getWeatherCacheTtlMs();
+    const payload = {
+      ...mapOpenMeteo(city, data),
+      cacheHit: false,
+      cacheExpiresAt: formatThailandTime(expiresAt),
+    };
     cache.set(city, {
       payload,
-      expiresAt: Date.now() + readNumber(process.env.WEATHER_CACHE_TTL_MINUTES, 60) * 60 * 1000,
+      expiresAt,
     });
     return payload;
   } catch (error) {
@@ -71,7 +84,9 @@ function getMockWeather(city: WeatherCity): WeatherForecastResponse {
   return {
     ...base,
     lastUpdated: getThailandTimeString(),
-    source: "mock",
+    source: "fallback",
+    cacheHit: false,
+    cacheExpiresAt: null,
   };
 }
 
@@ -248,6 +263,29 @@ function getThailandTimeString(): string {
 function readNumber(value: string | undefined, fallback: number): number {
   const parsed = Number(value);
   return Number.isFinite(parsed) ? parsed : fallback;
+}
+
+function getWeatherCacheTtlMs(): number {
+  const minutes = Math.min(Math.max(readNumber(process.env.WEATHER_CACHE_TTL_MINUTES, 10), 1), 10);
+  return minutes * 60 * 1000;
+}
+
+function formatThailandTime(timestamp: number): string {
+  try {
+    return new Intl.DateTimeFormat("en-CA", {
+      timeZone: "Asia/Bangkok",
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: false,
+    })
+      .format(new Date(timestamp))
+      .replace(",", "");
+  } catch {
+    return new Date(timestamp).toISOString().slice(0, 16).replace("T", " ");
+  }
 }
 
 function round(value: number | undefined, fallback: number): number {
