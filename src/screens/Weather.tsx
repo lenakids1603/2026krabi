@@ -216,25 +216,7 @@ export default function Weather() {
 
   const activeWeather = activeIndex === 0 ? krabiWeather : lantaWeather;
   const activeTide = activeIndex === 0 ? krabiTide : lantaTide;
-  const activeCity: City = activeIndex === 0 ? 'krabi' : 'lanta';
   const weatherTheme = getWeatherTheme(activeWeather);
-  const activeWeatherIsApi = activeWeather.source === 'api';
-  const activeTideIsApi = activeTide.source === 'api';
-  const activeWeatherFailed = activeWeather.source === 'fallback';
-  const activeTideFailed = activeTide.source === 'fallback';
-  const activeDataIsApi = activeWeatherIsApi && activeTideIsApi;
-  const dataSourceLabel = isRefreshing
-    ? '正在刷新实时数据...'
-    : activeDataIsApi
-      ? '实时天气与潮汐数据已更新'
-      : activeWeatherIsApi
-        ? '天气为实时数据，潮汐暂为离线估算。'
-        : activeTideIsApi
-          ? '潮汐为实时数据，天气暂为离线备份。'
-          : '天气和潮汐暂为离线估算。';
-  const statusTip = activeDataIsApi
-    ? '* 提示：本页面数据来自实时天气与潮汐接口，海况与潮汐仅供出行参考，请以当地官方通知和现场情况为准。'
-    : '* 提示：部分数据暂为离线估算，仅供行程参考，请以当地官方通知和现场情况为准。';
   const displayUpdateTime = activeWeather.lastUpdated || activeTide.lastUpdated || updateTime;
 
   return (
@@ -261,27 +243,9 @@ export default function Weather() {
           实时监测甲米及兰塔岛的海岛天气和海洋潮汐。合理规划赶海、户外出行与浮潜嬉水，时刻保障人身安全。
         </p>
 
-        {/* Lightweight Status, Data Source & Update Time */}
+        {/* Update Time & Refresh */}
         <div className="flex flex-col gap-2.5 pt-1">
-          {activeWeatherFailed && !isRefreshing && (
-            <div className="bg-amber-500/15 border border-amber-500/30 backdrop-blur-md text-amber-200 text-xs px-3.5 py-2.5 rounded-2xl font-medium flex items-center gap-2 max-w-2xl shadow-lg">
-              <span className="text-base">⚠️</span>
-              <span>天气实时数据加载失败，当前显示离线备份数据。</span>
-            </div>
-          )}
-
-          {activeTideFailed && !isRefreshing && (
-            <div className="bg-sky-500/15 border border-sky-400/30 backdrop-blur-md text-sky-100 text-xs px-3.5 py-2.5 rounded-2xl font-medium flex items-center gap-2 max-w-2xl shadow-lg">
-              <span className="text-base">⚠️</span>
-              <span>潮汐实时数据加载失败，当前显示离线备份数据。</span>
-            </div>
-          )}
-          
           <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
-            <span className="bg-white/10 text-white border border-white/10 backdrop-blur-sm px-3 py-1 rounded-full text-[11px] font-bold inline-flex items-center gap-1.5 shadow-sm">
-              <span className="w-1.5 h-1.5 rounded-full animate-pulse" style={{ backgroundColor: weatherTheme.accent }} />
-              {dataSourceLabel}
-            </span>
             {displayUpdateTime && (
               <span className="text-white/70 text-xs font-medium">
                 更新时间：{displayUpdateTime} (泰国时间)
@@ -302,7 +266,7 @@ export default function Weather() {
           </div>
           
           <p className="text-white/60 text-[11px] leading-relaxed max-w-xl">
-            {statusTip}
+            * 提示：天气、海况与潮汐信息仅供出行参考，请以当地官方通知、酒店前台、船公司和现场情况为准。
           </p>
         </div>
       </header>
