@@ -8,12 +8,15 @@ import { initDatabase } from "./db/client";
 import { createCheckinSpotRouter } from "./routes/checkinSpots";
 import { registerLegacyGalleryRoutes } from "./routes/galleryLegacy";
 import { ensureSeedCheckinSpots } from "./services/checkinSpotService";
+import { ensureDefaultGalleryMedia, migrateLegacyGalleryJson } from "./services/galleryService";
 
 const app = express();
 
 fs.mkdirSync(config.uploadDir, { recursive: true });
 initDatabase();
 ensureSeedCheckinSpots();
+migrateLegacyGalleryJson();
+ensureDefaultGalleryMedia();
 
 app.use(express.json({ limit: "20mb" }));
 app.use(express.urlencoded({ extended: true, limit: "20mb" }));

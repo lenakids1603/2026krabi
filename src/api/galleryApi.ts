@@ -47,7 +47,11 @@ export async function getUploaderHash(id: string): Promise<string> {
 // GET LIST
 export async function getGalleryItems(): Promise<GalleryItem[]> {
   try {
-    const res = await fetch('/api/gallery');
+    const res = await fetch('/api/gallery', {
+      headers: {
+        'X-Owner-Token': getUploaderId()
+      }
+    });
     if (!res.ok) throw new Error('API fetch error');
     const items = await res.json() as any[];
     return items.map(item => ({
@@ -109,6 +113,7 @@ export async function uploadGalleryFile(
     xhr.onerror = () => reject(new Error('网络连接异常，无法上传'));
     
     xhr.open('POST', '/api/gallery/upload');
+    xhr.setRequestHeader('X-Owner-Token', getUploaderId());
     xhr.send(formData);
   });
 }
@@ -117,7 +122,10 @@ export async function uploadGalleryFile(
 export async function deleteGalleryItem(id: string): Promise<boolean> {
   const uploaderId = getUploaderId();
   const res = await fetch(`/api/gallery/${id}?uploaderId=${encodeURIComponent(uploaderId)}`, {
-    method: 'DELETE'
+    method: 'DELETE',
+    headers: {
+      'X-Owner-Token': uploaderId
+    }
   });
   
   if (!res.ok) {
