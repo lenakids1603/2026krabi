@@ -6,8 +6,6 @@ import multer from "multer";
 import cookieParser from "cookie-parser";
 import crypto from "crypto";
 import { createServer as createViteServer } from "vite";
-import { getTides, isTideCity } from "./server/services/tideService";
-import { getWeather, isWeatherCity } from "./server/services/weatherService";
 
 interface GalleryItem {
   id: string;
@@ -155,37 +153,6 @@ function rateLimitMiddleware(req: express.Request, res: express.Response, next: 
 
 // Support serve of /uploads statically
 app.use("/uploads", express.static(uploadsDir));
-
-// ------------------------------------------------------------
-// WEATHER & TIDES API ENDPOINTS
-// ------------------------------------------------------------
-app.get("/api/weather", async (req, res) => {
-  const city = req.query.city;
-  if (!isWeatherCity(city)) {
-    return res.status(400).json({ error: "Unsupported city. Use krabi or lanta." });
-  }
-
-  try {
-    return res.json(await getWeather(city));
-  } catch (error) {
-    console.error("Weather endpoint error:", error);
-    return res.status(500).json({ error: "Failed to load weather data" });
-  }
-});
-
-app.get("/api/tides", async (req, res) => {
-  const city = req.query.city;
-  if (!isTideCity(city)) {
-    return res.status(400).json({ error: "Unsupported city. Use krabi or lanta." });
-  }
-
-  try {
-    return res.json(await getTides(city));
-  } catch (error) {
-    console.error("Tides endpoint error:", error);
-    return res.status(500).json({ error: "Failed to load tide data" });
-  }
-});
 
 // Multer disk destination configuration
 const storage = multer.diskStorage({

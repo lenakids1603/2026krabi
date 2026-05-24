@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'motion/react';
-import { Sun, CloudRain, Cloud, CloudLightning, Droplets, Wind, Eye, CheckCircle2, AlertTriangle, Droplet, ChevronLeft, ChevronRight, RefreshCw } from 'lucide-react';
+import { Sun, CloudRain, Cloud, CloudLightning, Droplets, Wind, Eye, CheckCircle2, AlertTriangle, Droplet, ChevronLeft, ChevronRight } from 'lucide-react';
 import { cn } from '../lib/utils';
 import { WEATHER_HEADER_BG } from '../assets/localImages';
 import { getWeather, getTides } from '../services/api';
@@ -29,97 +29,6 @@ const resolveWeatherIcon = (name: string, size = 20, customClass?: string) => {
   }
 };
 
-type WeatherTheme = {
-  background: string;
-  overlay: string;
-  accent: string;
-};
-
-const WEATHER_THEME: Record<'sunny' | 'cloudy' | 'rainy' | 'night' | 'default', WeatherTheme> = {
-  sunny: {
-    background: 'radial-gradient(circle at 18% 12%, rgba(253, 224, 71, 0.45), transparent 30%), linear-gradient(135deg, #075985 0%, #0284c7 45%, #f59e0b 100%)',
-    overlay: 'linear-gradient(180deg, rgba(8, 47, 73, 0.15), rgba(12, 74, 110, 0.58))',
-    accent: '#fde047',
-  },
-  cloudy: {
-    background: 'radial-gradient(circle at 20% 8%, rgba(226, 232, 240, 0.38), transparent 34%), linear-gradient(135deg, #334155 0%, #64748b 48%, #0f766e 100%)',
-    overlay: 'linear-gradient(180deg, rgba(15, 23, 42, 0.28), rgba(15, 23, 42, 0.68))',
-    accent: '#cbd5e1',
-  },
-  rainy: {
-    background: 'radial-gradient(circle at 80% 8%, rgba(125, 211, 252, 0.22), transparent 30%), linear-gradient(135deg, #0f172a 0%, #1e3a5f 48%, #334155 100%)',
-    overlay: 'linear-gradient(180deg, rgba(2, 6, 23, 0.32), rgba(2, 6, 23, 0.78))',
-    accent: '#38bdf8',
-  },
-  night: {
-    background: 'radial-gradient(circle at 22% 12%, rgba(168, 85, 247, 0.28), transparent 30%), linear-gradient(135deg, #020617 0%, #172554 52%, #581c87 100%)',
-    overlay: 'linear-gradient(180deg, rgba(2, 6, 23, 0.38), rgba(2, 6, 23, 0.82))',
-    accent: '#a78bfa',
-  },
-  default: {
-    background: 'radial-gradient(circle at 20% 10%, rgba(125, 211, 252, 0.35), transparent 32%), linear-gradient(135deg, #0c4a6e 0%, #0369a1 48%, #1e3a8a 100%)',
-    overlay: 'linear-gradient(180deg, rgba(8, 47, 73, 0.22), rgba(15, 23, 42, 0.68))',
-    accent: '#38bdf8',
-  },
-};
-
-function getBangkokHour(): number {
-  try {
-    const hour = new Intl.DateTimeFormat('en-US', {
-      timeZone: 'Asia/Bangkok',
-      hour: '2-digit',
-      hour12: false,
-    }).format(new Date());
-    return Number(hour);
-  } catch {
-    return 12;
-  }
-}
-
-function getWeatherTheme(weather: WeatherInfo): WeatherTheme {
-  const extra = weather as WeatherInfo & { weatherCode?: number; isDay?: boolean };
-  const weatherCode = extra.weatherCode;
-  const hour = getBangkokHour();
-  const isNight = extra.isDay === false || (extra.isDay === undefined && (hour < 6 || hour >= 18));
-
-  if (isNight) {
-    return WEATHER_THEME.night;
-  }
-
-  if (typeof weatherCode === 'number') {
-    if ([95, 96, 99].includes(weatherCode) || (weatherCode >= 51 && weatherCode <= 82)) {
-      return WEATHER_THEME.rainy;
-    }
-    if ([1, 2, 3, 45, 48].includes(weatherCode)) {
-      return WEATHER_THEME.cloudy;
-    }
-    if (weatherCode === 0) {
-      return WEATHER_THEME.sunny;
-    }
-  }
-
-  const icon = weather.forecast?.[0]?.icon;
-  if (icon === 'CloudRain' || icon === 'CloudLightning') {
-    return WEATHER_THEME.rainy;
-  }
-  if (icon === 'Cloud') {
-    return WEATHER_THEME.cloudy;
-  }
-  if (icon === 'Sun') {
-    return WEATHER_THEME.sunny;
-  }
-
-  return WEATHER_THEME.default;
-}
-
-function getFallbackTimeString(): string {
-  try {
-    return new Date().toISOString().slice(0, 16).replace('T', ' ');
-  } catch {
-    return "2026-05-21 09:00";
-  }
-}
-
 export default function Weather() {
   const [activeIndex, setActiveIndex] = useState(0); // 0 = Krabi, 1 = Koh Lanta
   const [krabiWeather, setKrabiWeather] = useState<WeatherInfo | null>(null);
@@ -127,7 +36,6 @@ export default function Weather() {
   const [krabiTide, setKrabiTide] = useState<TideData | null>(null);
   const [lantaTide, setLantaTide] = useState<TideData | null>(null);
   const [isApiError, setIsApiError] = useState(false);
-  const [isRefreshing, setIsRefreshing] = useState(false);
   const [updateTime, setUpdateTime] = useState<string>('');
 
   useEffect(() => {
@@ -138,11 +46,19 @@ export default function Weather() {
       let lt: TideData | null = null;
       let apiFailed = false;
 
+      const fallbackTimeString = () => {
+        try {
+          return new Date().toISOString().slice(0, 16).replace('T', ' ');
+        } catch {
+          return "2026-05-21 09:00";
+        }
+      };
+
       try {
         kw = await getWeather('krabi');
       } catch (err) {
         console.error("Failed to load Krabi weather:", err);
-        kw = { ...MOCK_WEATHER_KRABI, lastUpdated: getFallbackTimeString(), source: 'fallback' };
+        kw = { ...MOCK_WEATHER_KRABI, lastUpdated: fallbackTimeString(), source: 'mock' };
         apiFailed = true;
       }
 
@@ -150,7 +66,7 @@ export default function Weather() {
         lw = await getWeather('lanta');
       } catch (err) {
         console.error("Failed to load Lanta weather:", err);
-        lw = { ...MOCK_WEATHER_LANTA, lastUpdated: getFallbackTimeString(), source: 'fallback' };
+        lw = { ...MOCK_WEATHER_LANTA, lastUpdated: fallbackTimeString(), source: 'mock' };
         apiFailed = true;
       }
 
@@ -158,7 +74,7 @@ export default function Weather() {
         kt = await getTides('krabi');
       } catch (err) {
         console.error("Failed to load Krabi tides:", err);
-        kt = { ...MOCK_TIDE_KRABI, lastUpdated: getFallbackTimeString(), source: 'fallback' };
+        kt = { ...MOCK_TIDE_KRABI, lastUpdated: fallbackTimeString(), source: 'mock' };
         apiFailed = true;
       }
 
@@ -166,7 +82,7 @@ export default function Weather() {
         lt = await getTides('lanta');
       } catch (err) {
         console.error("Failed to load Lanta tides:", err);
-        lt = { ...MOCK_TIDE_LANTA, lastUpdated: getFallbackTimeString(), source: 'fallback' };
+        lt = { ...MOCK_TIDE_LANTA, lastUpdated: fallbackTimeString(), source: 'mock' };
         apiFailed = true;
       }
 
@@ -174,78 +90,34 @@ export default function Weather() {
       setLantaWeather(lw);
       setKrabiTide(kt);
       setLantaTide(lt);
-      setIsApiError(apiFailed || [kw, lw, kt, lt].some(item => item?.source !== 'api'));
-      setUpdateTime(kw?.lastUpdated || getFallbackTimeString());
+      setIsApiError(apiFailed);
+      setUpdateTime(kw?.lastUpdated || fallbackTimeString());
     }
     loadData();
   }, []);
 
-  const refreshRealtimeData = async () => {
-    if (isRefreshing) {
-      return;
-    }
-
-    const city = activeIndex === 0 ? 'krabi' : 'lanta';
-    setIsRefreshing(true);
-    setIsApiError(false);
-
-    try {
-      const [weather, tide] = await Promise.all([
-        getWeather(city, { refresh: true }),
-        getTides(city, { refresh: true }),
-      ]);
-
-      if (city === 'krabi') {
-        setKrabiWeather(weather);
-        setKrabiTide(tide);
-      } else {
-        setLantaWeather(weather);
-        setLantaTide(tide);
-      }
-
-      setUpdateTime(weather.lastUpdated || tide.lastUpdated || getFallbackTimeString());
-      setIsApiError(weather.source !== 'api' || tide.source !== 'api');
-    } catch (err) {
-      console.error("Failed to refresh realtime weather and tides:", err);
-      setIsApiError(true);
-    } finally {
-      setIsRefreshing(false);
-    }
-  };
-
   if (!krabiWeather || !lantaWeather || !krabiTide || !lantaTide) {
     return (
-      <div className="min-h-[60vh] flex items-center justify-center text-white font-bold bg-gradient-to-br from-sky-950 via-cyan-900 to-blue-950 rounded-[2rem] shadow-2xl">
+      <div className="min-h-[50vh] flex items-center justify-center text-white font-bold">
         加载天气和潮汐数据中...
       </div>
     );
   }
 
-  const activeWeather = activeIndex === 0 ? krabiWeather : lantaWeather;
-  const activeTide = activeIndex === 0 ? krabiTide : lantaTide;
-  const weatherTheme = getWeatherTheme(activeWeather);
-  const activeDataIsApi = activeWeather.source === 'api' && activeTide.source === 'api';
-  const dataSourceLabel = isRefreshing
-    ? '正在刷新实时数据...'
-    : activeDataIsApi
-      ? '当前为实时外部数据'
-      : '实时数据加载失败，当前显示离线备份数据。';
-  const displayUpdateTime = activeWeather.lastUpdated || activeTide.lastUpdated || updateTime;
-
   return (
-    <div className="relative z-0 min-h-screen space-y-6 pb-12 overflow-x-hidden text-left text-white">
-      {/* Dynamic weather background */}
-      <div className="fixed inset-0 z-0 pointer-events-none" style={{ background: weatherTheme.background }}>
+    <div className="space-y-6 pb-12 overflow-x-hidden relative text-left">
+      {/* Background with blurred Image */}
+      <div className="fixed inset-0 z-[-1] pointer-events-none">
         <img 
           src={WEATHER_HEADER_BG} 
           alt="Weather BG" 
-          className="absolute inset-0 w-full h-full object-cover blur-[80px] brightness-[0.8] opacity-25 mix-blend-overlay scale-125"
+          className="w-full h-full object-cover blur-[80px] brightness-[0.7] scale-125"
           referrerPolicy="no-referrer"
         />
-        <div className="absolute inset-0" style={{ background: weatherTheme.overlay }} />
+        <div className="absolute inset-0 bg-sky-950/20" />
       </div>
 
-      <header className="relative z-10 space-y-4 px-4 pt-6">
+      <header className="space-y-4 px-4 pt-6">
         <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }}>
           <span className="bg-white/12 text-white border border-white/20 backdrop-blur-md px-4 py-1.5 rounded-full text-[11px] font-extrabold tracking-[0.2em] uppercase mb-1 inline-block shadow-sm">
             WEATHER & TIDES
@@ -258,45 +130,33 @@ export default function Weather() {
 
         {/* Lightweight Status, Data Source & Update Time */}
         <div className="flex flex-col gap-2.5 pt-1">
-          {(isApiError || !activeDataIsApi) && !isRefreshing && (
+          {isApiError && (
             <div className="bg-amber-500/15 border border-amber-500/30 backdrop-blur-md text-amber-200 text-xs px-3.5 py-2.5 rounded-2xl font-medium flex items-center gap-2 max-w-2xl shadow-lg">
               <span className="text-base">⚠️</span>
-              <span>实时数据加载失败，当前显示离线备份数据。</span>
+              <span>实时数据加载失败，已自动载入本地安全备份数据。</span>
             </div>
           )}
           
           <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
             <span className="bg-white/10 text-white border border-white/10 backdrop-blur-sm px-3 py-1 rounded-full text-[11px] font-bold inline-flex items-center gap-1.5 shadow-sm">
-              <span className="w-1.5 h-1.5 rounded-full animate-pulse" style={{ backgroundColor: weatherTheme.accent }} />
-              {dataSourceLabel}
+              <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse" />
+              当前为本地预览数据
             </span>
-            {displayUpdateTime && (
+            {updateTime && (
               <span className="text-white/70 text-xs font-medium">
-                更新时间：{displayUpdateTime} (泰国时间)
+                更新时间：{updateTime} (泰国时间)
               </span>
             )}
-            <button
-              type="button"
-              onClick={refreshRealtimeData}
-              disabled={isRefreshing}
-              className={cn(
-                "inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/12 px-3.5 py-1.5 text-[11px] font-extrabold text-white shadow-sm backdrop-blur-md transition-all",
-                isRefreshing ? "cursor-wait opacity-70" : "cursor-pointer hover:bg-white/20 active:scale-95"
-              )}
-            >
-              <RefreshCw size={13} className={cn(isRefreshing && "animate-spin")} />
-              {isRefreshing ? "正在刷新实时数据..." : "刷新实时数据"}
-            </button>
           </div>
           
           <p className="text-white/60 text-[11px] leading-relaxed max-w-xl">
-            * 提示：刷新后请稍等片刻，数据更新可能需要1-2分钟时间，并刷新网页，若持续10分钟无法获取实时数据，请退出浏览器清理缓存或稍后再试。  
-            </p>
+            * 提示：本页面当前渲染团队离线备份数据。后续可接入实时 OpenWeather 与 WXTide 潮汐计算通道。
+          </p>
         </div>
       </header>
 
       {/* City Switch Tab */}
-      <div className="relative z-10 flex justify-center pt-6 px-4">
+      <div className="flex justify-center pt-6 px-4">
         <div className="flex bg-white/10 backdrop-blur-md p-1 rounded-full border border-white/20 relative shadow-lg">
           <button
             onClick={() => setActiveIndex(0)}
@@ -334,7 +194,7 @@ export default function Weather() {
       </div>
 
       {/* Slide Navigation Container */}
-      <div className="relative z-10 w-full text-left">
+      <div className="relative w-full text-left">
         {/* Left/Right Click Nav Arrows on margins for desktop usability */}
         <div className="absolute inset-y-12 left-2 right-2 pointer-events-none z-20 hidden sm:flex justify-between items-center h-48">
           <button
@@ -482,7 +342,7 @@ export default function Weather() {
       </div>
 
       {/* Bottom Dots Indicator */}
-      <div className="relative z-10 flex justify-center gap-1.5 pt-4">
+      <div className="flex justify-center gap-1.5 pt-4">
         <button
           onClick={() => setActiveIndex(0)}
           className={cn(
@@ -501,7 +361,7 @@ export default function Weather() {
         />
       </div>
 
-      <div className="relative z-10 text-center font-bold text-white/60 text-[11px] uppercase tracking-[0.2em] pointer-events-none select-none">
+      <div className="text-center font-bold text-white/50 text-[11px] uppercase tracking-[0.2em] pointer-events-none select-none">
         ← 左右滑动或点击顶部标签切换两地天气和潮汐 →
       </div>
     </div>

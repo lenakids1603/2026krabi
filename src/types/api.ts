@@ -71,11 +71,7 @@ export interface WeatherForecastResponse {
   forecast: WeatherForecast[];
   safety: WeatherAlertCard[];
   lastUpdated?: string;
-  source?: 'mock' | 'api' | 'fallback';
-  cacheHit?: boolean;
-  cacheExpiresAt?: string | null;
-  weatherCode?: number;
-  isDay?: boolean;
+  source?: 'mock' | 'api';
 }
 
 export interface TidePoint {
@@ -95,9 +91,7 @@ export interface TideInfo {
   points: TidePoint[];
   tip: string;
   lastUpdated?: string;
-  source?: 'mock' | 'api' | 'fallback';
-  cacheHit?: boolean;
-  cacheExpiresAt?: string | null;
+  source?: 'mock' | 'api';
 }
 
 // --- Gallery Types ---

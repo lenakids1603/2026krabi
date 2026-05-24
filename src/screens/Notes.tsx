@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from 'motion/react';
-import { UserCheck, Landmark, Backpack, Coins, ShieldCheck, ChevronDown, Download, AlertTriangle, Info } from 'lucide-react';
+import { UserCheck, Landmark, Backpack, Coins, ChevronDown, AlertTriangle } from 'lucide-react';
 import { useState } from 'react';
 import { cn } from '@/src/lib/utils';
 import { NOTES_HEADER_BG } from '@/src/assets/localImages';
@@ -17,37 +17,41 @@ export default function Notes() {
         <p className="text-on-surface-variant font-medium text-sm leading-relaxed max-w-2xl opacity-90">为了确保您的旅程顺利愉快，请仔细阅读以下信息。安全与尊重当地文化是我们的首要任务。</p>
       </header>
 
-      {/* Insurance Summary */}
+      {/* 人身安全提醒 */}
       <section>
         <motion.div 
             initial={{ opacity: 0, scale: 0.98 }}
             animate={{ opacity: 1, scale: 1 }}
-            className="bg-white p-8 rounded-[2.5rem] shadow-xl border-l-[12px] border-primary flex flex-col group hover:shadow-2xl transition-all duration-500 relative overflow-hidden"
+            className="bg-amber-50/40 p-8 rounded-[2.5rem] shadow-xl border-l-[12px] border-[#FF7E53] flex flex-col group hover:shadow-2xl transition-all duration-500 relative overflow-hidden"
         >
-          <div className="absolute top-[-20px] right-[-20px] text-primary/5 rotate-12 group-hover:rotate-0 transition-all duration-1000">
-             <ShieldCheck size={180} />
+          <div className="absolute top-[-20px] right-[-20px] text-[#FF7E53]/5 rotate-12 group-hover:rotate-0 transition-all duration-1000 pointer-events-none">
+             <AlertTriangle size={180} />
           </div>
-          <div className="relative z-10 space-y-6">
+          <div className="relative z-10 space-y-5 text-slate-800">
             <div className="flex items-start justify-between">
               <div>
-                <h3 className="font-heading font-bold text-2xl text-primary mb-1 tracking-tight">旅行保险摘要</h3>
-                <p className="text-on-surface-variant text-xs font-bold opacity-60 tracking-wider">Policy No: CH-RETREAT-2026-8890</p>
-              </div>
-              <ShieldCheck size={40} className="text-primary-container drop-shadow-xl" />
-            </div>
-            <div className="grid grid-cols-2 gap-6">
-              <div className="bg-surface-container-low p-5 rounded-2xl border border-outline-variant/20 shadow-inner group-hover:bg-primary/5 transition-colors">
-                <div className="text-[10px] text-on-surface-variant uppercase tracking-widest font-black opacity-60 mb-2">医疗保额</div>
-                <div className="text-3xl font-heading font-bold text-primary tracking-tighter">¥500,000</div>
-              </div>
-              <div className="bg-surface-container-low p-5 rounded-2xl border border-outline-variant/20 shadow-inner group-hover:bg-primary/5 transition-colors">
-                <div className="text-[10px] text-on-surface-variant uppercase tracking-widest font-black opacity-60 mb-2">紧急救援</div>
-                <div className="text-3xl font-heading font-bold text-primary tracking-tighter italic">全额承保</div>
+                <h3 className="font-heading font-bold text-2xl text-[#C13D11] mb-1 tracking-tight flex items-center gap-2">
+                  <AlertTriangle className="text-[#FF7E53]" size={26} />
+                  人身安全提醒
+                </h3>
+                <p className="text-on-surface-variant text-xs font-bold opacity-60 tracking-wider">PERSONAL SAFETY REMINDER</p>
               </div>
             </div>
-            <button className="w-full bg-primary text-white py-4 rounded-2xl font-bold flex items-center justify-center gap-3 hover:brightness-110 active:scale-[0.98] transition-all shadow-lg shadow-primary/20 text-sm uppercase tracking-widest">
-              <Download size={20} /> 下载完整保单 (PDF)
-            </button>
+            
+            <div className="space-y-4 text-sm leading-relaxed text-slate-700">
+              <p className="font-bold text-[#8B2605] bg-[#FF7E53]/10 p-4 rounded-2xl border-l-4 border-[#FF7E53]">
+                本次行程以集体出行为主，请大家务必把人身安全放在第一位。外出时尽量结伴同行，不要单独前往偏僻、人少、照明不足或存在安全隐患的区域；女生外出，尤其是夜间外出、打车、去酒吧或前往陌生地点时，必须结伴出行，不建议单独行动。自由活动期间请提前告知同伴自己的去向，并保持手机电量充足、通讯畅通。
+              </p>
+              <p>
+                在当地出行时请严格遵守交通规则，过马路注意左右来车，不随意横穿马路；乘坐车辆时系好安全带，不乘坐无正规资质、无明确价格或感觉不安全的交通工具。如需骑摩托车或电动车，请务必佩戴头盔，注意当地路况和靠左行驶规则，不酒后骑行，不超速，不冒险驾驶。
+              </p>
+              <p>
+                参加海边、出海、浮潜、游泳等活动时，请听从工作人员安排，注意天气、海况和安全提示，不擅自进入深水区、礁石区或禁止游泳区域。饮酒需适量，夜间娱乐后请结伴返回酒店。个人护照、钱包、手机等贵重物品请妥善保管，不随意交给陌生人，也不要轻信陌生人的搭讪、带路、推销或邀约。
+              </p>
+              <p className="font-medium text-slate-600">
+                如遇身体不适、迷路、交通事故、物品遗失、纠纷或其他突发情况，请第一时间联系同行伙伴、负责人或酒店工作人员，不要独自处理危险情况。
+              </p>
+            </div>
           </div>
         </motion.div>
       </section>

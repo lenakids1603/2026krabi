@@ -60,7 +60,7 @@ export default function Home() {
               ) : (
                 <>
                   <span className="text-primary font-heading font-bold text-5xl">Day {status?.dayNumber || 1}</span>
-                  <span className="text-on-surface-variant text-sm font-medium">/ {status?.totalDays || 10} Days</span>
+                  <span className="text-secondary text-sm font-medium">/ {status?.totalDays || 9} Days</span>
                 </>
               )}
             </div>

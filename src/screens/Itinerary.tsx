@@ -11,16 +11,15 @@ import { useDragToScroll } from '../hooks/useDragToScroll';
 // 💡 自定义左右滑动的日历小卡片内容 (您可以自由修改下方文字)
 // ==========================================
 const CALENDAR_CARDS = [
-  { date: '06.28', day: 1, weekday: '周日', title: '准备启程', note: '全员萧山集结红眼起飞' },
-  { date: '06.29', day: 2, weekday: '周一', title: '抵达入住', note: '入境并转场落入兰塔酒店' },
-  { date: '06.30', day: 3, weekday: '周二', title: '海滩度假', note: '北部椰浪沙滩悠闲品咖' },
-  { date: '07.01', day: 4, weekday: '周三', title: '探寻老镇', note: '访古朴老镇与红树艇探' },
-  { date: '07.02', day: 5, weekday: '周四', title: '南部秘境', note: '南部灯塔石滩自驾慢行' },
-  { date: '07.03', day: 6, weekday: '周五', title: '重聚奥南', note: '专车离岛入住奥南繁街' },
-  { date: '07.04', day: 7, weekday: '周六', title: '海面飞梭', note: '长尾渡一品攀岩者圣地' },
-  { date: '07.05', day: 8, weekday: '周日', title: '宏岛浮潜', note: '全岛浮潜或者内路雨池' },
-  { date: '07.06', day: 9, weekday: '周一', title: '终章休整', note: 'SPA采购感恩晚会' },
-  { date: '07.07', day: 10, weekday: '周二', title: '带笑返程', note: '行李收拾专车安全返航' },
+  { date: '06.28', day: 1, weekday: '周日', title: '准备启程', note: '全员从杭州萧山集结夜航启程' },
+  { date: '06.29', day: 2, weekday: '周一', title: '抵达入住', note: '入境并乘专车前往兰塔岛并休整' },
+  { date: '06.30', day: 3, weekday: '周二', title: '自由活动', note: '漫步老镇探秘奇妙红树林生态' },
+  { date: '07.01', day: 4, weekday: '周三', title: '自由活动', note: '探索南部秘境海岸与国家公园' },
+  { date: '07.02', day: 5, weekday: '周四', title: '汇聚甲米', note: '离岛返回并在奥南商圈活动' },
+  { date: '07.03', day: 6, weekday: '周五', title: '莱利半日', note: '乘坐长尾船游览经典莱利湾海滩' },
+  { date: '07.04', day: 7, weekday: '周六', title: '宏岛浮潜', note: '天气晴出海浮潜雨天改内陆线' },
+  { date: '07.05', day: 8, weekday: '周日', title: '自由活动', note: '奥南休闲慢活与团队告别晚宴' },
+  { date: '07.06', day: 9, weekday: '周一', title: '返回杭州', note: '收拾行装专车送往机场启程返航' },
 ];
 
 export default function Itinerary() {
@@ -56,7 +55,7 @@ export default function Itinerary() {
         </motion.div>
         <h2 className="font-heading font-black text-4xl text-[#00516E] tracking-tight text-left">团建行程</h2>
         <p className="text-on-surface-variant max-w-2xl font-medium text-sm leading-relaxed opacity-90 text-left">
-          甲米 & 兰塔岛 10 天 9 晚公司度夏游玩全纪实。伴随着海浪、落日与椰树，开启令人期待的探索之旅。
+          甲米 & 兰塔岛 9 天 8 晚公司度夏游玩全纪实。伴随着海浪、落日与椰树，开启令人期待的探索之旅。
         </p>
 
         {/* Lightweight time/range banners */}
@@ -69,7 +68,7 @@ export default function Itinerary() {
         {tripProgress?.status === 'after' && (
           <div className="bg-slate-100 border border-slate-200 text-slate-600 text-xs px-3.5 py-2 rounded-2xl font-medium flex items-center gap-2">
             <span>🎉</span>
-            <span>2026 团建行程已于 2026-07-07 圆满落幕，感谢同行！</span>
+            <span>2026 团建行程已于 2026-07-06 圆满落幕，感谢同行！</span>
           </div>
         )}
         {tripProgress?.status === 'during' && (
@@ -139,7 +138,7 @@ export default function Itinerary() {
                 ? "border-white/10 text-white/75" 
                 : "border-outline-variant/10 text-on-surface-variant/70"
             )}>
-              查看完整 10 天大行程
+              查看完整 9 天大行程
             </div>
           </button>
 

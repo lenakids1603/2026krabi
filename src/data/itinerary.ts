@@ -8,310 +8,269 @@ export const ITINERARY: DayItinerary[] = [
   {
     day: 1,
     date: '06.28',
-    title: '全员集结，准备启程',
+    title: '准备启程',
     icon: 'plane-takeoff',
     activities: [
       {
         id: 'a1-1',
-        time: '21:00',
-        title: '萧山国际机场 (HGH) T4 集合',
+        time: '晚上',
+        title: '全员萧山集结',
         location: '杭州萧山国际机场 T4 航站楼',
-        description: '团队成员统一在指定值机柜台前集合值机。温馨提醒：提前换好少量泰铢，准备好充电宝、薄外套，国际航班建议提前抵达机场。',
+        description: '团队成员统一在指定值机柜台前集合，办理值机和出境手续。温馨提醒：提前备好少量泰铢，检查护照和随身物品。',
         type: 'itinerary'
       },
       {
         id: 'a1-2',
-        time: '23:00',
-        title: '登机启程',
-        location: '杭州 -> 泰国',
-        description: '红眼航班启程，开启充满期待的 retreat 旅行。请尽量在飞机上休息好，恢复体力。',
+        time: '深夜航班',
+        title: '夜航启程',
+        location: '杭州 -> 泰国甲米',
+        description: '搭乘国际航班前往泰国甲米，正式开启 2026 兰塔之旅。请尽量在飞机上休息好。',
         type: 'itinerary'
       }
     ],
-    tags: ['机场集结', '红眼航班'],
+    tags: ['萧山集结', '夜航启程'],
     image: changiWaterfall
   },
   {
     day: 2,
     date: '06.29',
-    title: '抵达甲米，入住兰塔',
+    title: '抵达入住',
     icon: 'hotel',
     activities: [
       {
         id: 'a2-1',
-        time: '11:50',
-        title: '抵达甲米，入境与取行李',
-        location: '甲米机场 (KBV)',
-        description: '飞机落地，统一办理入境手续并提取行李。落地后不安排甲米市区游玩，直接前往兰塔。',
+        time: '上午（曼谷时间）',
+        title: '入境甲米 & 提取行李',
+        location: '甲米国际机场 (KBV)',
+        description: '顺利抵达甲米机场后办理入境手续，统一提取团队行李并进行集结。',
         type: 'itinerary'
       },
       {
         id: 'a2-2',
-        time: '13:00 - 16:00',
-        title: '专车前往兰塔酒店，办理入住',
+        time: '中午-下午',
+        title: '专车前往兰塔酒店并入住',
         location: '甲米机场 -> 兰塔度假酒店',
-        description: '专车接送，包含车渡时间。由于路况可能会有些多变，实际时间会稍有浮动。抵达酒店后办理入住。',
+        description: '乘坐舒适舒心的专车前往美丽的兰塔岛酒店。下午办理入住并休整放松。',
         type: 'hotel'
       },
       {
         id: 'a2-3',
-        time: '傍晚',
-        title: '酒店休息、海边散步与看日落',
-        location: '兰塔岛海滩 (Long Beach / Klong Dao / Kantiang Bay)',
-        description: '漫步漫长静谧的沙滩，饱览艳丽的海上日落，随后在海滨享用美味舒心的泰式海鲜晚餐，吹着晚风，洗去旅途的漫漫风尘。',
+        time: '傍晚 & 晚上',
+        title: '海边散步与欣赏璀璨日落',
+        location: '兰塔海滩',
+        description: '在蔚蓝的海边沙滩悠闲散步、饱览日落红霞。晚上全员自由享用美味晚餐。',
         type: 'dining'
       }
     ],
-    tags: ['转场兰塔', '海滩落日', '椰风晚宴'],
+    tags: ['专车前往', '兰塔入住', '海边落日'],
     image: krabiSunsetDinner
   },
   {
     day: 3,
     date: '06.30',
-    title: '漫步北部，开启度假状态',
-    icon: 'waves',
+    title: '自由活动',
+    icon: 'compass',
     activities: [
       {
         id: 'a3-1',
         time: '上午',
-        title: '睡到自然醒，酒店早餐与海边放松',
-        location: '度假酒店及周边沙滩',
-        description: '享受好吃的度假村早餐。在海风中慢游晨练，彻底进入放松的度假状态。',
+        title: '睡到自然醒 & 酒店椰风早餐',
+        location: '度假村及周边',
+        description: '睡到自然醒，好享享用悠闲美味的酒店海景度假早餐。',
         type: 'itinerary'
       },
       {
         id: 'a3-2',
         time: '下午',
-        title: '慢游北部沙滩、喝咖啡与下午茶',
-        location: 'Long Beach & Klong Dao 海滩',
-        description: '下午漫步海滩、喝杯椰林咖啡，或在度假村泳池惬意游泳。温馨提示：雨季海浪稍微偏大，有风浪提示请注意避让。',
-        type: 'itinerary'
+        title: '探访兰塔老镇与红树林冒险',
+        location: '兰塔老镇 (Lanta Old Town) & 红树林河湾',
+        description: '随后可前往兰塔老镇感受安静复古的海边街景与风情；下午可安排生态红树林探秘、皮划艇或找一家舒适的临海咖啡馆悠然舒压。',
+        type: 'attraction'
       },
       {
         id: 'a3-3',
         time: '晚上',
-        title: 'Saladan 镇晚餐与便利补给',
-        location: 'Saladan 镇街区',
-        description: '去北部最热闹的 Saladan 镇享用晚宴并购买一些日用补给，同时预订或确认好后几天的岛内游、包车等细节安排。',
+        title: '返回酒店泳池放松 & 自由晚餐',
+        location: '酒店泳池 / 兰塔特色餐厅',
+        description: '可以返回酒店泳池或海滩躺平，伴着椰风享用自由惬意的晚餐。',
         type: 'dining'
       }
     ],
-    tags: ['自然睡醒', '海浪咖啡', 'Saladan巡游']
+    tags: ['兰塔老镇', '皮划艇探索', '漫游发呆']
   },
   {
     day: 4,
     date: '07.01',
-    title: '探寻东岸老镇与红树林',
-    icon: 'compass',
+    title: '自由活动',
+    icon: 'waves',
     activities: [
       {
         id: 'a4-1',
         time: '上午',
-        title: 'Lanta Old Town 老镇闲逛与发呆',
-        location: '兰塔老镇 (Lanta Old Town)',
-        description: '这里是一座纯正的木屋临海老镇，有很多文艺清新的临海咖啡馆 and 海鲜餐厅，非常适合拍照发朋友圈。',
+        title: '探索兰塔南部幽静海滩',
+        location: 'Kantiang Bay / Nui Bay / Bamboo Bay',
+        description: '南部的海岸海滩更加清幽，适合探秘和兜风。',
         type: 'attraction'
       },
       {
         id: 'a4-2',
         time: '下午',
-        title: '红树林皮划艇冒险 (晴) / 泰餐课 SPA (雨)',
-        location: '红树林河湾 / 本地 SPA 烹饪馆',
-        description: '若天气晴好：在东部红树林自划皮划艇深入生态迷宫；若遇下雨：我们则改成在室内上一次当地趣味厨艺课，或是去舒适的SPA护理。活动当天依据天气随时调整。不推荐安排远海跳岛。',
+        title: '南部国家公园灯塔之行',
+        location: '兰塔南部国家森林公园',
+        description: '如果天气合适，全员可以前往经典的国家公园，探访壮观的地标性红白灯塔和海岸怪石滩，用镜头定格极致海景。',
         type: 'attraction'
       },
       {
         id: 'a4-3',
         time: '晚上',
-        title: '回酒店看日落、享用晚餐',
-        location: '度假酒店 / 附近海鲜餐厅',
-        description: '踩着一地晚霞返回，晚餐一如既往的放松，没有复杂的商业节奏。',
+        title: '海边星空晚餐 & 自由休整',
+        location: '度假酒店',
+        description: '踩着一地的晚霞回到酒店并休整休息。',
         type: 'dining'
       }
     ],
-    tags: ['古镇风情', '皮划艇探索', '慢活主张'],
+    tags: ['国家公园', '最南灯塔', '秘境探海'],
     image: ITINERARY_DAY3_BG
   },
   {
     day: 5,
     date: '07.02',
-    title: '探秘南部灯塔与绝美南部湾',
-    icon: 'bike',
+    title: '汇聚甲米',
+    icon: 'navigation',
     activities: [
       {
         id: 'a5-1',
         time: '上午',
-        title: '包车或自驾游览南部秘境沙滩半日巡礼',
-        location: 'Kantiang Bay / Nui Bay / Bamboo Bay',
-        description: '南部由于群山环绕更显寂静清幽，水质极佳。可以包车或租小排量车带队前往。温馨提示：雨季山路弯多坡急，开摩托或骑行请一定加倍小心！',
-        type: 'attraction'
+        title: '办理退房，专车离岛重聚奥南',
+        location: '兰塔岛 -> 甲米奥南',
+        description: '美味早餐过后整理行装，统一办理退房，乘坐专车离开兰塔岛，返回甲米奥南酒店。',
+        type: 'itinerary'
       },
       {
         id: 'a5-2',
         time: '下午',
-        title: 'Mu Ko Lanta 森林公园灯塔 (顺畅时) 或 度假村躺平',
-        location: '兰塔国家公园灯塔区 / 酒店泳池',
-        description: '前往兰塔最下方的国家公园探秘经典的标志型灯塔，看波涛汹涌的海浊石滩。如果雨势太大，改成在酒店泳池静享慵懒一刻。',
-        type: 'attraction'
+        title: '新酒店入住办理 & 自由午休',
+        location: '甲米奥南区域度假酒店',
+        description: '在新酒店安顿行李，舒服地简单睡个午觉并补充体力。',
+        type: 'hotel'
       },
       {
         id: 'a5-3',
-        time: '晚上',
-        title: '最后一晚兰塔海滩晚餐',
-        location: '兰塔特色椰风海滩餐馆',
-        description: '在兰塔的最后一夜，听着温柔的海涛共进最后的晚宴。不建议太晚睡，养足精神准备明天上午的迁徙。',
+        time: '傍晚 & 晚上',
+        title: '奥南海滩和繁华商业街自由探索',
+        location: '奥南大滩 / 商业街 / 泰式街边夜市',
+        description: '傍晚在热闹的奥南海湾周边轻松活动，自由寻访美食，也可以顺路采购当地海岛伴手礼及特产。',
         type: 'dining'
       }
     ],
-    tags: ['国家公园', '碧海南部', '椰风沙滩']
+    tags: ['转场甲米', '入住奥南', '繁华夜色']
   },
   {
     day: 6,
     date: '07.03',
-    title: '专车返程，入住奥南',
-    icon: 'navigation',
+    title: '莱利半日',
+    icon: 'waves',
     activities: [
       {
         id: 'a6-1',
         time: '上午',
-        title: '早餐后退房并启程返回甲米奥南',
-        location: '兰塔岛 -> 甲米奥南区酒店',
-        description: '在度假村悠闲美味的早餐后统一结账。专车跨海送我们重聚奥南主湾。提前一天务必和接送师傅进行确认并约定时间。',
-        type: 'itinerary'
+        title: '乘坐泰式古典长尾船前往莱利半岛',
+        location: '奥南主码头 -> Railay Beach',
+        description: '搭乘经典的泰国摇曳长尾船仅需 5-10 分钟航程即可抵达，近距离仰望喀斯特奇石峭壁。',
+        type: 'attraction'
       },
       {
         id: 'a6-2',
         time: '下午',
-        title: '入住新酒店，迎风漫游奥南海滩',
-        location: '奥南海滩 (Ao Nang Beach) / 诺帕拉特塔拉海滩',
-        description: '在新酒店安顿行李，简单午休后可在甲米最热闹最好玩的两大沙滩上散步、发呆，首日来到甲米行程尽量不安排累人项目。',
-        type: 'hotel'
+        title: '游览莱利海滩与神秘帕南公主洞海滩',
+        location: '莱利湾帕南洞穴海滩 (Prha Nang Cave)',
+        description: '游览莱利极具名气的喀斯特断崖风景和纯净沙滩。下午根据自身天气和体能，随时选择留在沙滩冰饮放松或乘坐长尾船返回奥南午休。',
+        type: 'attraction'
       },
       {
         id: 'a6-3',
         time: '晚上',
-        title: '打卡奥南街区热闹大夜市 & 漫步品尝风味晚餐',
-        location: '奥南大夜市 / 临街海景餐位',
-        description: '奥南相比兰塔烟火气息十分浓厚。可以去奥南夜市感受当地人的风味小吃，也可以趁夜间咨询当地出海公司查看第2日的风浪以及决定第二天的项目。',
+        title: '品尝海鲜美食 & 自由安排舒缓泰式按摩',
+        location: '奥南海滩及沿街餐厅',
+        description: '晚上大家自由组团享用当地海鲜烧烤大餐，推荐在晚餐结束后安排一次舒解筋骨的泰式全身 Spa 按摩。',
         type: 'dining'
       }
     ],
-    tags: ['重归甲米', '繁华奥南', '海景晚灯']
+    tags: ['莱利半岛', '长尾船奇航', '帕南洞穴']
   },
   {
     day: 7,
     date: '07.04',
-    title: '莱利一日，探密攀岩胜地',
-    icon: 'waves',
+    title: '宏岛浮潜',
+    icon: 'compass',
     activities: [
       {
         id: 'a7-1',
-        time: '上午',
-        title: '莱利海滩 & 神秘公主洞穴半日游',
-        location: '莱利海滩 (Railay Beach) & Prha Nang Cave Beach',
-        description: '如果天气良好：从奥南主码头购买船票乘坐长尾船。仅需 5-10 分钟穿梭，即可到达著名的奇石林立跟攀岩天堂。机动性极好。',
+        time: '出海线（天气晴好时）',
+        title: 'Hong Islands 宏岛一日出海浮潜',
+        location: '大宏岛美丽海域及梦幻泻湖',
+        description: '天气与风浪条件俱佳时，乘船开始经典 360 度超级宏岛出海探奇，感受清凉透底的翡翠海水浮潜和白色沙滩。',
         type: 'attraction'
       },
       {
         id: 'a7-2',
-        time: '下午',
-        title: '在 Railay 享用冷饮或乘坐长尾船返回度假村午休',
-        location: '莱利群山咖啡馆 / 奥南温床',
-        description: '继续在遮天翠叶的莱利穿行冒险，也可趁下午暑气返校前直接坐长尾船返回奥南。若遇到强风甚至下雨等不可控海况，我们将改成前往翡翠池与天然温泉。',
+        time: '内陆线（若下雨风浪大备用）',
+        title: '打卡热带翡翠池、温泉瀑布与喀斯特虎窟寺',
+        location: '内陆国家级绿色翡翠池 / 温泉 / 虎窟寺',
+        description: '如果下雨或海况风浪不宜出海，则平滑变更为舒适安全的避风内陆特色景观带：畅游宛若九寨的林中翡翠池，在温泉飞瀑中天然水疗，或去甲米镇感受人文。',
         type: 'attraction'
-      },
-      {
-        id: 'a7-3',
-        time: '晚上',
-        title: '品尝泰式经典海鲜晚餐与老练泰式全身按摩',
-        location: '奥南海滩海滨餐厅 / SPA 养生会所',
-        description: '大快朵颐大螃蟹和龙虾，最后在娴熟的精油按摩下送走充实而惊奇的一天。',
-        type: 'dining'
       }
     ],
-    tags: ['莱利攀岩', '公主湾风骨', '休闲翡翠池']
+    tags: ['宏岛浮潜', '天气好出海', '雨天改内陆']
   },
   {
     day: 8,
     date: '07.05',
-    title: '跳岛宏岛巡航 / 绝佳内陆雨季替代',
-    icon: 'compass',
+    title: '自由活动',
+    icon: 'waves',
     activities: [
       {
         id: 'a8-1',
-        time: '全天 (晴好)',
-        title: '天气极好：宏岛 (Hong Islands) / 甲米四岛经典一日游',
-        location: '甲米海域美丽海中小群岛',
-        description: '在无暇的碧波沙滩中进行全团出海大浮潜，去探秘神奇的长滩与泻湖。出游时风浪会影响最终船司安排，请前一天定好保留可退改计划。',
-        type: 'attraction'
+        time: '全天自由',
+        title: '奥南商区随心打卡、购物选特产、海风慢生活',
+        location: '度假中心 / 咖啡馆 / 纪念品店',
+        description: '今日彻底留白，全员不作团队打卡限定。大家可以根据兴趣进行咖啡发呆、特产采买，亦或只是在奥南海边静赏潮起潮落。',
+        type: 'itinerary'
       },
       {
         id: 'a8-2',
-        time: '全天 (阴雨备选)',
-        title: '天气欠佳：打卡极赞喀斯特翡翠池、瀑布温泉和虎窟寺攀登',
-        location: '翡翠池森林、温泉瀑布、虎窟寺与甲米镇大集市',
-        description: '若海上面临强阵雨风浪无法出航，请在内陆线里穿梭。去在森林溪水温泉里游泳，甚至登顶虎窟寺俯瞰雨林，晚上大饱口福于甲米镇周末超级夜市。',
-        type: 'attraction'
+        time: '晚上（团队晚餐）',
+        title: 'Lenakids 团队盛大答谢与欢聚晚会',
+        location: '奥南海湾高空海景浪漫餐吧',
+        description: '在夕阳与椰风沙滩的相伴中，团队齐聚盛宴。欢声笑语，觥筹交错，共同纪念与感恩这段精彩的 2026 Retreat 海岛之行。',
+        type: 'dining'
       }
     ],
-    tags: ['宏岛漫游', '出海浮潜', '全能温雨备']
+    tags: ['全天随心', '奥南购物', '告别晚宴']
   },
   {
     day: 9,
     date: '07.06',
-    title: '终章休整，最后的浪漫留白',
-    icon: 'waves',
+    title: '返回杭州',
+    icon: 'plane-takeoff',
     activities: [
       {
         id: 'a9-1',
-        time: '上午',
-        title: '睡到自然醒，享用闲逸早餐和在池畔小坐',
-        location: '度假村及附近浅滩',
-        description: '由于明日返航，最后一日上午避免远航。尽情放松。在椰林树影和碧水晴空中呼吸纯净的海风。',
+        time: '上午（送机时刻）',
+        title: '整理行装 & 登上专用大巴返航',
+        location: '奥南度假酒店 -> 甲米机场',
+        description: '在酒店从容吃完早餐，退房办理好行李整理，登上面包专用送机专车，乘车稳稳驶入甲米国际机场进行办票。',
         type: 'itinerary'
       },
       {
         id: 'a9-2',
-        time: '下午',
-        title: '海岛特产手礼选购与极致全身精油香薰 SPA',
-        location: '奥南工艺集市 / 按摩会馆',
-        description: '选购海岛干货特产。做个深层减压 SPA 理疗。给回程和即将到来的工作留下极佳的缓冲！',
-        type: 'attraction'
-      },
-      {
-        id: 'a9-3',
-        time: '晚上',
-        title: 'Lenakids 盛大的答谢与告别晚会',
-        location: '奥南星光海景高差餐吧',
-        description: '总结 retreat 全过程，欢声笑语，觥筹交错。再次检查并由领队统一订好确定明天早九点前往机场的送机专车。',
-        type: 'dining'
-      }
-    ],
-    tags: ['告别狂喜', '特产采买', '顶级SPA']
-  },
-  {
-    day: 10,
-    date: '07.07',
-    title: '带上满满快乐与行李，踏上归国旅途',
-    icon: 'plane-takeoff',
-    activities: [
-      {
-        id: 'a10-1',
-        time: '09:00左右',
-        title: '全员大堂集合并携箱登上送机专车前往机场',
-        location: '奥南酒店 -> 甲米机场 KBV',
-        description: '返航国际班机为 11:25，提前预约好的大巴于酒店大堂统一接机出发。预留充足时间办票退税。',
-        type: 'itinerary'
-      },
-      {
-        id: 'a10-2',
-        time: '11:25',
-        title: '国际航班飞返，顺利回到港湾',
-        location: '甲米国际机场 (KBV)',
-        description: '怀着丰沛的回忆和相机中绝美的照片高飞启航，圆满结束极赞的 2026 Lenakids Retreat！',
+        time: '航班时间',
+        title: '怀着欢声笑语与满满快乐重归家园',
+        location: '甲米机场 (KBV) -> 杭州萧山机港',
+        description: '携带饱满的度假元气与相机相册中无数的绝美风景在值机后登机起航。圆满告别极赞的 2026 泰国兰塔团建休养！',
         type: 'itinerary'
       }
     ],
-    tags: ['完美收官', '带笑而归', '期待重逢']
+    tags: ['完美收官', '平安抵达', '期待重逢']
   }
 ];
