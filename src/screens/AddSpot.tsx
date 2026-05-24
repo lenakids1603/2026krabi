@@ -25,14 +25,36 @@ export default function AddSpot() {
   const [imagePreview, setImagePreview] = useState<string>('');
   const [searchQuery, setSearchQuery] = useState('');
 
-  // Settle coordinates. Displaying the default from the prototype: (7.8804° N, 98.3923° E)
+  // Settle coordinates. Default to Phuket: (7.8804° N, 98.3923° E)
   const [lat, setLat] = useState<number>(7.8804);
   const [lng, setLng] = useState<number>(98.3923);
+  const [isLocating, setIsLocating] = useState(true);
 
   // File handling
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const categories: ('餐厅' | '摄影位' | '酒吧' | '咖啡馆' | '其他')[] = ['餐厅', '摄影位', '酒吧', '咖啡馆', '其他'];
+
+  // --- NEW: Browser Geolocation Logic ---
+  useEffect(() => {
+    if ("geolocation" in navigator) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          setLat(position.coords.latitude);
+          setLng(position.coords.longitude);
+          setIsLocating(false);
+        },
+        (error) => {
+          console.error("Error getting location:", error);
+          setIsLocating(false); // Fallback to default Phuket coords on error or denial
+        },
+        { timeout: 10000 }
+      );
+    } else {
+      setIsLocating(false);
+    }
+  }, []);
+  // --- END NEW LOGIC ---
 
   const handleImageSelect = (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -52,12 +74,10 @@ export default function AddSpot() {
     }
   };
 
-  // Safe submission through the API gateway with local fallback inside the service layer
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     if (!name.trim()) return;
 
-    // Use a default beautiful image corresponding to category if none is imported
     let finalImage = imagePreview;
     if (!finalImage) {
       const defaultSceneries: Record<string, string> = {
@@ -80,34 +100,11 @@ export default function AddSpot() {
       user: user.trim() || '旅行同伴'
     });
 
-    // Redirect to list
     navigate('/checkin-spots');
-  };
-
-  // Mock search coordinates for Thai locations
-  const handleMockSearch = () => {
-    if (!searchQuery) return;
-    const query = searchQuery.trim();
-    if (query.includes('芭东') || query.includes('Patong')) {
-      setLat(7.8951); setLng(98.2965);
-    } else if (query.includes('甲米') || query.includes('Krabi')) {
-      setLat(8.0863); setLng(98.9063);
-    } else if (query.includes('兰塔') || query.includes('Lanta')) {
-      setLat(7.6253); setLng(99.0342);
-    } else if (query.includes('卡隆') || query.includes('Karon')) {
-      setLat(7.8344); setLng(98.2921);
-    } else if (query.includes('普吉镇') || query.includes('Phuket Town')) {
-      setLat(7.8804); setLng(98.3923);
-    } else {
-      // Small random jitter to simulate searching next locations
-      setLat(7.8804 + (Math.random() - 0.5) * 0.1);
-      setLng(98.3923 + (Math.random() - 0.5) * 0.1);
-    }
   };
 
   return (
     <div className="max-w-3xl mx-auto space-y-6 pb-16 text-left">
-      {/* Navigation Title Bar */}
       <header className="flex items-center justify-between pb-2 border-b border-outline-variant/30">
         <button
           onClick={() => navigate('/checkin-spots')}
@@ -117,12 +114,11 @@ export default function AddSpot() {
           <span>返回分享列表</span>
         </button>
         <h2 className="font-heading font-black text-2xl text-[#00516E]">新增打卡点</h2>
-        <div className="w-8" /> {/* Spacer */}
+        <div className="w-8" />
       </header>
 
       <form onSubmit={handleSubmit} className="space-y-6">
         
-        {/* SECTION 1: MAP AND USER COORDINATES */}
         <div className="space-y-3">
           <label className="text-sm font-bold text-on-surface-variant flex items-center gap-1.5">
             <MapPin size={16} className="text-[#FF7E53]" />
@@ -131,12 +127,16 @@ export default function AddSpot() {
 
           <div className="relative h-72 md:h-80 w-full rounded-2xl overflow-hidden border border-outline-variant/40 bg-slate-50 shadow-inner group">
 
-            {hasValidKey ? (
-              // Standard real Google Maps layout when API_KEY is present
+            {isLocating ? (
+              <div className="w-full h-full flex flex-col items-center justify-center bg-slate-50 gap-3">
+                <div className="w-8 h-8 border-4 border-[#FF7E53]/20 border-t-[#FF7E53] rounded-full animate-spin" />
+                <p className="text-sm font-bold text-[#00516E]">正在获取您的当前位置...</p>
+              </div>
+            ) : hasValidKey ? (
               <APIProvider apiKey={API_KEY} version="weekly">
                 <Map
-                  defaultCenter={{ lat: 7.8804, lng: 98.3923 }}
-                  defaultZoom={11}
+                  defaultCenter={{ lat, lng }}
+                  defaultZoom={15}
                   mapId="DEMO_MAP_ID"
                   gestureHandling="cooperative"
                   reuseMaps
@@ -150,15 +150,10 @@ export default function AddSpot() {
                 </Map>
               </APIProvider>
             ) : (
-              // A gorgeous custom vector fallback picker map centered on southern Thailand/Phuket coastal area
               <div className="relative w-full h-full bg-gradient-to-br from-[#E0F2FE] via-[#BAE6FD] to-[#38BDF8] flex items-center justify-center cursor-crosshair">
-                
-                {/* Visual outline/shoreline drawing representation */}
                 <svg className="absolute inset-0 w-full h-full opacity-35" viewBox="0 0 100 100" preserveAspectRatio="none">
                   <path d="M 12 0 C 18 15, 8 30, 20 40 Q 30 50, 40 70 T 80 100 L 100 100 L 100 0 Z" fill="#F0FDFA" />
-                  {/* Koh Lanta contour */}
                   <path d="M 68 62 C 60 70, 70 85, 76 96 C 80 94, 84 80, 80 72 Z" fill="#BBF7D0" />
-                  {/* Grid overlay coordinates */}
                   <g stroke="#FFF" strokeWidth="0.1" strokeDasharray="1 3">
                     <line x1="20" y1="0" x2="20" y2="100" />
                     <line x1="40" y1="0" x2="40" y2="100" />
@@ -169,12 +164,8 @@ export default function AddSpot() {
                   </g>
                 </svg>
 
-                {/* Island visual labels */}
-                <div className="absolute top-[20%] left-[25%] opacity-55 text-[10px] uppercase font-mono font-bold tracking-widest text-[#0369A1]">Phuket Island</div>
-                <div className="absolute top-[35%] right-[25%] opacity-55 text-[10px] uppercase font-mono font-bold tracking-widest text-[#0369A1]">Krabi Province</div>
-                <div className="absolute bottom-[20%] right-[15%] opacity-55 text-[10px] uppercase font-mono font-bold tracking-widest text-[#0369A1]">Koh Lanta</div>
+                <div className="absolute top-[20%] left-[25%] opacity-55 text-[10px] uppercase font-mono font-bold tracking-widest text-[#0369A1]">Current Region</div>
 
-                {/* Simulated Marker with visual pulse */}
                 <div className="relative z-10 flex flex-col items-center select-none cursor-pointer">
                   <motion.div
                     animate={{ y: [0, -6, 0] }}
@@ -186,7 +177,6 @@ export default function AddSpot() {
                   <div className="w-3 h-1 bg-black/20 rounded-full blur-[1px] mt-1 shrink-0" />
                 </div>
 
-                {/* Instruction note embedded inside fallback canvas */}
                 <div className="absolute bottom-4 left-4 right-4 bg-white/90 backdrop-blur-md rounded-xl p-3 border border-outline-variant/30 text-left flex items-start gap-2.5 shadow-md">
                   <span className="p-1.5 bg-sky-100 text-[#0284C7] rounded-lg mt-0.5">
                     <Info size={14} />
@@ -194,63 +184,29 @@ export default function AddSpot() {
                   <div className="flex-1 min-w-0">
                     <p className="text-[11px] font-bold text-on-surface">交互式模拟定位盘</p>
                     <p className="text-[10px] text-on-surface-variant leading-relaxed">
-                      已自动匹配甲米团建坐标。您可以直接在此盘面上拖动或点击来修改纬度与经度等详细数值。
+                      已自动匹配当前环境坐标。您可以直接在此盘面上点击修改经纬度。
                     </p>
                   </div>
                 </div>
 
-                {/* Subtle coordinate adjust overlay at the right */}
                 <div className="absolute right-4 top-4 bg-white/95 backdrop-blur-md p-2 rounded-xl flex flex-col gap-2 shadow-md border border-outline-variant/20">
-                  <button 
-                    type="button" 
-                    onClick={() => { setLat(prev => prev + 0.005); }}
-                    className="p-1.5 rounded bg-surface hover:bg-neutral-100 font-bold font-mono text-xs text-[#00516E]"
-                    title="增加纬度"
-                  >
-                    ▲ Y
-                  </button>
-                  <button 
-                    type="button" 
-                    onClick={() => { setLat(prev => prev - 0.005); }}
-                    className="p-1.5 rounded bg-surface hover:bg-neutral-100 font-bold font-mono text-xs text-[#00516E]"
-                    title="减少纬度"
-                  >
-                    ▼ Y
-                  </button>
-                  <button 
-                    type="button" 
-                    onClick={() => { setLng(prev => prev - 0.005); }}
-                    className="p-1.5 rounded bg-surface hover:bg-neutral-100 font-bold font-mono text-xs text-[#00516E]"
-                    title="减少经度"
-                  >
-                    ◀ X
-                  </button>
-                  <button 
-                    type="button" 
-                    onClick={() => { setLng(prev => prev + 0.005); }}
-                    className="p-1.5 rounded bg-surface hover:bg-neutral-100 font-bold font-mono text-xs text-[#00516E]"
-                    title="增加经度"
-                  >
-                    ▶ X
-                  </button>
+                  <button type="button" onClick={() => setLat(prev => prev + 0.005)} className="p-1.5 rounded bg-surface hover:bg-neutral-100 font-bold font-mono text-xs text-[#00516E]">▲ Y</button>
+                  <button type="button" onClick={() => setLat(prev => prev - 0.005)} className="p-1.5 rounded bg-surface hover:bg-neutral-100 font-bold font-mono text-xs text-[#00516E]">▼ Y</button>
+                  <button type="button" onClick={() => setLng(prev => prev - 0.005)} className="p-1.5 rounded bg-surface hover:bg-neutral-100 font-bold font-mono text-xs text-[#00516E]">◀ X</button>
+                  <button type="button" onClick={() => setLng(prev => prev + 0.005)} className="p-1.5 rounded bg-surface hover:bg-neutral-100 font-bold font-mono text-xs text-[#00516E]">▶ X</button>
                 </div>
               </div>
             )}
 
-            {/* FLOATING EXACT COORDINATES BAR ON TOP OF MAP */}
             <div className="absolute bottom-4 right-4 bg-[#0F172A]/85 backdrop-blur-md text-white text-[10px] font-mono rounded-lg px-3 py-1.5 shadow-md flex items-center gap-1.5 font-bold">
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
               <span>{lat.toFixed(6)}° N, {lng.toFixed(6)}° E</span>
             </div>
-
           </div>
         </div>
 
-        {/* SECTION 2: CATEGORY CHOICE tabs */}
         <div className="space-y-3">
-          <label className="text-sm font-extrabold text-[#00516E] uppercase tracking-wider block">
-            打卡类型
-          </label>
+          <label className="text-sm font-extrabold text-[#00516E] uppercase tracking-wider block">打卡类型</label>
           <div className="flex flex-wrap gap-2">
             {categories.map(cat => (
               <button
@@ -270,7 +226,6 @@ export default function AddSpot() {
           </div>
         </div>
 
-        {/* SECTION 3: NAME INPUT */}
         <div className="space-y-2">
           <label className="text-sm font-extrabold text-[#00516E] flex items-center gap-1">
             <span>名称</span>
@@ -280,33 +235,27 @@ export default function AddSpot() {
             type="text"
             required
             maxLength={40}
-            placeholder="给打卡点起个有趣的名字（如 攀牙湾绝美漂流、芭东落日夜市）"
+            placeholder="给打卡点起个有趣的名字"
             value={name}
             onChange={(e) => setName(e.target.value)}
             className="w-full px-4 py-3 border border-neutral-200 rounded-xl focus:ring-1 focus:ring-[#FF7E53] focus:border-[#FF7E53] focus:outline-none text-[13px] font-bold"
           />
         </div>
 
-        {/* SECTION 4: DESCRIPTION TEXTAREA */}
         <div className="space-y-2">
-          <label className="text-sm font-extrabold text-[#00516E] block">
-            简介
-          </label>
+          <label className="text-sm font-extrabold text-[#00516E] block">简介</label>
           <textarea
             rows={4}
             maxLength={250}
-            placeholder="描述一下这里有什么好玩的，最佳游玩建议或者菜品指南（不超过250字）..."
+            placeholder="描述一下这里有什么好玩的..."
             value={description}
             onChange={(e) => setDescription(e.target.value)}
             className="w-full px-4 py-3 border border-neutral-200 rounded-xl focus:ring-1 focus:ring-[#FF7E53] focus:border-[#FF7E53] focus:outline-none text-[13px] font-medium leading-relaxed"
           />
         </div>
 
-        {/* SECTION 5: IMAGE SELECT DOCK */}
         <div className="space-y-2">
-          <label className="text-sm font-extrabold text-[#00516E] block">
-            照片 (点击上传)
-          </label>
+          <label className="text-sm font-extrabold text-[#00516E] block">照片 (点击上传)</label>
           <div 
             onClick={() => fileInputRef.current?.click()}
             className="border-2 border-dashed border-neutral-300 rounded-2xl h-44 text-center flex flex-col items-center justify-center cursor-pointer hover:border-[#FF7E53] transition-colors p-4 relative bg-[#FAF9F5]"
@@ -327,70 +276,42 @@ export default function AddSpot() {
                 </div>
                 <div>
                   <p className="text-xs font-bold text-on-surface">点击上传照片</p>
-                  <p className="text-[10px] text-on-surface-variant opacity-70 mt-1">
-                    未选择将根据您之前勾选的类型，智能生成唯美泰国海景卡片面罩
-                  </p>
+                  <p className="text-[10px] text-on-surface-variant opacity-70 mt-1">未选择将根据类型自动匹配背景</p>
                 </div>
               </div>
             )}
-            <input
-              type="file"
-              accept="image/*"
-              ref={fileInputRef}
-              onChange={handleImageSelect}
-              className="hidden"
-            />
+            <input type="file" accept="image/*" ref={fileInputRef} onChange={handleImageSelect} className="hidden" />
           </div>
         </div>
 
-        {/* SECTION 6: GUEST CONTRIBUTED NAME */}
         <div className="space-y-2">
-          <label className="text-sm font-extrabold text-[#00516E] block">
-            分享人
-          </label>
+          <label className="text-sm font-extrabold text-[#00516E] block">分享人</label>
           <input
             type="text"
             maxLength={18}
-            placeholder="您的名字或昵称 (如: Xiao Tang)"
+            placeholder="您的名字或昵称"
             value={user}
             onChange={(e) => setUser(e.target.value)}
             className="w-full px-4 py-3 border border-neutral-200 rounded-xl focus:ring-1 focus:ring-[#FF7E53] focus:border-[#FF7E53] focus:outline-none text-[13px] font-bold"
           />
         </div>
 
-        {/* OUTLINE ALERT REGARDING API SETUP */}
-        {hasValidKey ? (
-          <div className="bg-emerald-50 border border-emerald-100 text-emerald-950 rounded-xl p-4 flex gap-3 text-xs leading-relaxed text-left">
-            <div className="p-1 bg-emerald-100 text-emerald-700 rounded-lg shrink-0 h-fit mt-0.5">
-              <Check size={14} strokeWidth={3} />
-            </div>
-            <div className="space-y-1">
-              <span className="font-bold text-emerald-800">成功联通 Google Maps 平台内置服务！</span>
-              <p className="opacity-85 text-[11px]">
-                系统已识别到您的项目安全密钥：<code className="bg-emerald-200/40 px-1 py-0.5 rounded font-mono font-bold">{API_KEY.substring(0, 8)}...{API_KEY.substring(API_KEY.length - 4)}</code> (长度 {API_KEY.length} 字符)。现在正为您载入官方 API 原生地图。
-              </p>
-            </div>
-          </div>
-        ) : (
-          <div className="bg-sky-50 border border-sky-100 text-sky-900 rounded-xl p-4 flex gap-3 text-xs leading-relaxed text-left animate-fadeIn">
+        {!hasValidKey && (
+          <div className="bg-sky-50 border border-sky-100 text-sky-900 rounded-xl p-4 flex gap-3 text-xs leading-relaxed text-left">
             <HelpCircle size={18} className="text-[#0284C7] shrink-0 mt-0.5" />
             <div className="space-y-1">
-              <span className="font-bold text-[#00516E]">系统提示：您当前正在使用本地高保真 2D 拟真沙盒进行打卡</span>
-              <p className="opacity-80">
-                若要联通真实 Google Maps 引擎，您可以一键打开编辑器右上角的 <strong>Settings (⚙️ 齿轮图标) → Secrets (密钥管理机制) → 添加配对的 GOOGLE_MAPS_PLATFORM_KEY</strong> 作为变量名称。
-              </p>
+              <span className="font-bold text-[#00516E]">系统提示：您当前正在使用本地拟真沙盒进行打卡</span>
+              <p className="opacity-80">配置 GOOGLE_MAPS_PLATFORM_KEY 以联通真实地图引擎。</p>
             </div>
           </div>
         )}
 
-        {/* SUBMIT BUTTON */}
         <button
           type="submit"
           className="w-full py-4 bg-[#FF7E53] hover:bg-[#E0633B] text-white font-black rounded-2xl shadow-lg shadow-[#FF7E53]/25 flex items-center justify-center gap-2 text-sm uppercase tracking-wider transition-all cursor-pointer hover:shadow-xl active:scale-[0.99]"
         >
           <span>提交分享</span>
         </button>
-
       </form>
     </div>
   );
