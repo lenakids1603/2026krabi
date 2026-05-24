@@ -1,3 +1,4 @@
+import "dotenv/config";
 import express from "express";
 import path from "path";
 import fs from "fs";
@@ -107,7 +108,18 @@ function saveDBItems(items: GalleryItem[]) {
 
 // Config cookies & secret parsing
 const ADMIN_SECRET = process.env.ADMIN_SESSION_SECRET || "default_krabi_2026_salt_secret";
-const ADMIN_PASSWORD = process.env.GALLERY_ADMIN_PASSWORD || "krabi2026";
+
+function getAdminPassword(): string {
+  const password = process.env.GALLERY_ADMIN_PASSWORD || process.env.ADMIN_PASSWORD || "krabi2026";
+  if (!process.env.GALLERY_ADMIN_PASSWORD && !process.env.ADMIN_PASSWORD) {
+    console.warn("[WARNING] No GALLERY_ADMIN_PASSWORD or ADMIN_PASSWORD set in env. Falling back to default 'krabi2026' for development.");
+  }
+  return password;
+}
+
+function isAdminPasswordValid(password: string): boolean {
+  return password === getAdminPassword();
+}
 
 app.use(express.json({ limit: "20mb" }));
 app.use(express.urlencoded({ extended: true, limit: "20mb" }));
@@ -390,7 +402,7 @@ app.post("/api/gallery/admin/login", (req, res) => {
     return res.status(400).json({ error: "密码不能为空" });
   }
 
-  if (password !== ADMIN_PASSWORD) {
+  if (!isAdminPasswordValid(password)) {
     return res.status(401).json({ error: "密码输入错误" });
   }
 
