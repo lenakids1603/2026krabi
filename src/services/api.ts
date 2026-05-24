@@ -231,9 +231,21 @@ function getThailandTimeString(): string {
   }
 }
 
-export async function getWeather(city: 'krabi' | 'lanta'): Promise<WeatherForecastResponse> {
+type RealtimeRequestOptions = {
+  refresh?: boolean;
+};
+
+function buildRealtimeUrl(path: '/api/weather' | '/api/tides', city: 'krabi' | 'lanta', options?: RealtimeRequestOptions): string {
+  const params = new URLSearchParams({ city });
+  if (options?.refresh) {
+    params.set('refresh', '1');
+  }
+  return `${path}?${params.toString()}`;
+}
+
+export async function getWeather(city: 'krabi' | 'lanta', options?: RealtimeRequestOptions): Promise<WeatherForecastResponse> {
   try {
-    const response = await fetch(`/api/weather?city=${encodeURIComponent(city)}`);
+    const response = await fetch(buildRealtimeUrl('/api/weather', city, options), { cache: 'no-store' });
     if (!response.ok) {
       throw new Error('Failed to load weather');
     }
@@ -243,14 +255,14 @@ export async function getWeather(city: 'krabi' | 'lanta'): Promise<WeatherForeca
     return {
       ...base,
       lastUpdated: getThailandTimeString(),
-      source: 'mock'
+      source: 'fallback'
     };
   }
 }
 
-export async function getTides(city: 'krabi' | 'lanta'): Promise<TideInfo> {
+export async function getTides(city: 'krabi' | 'lanta', options?: RealtimeRequestOptions): Promise<TideInfo> {
   try {
-    const response = await fetch(`/api/tides?city=${encodeURIComponent(city)}`);
+    const response = await fetch(buildRealtimeUrl('/api/tides', city, options), { cache: 'no-store' });
     if (!response.ok) {
       throw new Error('Failed to load tides');
     }
@@ -260,7 +272,7 @@ export async function getTides(city: 'krabi' | 'lanta'): Promise<TideInfo> {
     return {
       ...base,
       lastUpdated: getThailandTimeString(),
-      source: 'mock'
+      source: 'fallback'
     };
   }
 }

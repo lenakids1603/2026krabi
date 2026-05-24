@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'motion/react';
-import { Sun, CloudRain, Cloud, CloudLightning, Droplets, Wind, Eye, CheckCircle2, AlertTriangle, Droplet, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Sun, CloudRain, Cloud, CloudLightning, Droplets, Wind, Eye, CheckCircle2, AlertTriangle, Droplet, ChevronLeft, ChevronRight, RefreshCw } from 'lucide-react';
 import { cn } from '../lib/utils';
 import { WEATHER_HEADER_BG } from '../assets/localImages';
 import { getWeather, getTides } from '../services/api';
@@ -112,6 +112,14 @@ function getWeatherTheme(weather: WeatherInfo): WeatherTheme {
   return WEATHER_THEME.default;
 }
 
+function getFallbackTimeString(): string {
+  try {
+    return new Date().toISOString().slice(0, 16).replace('T', ' ');
+  } catch {
+    return "2026-05-21 09:00";
+  }
+}
+
 export default function Weather() {
   const [activeIndex, setActiveIndex] = useState(0); // 0 = Krabi, 1 = Koh Lanta
   const [krabiWeather, setKrabiWeather] = useState<WeatherInfo | null>(null);
@@ -119,6 +127,7 @@ export default function Weather() {
   const [krabiTide, setKrabiTide] = useState<TideData | null>(null);
   const [lantaTide, setLantaTide] = useState<TideData | null>(null);
   const [isApiError, setIsApiError] = useState(false);
+  const [isRefreshing, setIsRefreshing] = useState(false);
   const [updateTime, setUpdateTime] = useState<string>('');
 
   useEffect(() => {
@@ -129,19 +138,11 @@ export default function Weather() {
       let lt: TideData | null = null;
       let apiFailed = false;
 
-      const fallbackTimeString = () => {
-        try {
-          return new Date().toISOString().slice(0, 16).replace('T', ' ');
-        } catch {
-          return "2026-05-21 09:00";
-        }
-      };
-
       try {
         kw = await getWeather('krabi');
       } catch (err) {
         console.error("Failed to load Krabi weather:", err);
-        kw = { ...MOCK_WEATHER_KRABI, lastUpdated: fallbackTimeString(), source: 'mock' };
+        kw = { ...MOCK_WEATHER_KRABI, lastUpdated: getFallbackTimeString(), source: 'fallback' };
         apiFailed = true;
       }
 
@@ -149,7 +150,7 @@ export default function Weather() {
         lw = await getWeather('lanta');
       } catch (err) {
         console.error("Failed to load Lanta weather:", err);
-        lw = { ...MOCK_WEATHER_LANTA, lastUpdated: fallbackTimeString(), source: 'mock' };
+        lw = { ...MOCK_WEATHER_LANTA, lastUpdated: getFallbackTimeString(), source: 'fallback' };
         apiFailed = true;
       }
 
@@ -157,7 +158,7 @@ export default function Weather() {
         kt = await getTides('krabi');
       } catch (err) {
         console.error("Failed to load Krabi tides:", err);
-        kt = { ...MOCK_TIDE_KRABI, lastUpdated: fallbackTimeString(), source: 'mock' };
+        kt = { ...MOCK_TIDE_KRABI, lastUpdated: getFallbackTimeString(), source: 'fallback' };
         apiFailed = true;
       }
 
@@ -165,7 +166,7 @@ export default function Weather() {
         lt = await getTides('lanta');
       } catch (err) {
         console.error("Failed to load Lanta tides:", err);
-        lt = { ...MOCK_TIDE_LANTA, lastUpdated: fallbackTimeString(), source: 'mock' };
+        lt = { ...MOCK_TIDE_LANTA, lastUpdated: getFallbackTimeString(), source: 'fallback' };
         apiFailed = true;
       }
 
@@ -173,11 +174,44 @@ export default function Weather() {
       setLantaWeather(lw);
       setKrabiTide(kt);
       setLantaTide(lt);
-      setIsApiError(apiFailed || [kw, lw, kt, lt].some(item => item?.source === 'mock'));
-      setUpdateTime(kw?.lastUpdated || fallbackTimeString());
+      setIsApiError(apiFailed || [kw, lw, kt, lt].some(item => item?.source !== 'api'));
+      setUpdateTime(kw?.lastUpdated || getFallbackTimeString());
     }
     loadData();
   }, []);
+
+  const refreshRealtimeData = async () => {
+    if (isRefreshing) {
+      return;
+    }
+
+    const city = activeIndex === 0 ? 'krabi' : 'lanta';
+    setIsRefreshing(true);
+    setIsApiError(false);
+
+    try {
+      const [weather, tide] = await Promise.all([
+        getWeather(city, { refresh: true }),
+        getTides(city, { refresh: true }),
+      ]);
+
+      if (city === 'krabi') {
+        setKrabiWeather(weather);
+        setKrabiTide(tide);
+      } else {
+        setLantaWeather(weather);
+        setLantaTide(tide);
+      }
+
+      setUpdateTime(weather.lastUpdated || tide.lastUpdated || getFallbackTimeString());
+      setIsApiError(weather.source !== 'api' || tide.source !== 'api');
+    } catch (err) {
+      console.error("Failed to refresh realtime weather and tides:", err);
+      setIsApiError(true);
+    } finally {
+      setIsRefreshing(false);
+    }
+  };
 
   if (!krabiWeather || !lantaWeather || !krabiTide || !lantaTide) {
     return (
@@ -188,7 +222,15 @@ export default function Weather() {
   }
 
   const activeWeather = activeIndex === 0 ? krabiWeather : lantaWeather;
+  const activeTide = activeIndex === 0 ? krabiTide : lantaTide;
   const weatherTheme = getWeatherTheme(activeWeather);
+  const activeDataIsApi = activeWeather.source === 'api' && activeTide.source === 'api';
+  const dataSourceLabel = isRefreshing
+    ? '正在刷新实时数据...'
+    : activeDataIsApi
+      ? '当前为实时外部数据'
+      : '实时数据加载失败，当前显示离线备份数据。';
+  const displayUpdateTime = activeWeather.lastUpdated || activeTide.lastUpdated || updateTime;
 
   return (
     <div className="relative z-0 min-h-screen space-y-6 pb-12 overflow-x-hidden text-left text-white">
@@ -216,23 +258,35 @@ export default function Weather() {
 
         {/* Lightweight Status, Data Source & Update Time */}
         <div className="flex flex-col gap-2.5 pt-1">
-          {isApiError && (
+          {(isApiError || !activeDataIsApi) && !isRefreshing && (
             <div className="bg-amber-500/15 border border-amber-500/30 backdrop-blur-md text-amber-200 text-xs px-3.5 py-2.5 rounded-2xl font-medium flex items-center gap-2 max-w-2xl shadow-lg">
               <span className="text-base">⚠️</span>
-              <span>实时数据加载失败，已自动载入本地安全备份数据。</span>
+              <span>实时数据加载失败，当前显示离线备份数据。</span>
             </div>
           )}
           
           <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
             <span className="bg-white/10 text-white border border-white/10 backdrop-blur-sm px-3 py-1 rounded-full text-[11px] font-bold inline-flex items-center gap-1.5 shadow-sm">
               <span className="w-1.5 h-1.5 rounded-full animate-pulse" style={{ backgroundColor: weatherTheme.accent }} />
-              当前为本地预览数据
+              {dataSourceLabel}
             </span>
-            {updateTime && (
+            {displayUpdateTime && (
               <span className="text-white/70 text-xs font-medium">
-                更新时间：{updateTime} (泰国时间)
+                更新时间：{displayUpdateTime} (泰国时间)
               </span>
             )}
+            <button
+              type="button"
+              onClick={refreshRealtimeData}
+              disabled={isRefreshing}
+              className={cn(
+                "inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/12 px-3.5 py-1.5 text-[11px] font-extrabold text-white shadow-sm backdrop-blur-md transition-all",
+                isRefreshing ? "cursor-wait opacity-70" : "cursor-pointer hover:bg-white/20 active:scale-95"
+              )}
+            >
+              <RefreshCw size={13} className={cn(isRefreshing && "animate-spin")} />
+              {isRefreshing ? "正在刷新实时数据..." : "刷新实时数据"}
+            </button>
           </div>
           
           <p className="text-white/60 text-[11px] leading-relaxed max-w-xl">
