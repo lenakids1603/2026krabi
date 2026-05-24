@@ -6,3 +6,12 @@ coverage/
 *.log
 .env*
 !.env.example
+uploads/
+server/uploads/
+server/db/data/
+gallery_db.json
+*.sqlite
+*.sqlite3
+*.db
+*.sqlite-shm
+*.sqlite-wal

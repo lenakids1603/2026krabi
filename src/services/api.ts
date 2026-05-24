@@ -232,21 +232,37 @@ function getThailandTimeString(): string {
 }
 
 export async function getWeather(city: 'krabi' | 'lanta'): Promise<WeatherForecastResponse> {
-  const base = city === 'krabi' ? MOCK_WEATHER_KRABI : MOCK_WEATHER_LANTA;
-  return {
-    ...base,
-    lastUpdated: getThailandTimeString(),
-    source: 'mock'
-  };
+  try {
+    const response = await fetch(`/api/weather?city=${encodeURIComponent(city)}`);
+    if (!response.ok) {
+      throw new Error('Failed to load weather');
+    }
+    return await response.json() as WeatherForecastResponse;
+  } catch {
+    const base = city === 'krabi' ? MOCK_WEATHER_KRABI : MOCK_WEATHER_LANTA;
+    return {
+      ...base,
+      lastUpdated: getThailandTimeString(),
+      source: 'mock'
+    };
+  }
 }
 
 export async function getTides(city: 'krabi' | 'lanta'): Promise<TideInfo> {
-  const base = city === 'krabi' ? MOCK_TIDE_KRABI : MOCK_TIDE_LANTA;
-  return {
-    ...base,
-    lastUpdated: getThailandTimeString(),
-    source: 'mock'
-  };
+  try {
+    const response = await fetch(`/api/tides?city=${encodeURIComponent(city)}`);
+    if (!response.ok) {
+      throw new Error('Failed to load tides');
+    }
+    return await response.json() as TideInfo;
+  } catch {
+    const base = city === 'krabi' ? MOCK_TIDE_KRABI : MOCK_TIDE_LANTA;
+    return {
+      ...base,
+      lastUpdated: getThailandTimeString(),
+      source: 'mock'
+    };
+  }
 }
 
 // ==========================================

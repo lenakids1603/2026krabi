@@ -90,7 +90,7 @@ export default function Weather() {
       setLantaWeather(lw);
       setKrabiTide(kt);
       setLantaTide(lt);
-      setIsApiError(apiFailed);
+      setIsApiError(apiFailed || [kw, lw, kt, lt].some(item => item?.source === 'mock'));
       setUpdateTime(kw?.lastUpdated || fallbackTimeString());
     }
     loadData();
