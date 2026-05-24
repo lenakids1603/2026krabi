@@ -46,6 +46,7 @@ export function GalleryGrid({ photos, isAdmin, onLike, onSelect, onDelete }: Gal
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: Math.min(idx * 0.05, 0.4) }}
+            onClick={() => onSelect?.(photo)}
             className="relative group rounded-3xl overflow-hidden shadow-[0px_4px_20px_rgba(0,0,0,0.03)] border border-slate-100 bg-white break-inside-avoid cursor-pointer"
           >
             {/* Media thumbnail */}

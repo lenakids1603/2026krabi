@@ -13,7 +13,7 @@ import { ITINERARY } from '../data/itinerary';
 import { MOCK_WEATHER_KRABI, MOCK_WEATHER_LANTA } from '../data/weather';
 import { MOCK_TIDE_KRABI, MOCK_TIDE_LANTA } from '../data/tides';
 import { DEFAULT_CHECKIN_SPOTS } from '../data/checkinSpots';
-import { getGalleryItems, uploadGalleryFile, deleteGalleryItem } from '../api/galleryApi';
+import { getUploaderId, getGalleryItems, uploadGalleryFile, deleteGalleryItem } from '../api/galleryApi';
 
 // ==========================================
 // 🏠 1. HOME STATUS API
@@ -271,22 +271,9 @@ export async function deleteGalleryMedia(id: string): Promise<boolean> {
 }
 
 // ==========================================
-// 📍 5. CHECK-IN SPOTS (SERVER API + LOCAL FALLBACK)
+// 📍 5. CHECK-IN SPOTS (LOCALSTORAGE ENGINE + FALLBACK)
 // ==========================================
-function getCheckinOwnerToken(): string {
-  let token = localStorage.getItem('lenakids_checkin_owner_token');
-  if (!token) {
-    if (typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function') {
-      token = crypto.randomUUID();
-    } else {
-      token = 'owner_' + Array.from({ length: 32 }, () => Math.floor(Math.random() * 16).toString(16)).join('');
-    }
-    localStorage.setItem('lenakids_checkin_owner_token', token);
-  }
-  return token;
-}
-
-function getLocalCheckinSpots(): CheckinSpot[] {
+export async function getCheckinSpots(): Promise<CheckinSpot[]> {
   const saved = localStorage.getItem('lenakids_shared_spots');
   if (saved) {
     try {
@@ -305,7 +292,7 @@ function getLocalCheckinSpots(): CheckinSpot[] {
   return DEFAULT_CHECKIN_SPOTS;
 }
 
-function createLocalCheckinSpot(input: CreateCheckinSpotInput): CheckinSpot {
+export async function createCheckinSpot(input: CreateCheckinSpotInput): Promise<CheckinSpot> {
   const categoryImageFallbacks: Record<string, string> = {
     '餐厅': 'https://images.unsplash.com/photo-1552566626-52f8b828add9?auto=format&fit=crop&w=600&q=80',
     '摄影位': 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=600&q=80',
@@ -343,7 +330,7 @@ function createLocalCheckinSpot(input: CreateCheckinSpotInput): CheckinSpot {
   return newSpot;
 }
 
-function deleteLocalCheckinSpot(id: string): boolean {
+export async function deleteCheckinSpot(id: string): Promise<boolean> {
   const saved = localStorage.getItem('lenakids_shared_spots');
   if (saved) {
     try {
@@ -356,56 +343,4 @@ function deleteLocalCheckinSpot(id: string): boolean {
     }
   }
   return false;
-}
-
-export async function getCheckinSpots(): Promise<CheckinSpot[]> {
-  try {
-    const response = await fetch('/api/checkin-spots');
-    if (!response.ok) {
-      throw new Error('Failed to load check-in spots');
-    }
-    return await response.json() as CheckinSpot[];
-  } catch {
-    return getLocalCheckinSpots();
-  }
-}
-
-export async function createCheckinSpot(input: CreateCheckinSpotInput): Promise<CheckinSpot> {
-  try {
-    const response = await fetch('/api/checkin-spots', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-Owner-Token': getCheckinOwnerToken()
-      },
-      body: JSON.stringify(input)
-    });
-
-    if (!response.ok) {
-      throw new Error('Failed to create check-in spot');
-    }
-
-    return await response.json() as CheckinSpot;
-  } catch {
-    return createLocalCheckinSpot(input);
-  }
-}
-
-export async function deleteCheckinSpot(id: string): Promise<boolean> {
-  try {
-    const response = await fetch(`/api/checkin-spots/${encodeURIComponent(id)}`, {
-      method: 'DELETE',
-      headers: {
-        'X-Owner-Token': getCheckinOwnerToken()
-      }
-    });
-
-    if (response.ok) {
-      return true;
-    }
-  } catch {
-    // Fall back below when the backend is unavailable.
-  }
-
-  return deleteLocalCheckinSpot(id);
 }

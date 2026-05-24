@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { X, Shield, RefreshCw, Film, Image as ImageIcon, CheckCircle, AlertCircle, Trash2, ArrowRight, Heart } from 'lucide-react';
+import { X, Shield, RefreshCw, Film, Image as ImageIcon, CheckCircle, AlertCircle, Trash2, ArrowRight, Heart, Download } from 'lucide-react';
 import { cn } from '../lib/utils';
 import { getGalleryItems, uploadGalleryFile, deleteGalleryItem, checkAdminStatus, GalleryItem } from '../api/galleryApi';
 import { GalleryGrid } from '../components/gallery/GalleryGrid';
@@ -164,6 +164,36 @@ export default function Gallery() {
       }
       return p;
     }));
+  };
+
+  // Download handler with iPhone/WeChat browser fallback options
+  const handleDownload = async (photo: GalleryItem) => {
+    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+    const isWeChat = /MicroMessenger/i.test(navigator.userAgent);
+
+    if (isIOS || isWeChat) {
+      window.open(photo.file_url, '_blank');
+      alert('【系统提示】\n苹果 iOS / 微信等内置浏览器由于系统底线限制，无法直接下载。\n\n本系统已在新标签页为您打开媒体文件原件：\n请 [长按图片或网页视频] 调出菜单，并选择「保存到相册」或「存储到文件」即可。');
+      return;
+    }
+
+    try {
+      const response = await fetch(photo.file_url);
+      if (!response.ok) throw new Error('CORS or Network issue');
+      const blob = await response.blob();
+      const blobUrl = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = blobUrl;
+      link.download = photo.original_name || `lenakids-retreat-${photo.id}.${photo.media_type === 'video' ? 'mp4' : 'jpg'}`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(blobUrl);
+    } catch (err) {
+      console.warn('Direct BLOB download failed, utilizing fallback window:', err);
+      window.open(photo.file_url, '_blank');
+      alert('已在新窗口中为您打开媒体原件。若没有自动下载：\n- 手机端：请长按画面选择「保存至相册」\n- 电脑端：请在画面上点击鼠标右键，选择「另外保存图片/视频」');
+    }
   };
 
   return (
@@ -397,12 +427,19 @@ export default function Gallery() {
                   </p>
                 </div>
 
-                <div className="flex items-center gap-4 text-xs font-bold self-start sm:self-auto text-slate-300">
+                <div className="flex flex-wrap items-center gap-3 text-xs font-bold self-start sm:self-auto text-slate-300">
+                  <button 
+                    onClick={() => handleDownload(selectedPhoto)}
+                    className="flex items-center gap-2 bg-[#0077B6] hover:bg-[#00516E] text-white px-4 py-2.5 rounded-xl transition-all shadow-md active:scale-95 cursor-pointer"
+                  >
+                    <Download size={14} />
+                    <span>下载原文件</span>
+                  </button>
                   <button 
                     onClick={() => handleLike(selectedPhoto.id)}
-                    className="flex items-center gap-2 bg-[#FF7E53]/10 hover:bg-[#FF7E53]/20 text-[#FF7E53] border border-[#FF7E53]/20 px-4 py-2.5 rounded-xl transition-all"
+                    className="flex items-center gap-2 bg-[#FF7E53]/10 hover:bg-[#FF7E53]/20 text-[#FF7E53] border border-[#FF7E53]/20 px-4 py-2.5 rounded-xl transition-all active:scale-95 cursor-pointer"
                   >
-                    <Heart size={16} className="fill-[#FF7E53]" />
+                    <Heart size={14} className="fill-[#FF7E53]" />
                     <span>点赞 {selectedPhoto.likes}</span>
                   </button>
                   <span className="text-slate-500">·</span>
