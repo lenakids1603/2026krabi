@@ -77,7 +77,7 @@ export default function Home() {
           </div>
           <div className="flex-[2] w-full">
             <div className="text-on-surface-variant text-[10px] uppercase font-bold tracking-[0.2em] mb-4 opacity-60 text-left">下一项活动</div>
-            <div className="bg-surface-container-low rounded-2xl p-4 flex items-center justify-between hover:bg-surface-container-high transition-all cursor-pointer group border border-outline-variant/20">
+            <div className="bg-surface-container-low rounded-2xl p-4 flex items-center justify-between transition-all border border-outline-variant/20">
               <div className="flex items-center gap-4">
                 <div className="w-14 h-14 bg-primary-container rounded-2xl flex items-center justify-center text-white shadow-lg group-hover:scale-105 transition-transform duration-300">
                   <PlaneTakeoff size={28} />
@@ -87,7 +87,6 @@ export default function Home() {
                   <p className="text-on-surface-variant text-xs font-medium mt-0.5">{status?.nextActivity?.time || '23:00'} · {status?.nextActivity?.location || '港口航站'}</p>
                 </div>
               </div>
-              <ArrowRight className="text-outline-variant group-hover:text-primary transition-colors group-hover:translate-x-1 duration-300" size={20} />
             </div>
           </div>
         </div>
