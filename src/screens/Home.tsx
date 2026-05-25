@@ -241,12 +241,7 @@ export default function Home() {
             className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
             referrerPolicy="no-referrer"
           />
-          <div className="absolute inset-0 bg-black/50 flex items-center px-10 group-hover:bg-black/40 transition-colors duration-500">
-            <h4 className="text-white font-heading font-bold text-2xl tracking-tight leading-snug text-left">
-                查看甲米当地美食攻略
-                <ArrowRight className="inline-block ml-2 opacity-0 group-hover:opacity-100 -translate-x-4 group-hover:translate-x-0 transition-all duration-300" size={24} />
-            </h4>
-          </div>
+          
         </div>
       </section>
     </div>
