@@ -7,8 +7,6 @@ export interface GalleryItem {
   file_size: number;
   uploader_token_hash: string;
   created_at: string;
-  likes: number;
-  comments: number;
   // Backward compatibility with other components
   url: string;
   category?: string;

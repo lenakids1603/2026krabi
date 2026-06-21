@@ -50,10 +50,14 @@ export function isTideCity(value: unknown): value is TideCity {
   return value === "krabi" || value === "lanta";
 }
 
-export async function getTides(city: TideCity): Promise<TideInfo> {
+export async function getTides(city: TideCity, options: { refresh?: boolean } = {}): Promise<TideInfo> {
   const cached = cache.get(city);
-  if (cached && cached.expiresAt > Date.now()) {
+  if (!options.refresh && cached && cached.expiresAt > Date.now()) {
     return cached.payload;
+  }
+
+  if (cached && cached.expiresAt <= Date.now()) {
+    cache.delete(city);
   }
 
   if (!process.env.WORLD_TIDES_API_KEY) {

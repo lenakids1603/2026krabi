@@ -42,7 +42,7 @@
 * **天气 Mock 数据**：`src/data/weather.ts`
 * **潮汐 Mock 数据**：`src/data/tides.ts`
 * **默认打卡数据**：`src/data/checkinSpots.ts`
-* **默认相册媒体**：`src/data/gallery.ts`
+* **默认相册媒体**：`server.ts` 内置 `DEFAULT_ITEMS`（运行时存储于 `gallery_db.json`）
 
 ---
 
@@ -117,9 +117,7 @@
       original_name TEXT NOT NULL,
       file_size INTEGER NOT NULL,
       uploader_token_hash TEXT NOT NULL,
-      created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-      likes INTEGER DEFAULT 0,
-      comments INTEGER DEFAULT 0
+      created_at DATETIME DEFAULT CURRENT_TIMESTAMP
   );
   ```
 

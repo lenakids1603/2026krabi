@@ -6,12 +6,11 @@ import { GalleryItem, getUploaderId, getUploaderHash } from '../../api/galleryAp
 interface GalleryGridProps {
   photos: GalleryItem[];
   isAdmin: boolean;
-  onLike?: (id: string) => void;
   onSelect?: (photo: GalleryItem) => void;
   onDelete?: (id: string) => void;
 }
 
-export function GalleryGrid({ photos, isAdmin, onLike, onSelect, onDelete }: GalleryGridProps) {
+export function GalleryGrid({ photos, isAdmin, onSelect, onDelete }: GalleryGridProps) {
   const [currentUserHash, setCurrentUserHash] = useState<string>('');
   const [deletingId, setDeletingId] = useState<string | null>(null);
 

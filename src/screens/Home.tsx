@@ -117,10 +117,10 @@ export default function Home() {
               
               <div>
                 <span className="bg-white/15 backdrop-blur-md text-white text-[9px] font-extrabold px-2.5 py-1 rounded-full mb-3 inline-block uppercase tracking-widest ring-1 ring-white/10">
-                  CRUISE MAP · 10 DAYS
+                  CRUISE MAP · 9 DAYS
                 </span>
                 <h4 className="font-heading font-black text-3xl mb-2.5 tracking-tight">团建日程安排</h4>
-                <p className="text-white/80 text-[11px] leading-relaxed font-semibold max-w-sm">从甲米落日、海边落日晚霞，到兰塔岛最深处的秘密泻湖，在这里探索 10 日完整官方日程。</p>
+                <p className="text-white/80 text-[11px] leading-relaxed font-semibold max-w-sm">从甲米落日、海边落日晚霞，到兰塔岛最深处的秘密泻湖，在这里探索 9 日完整官方日程。</p>
               </div>
             </div>
             
