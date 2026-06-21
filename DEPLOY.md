@@ -110,7 +110,7 @@ pm2 restart krabi
 
 ## 数据持久化（重要）
 
-`uploads/`、`gallery_db.json`、`checkin_spots_db.json` 都在 `/var/www/2026krabi` 下，pm2 重启不会丢。**不要 `rm -rf` 重建该目录**，否则会丢失用户上传的照片和共享打卡点。建议定期备份这三项：
+`uploads/`、`gallery_db.json`、`checkin_spots_db.json` 都在 `/var/www/2026krabi` 下，pm2 重启不会丢。这三项已加入 `.gitignore`，因此 `git pull` 不会覆盖它们（仓库里不再含这些文件，首次启动会自动生成种子数据）。**不要 `rm -rf` 重建该目录**，否则会丢失用户上传的照片和共享打卡点。建议定期备份这三项：
 
 ```bash
 tar czf /backup/krabi-data-$(date +%F).tgz uploads gallery_db.json checkin_spots_db.json
@@ -118,5 +118,5 @@ tar czf /backup/krabi-data-$(date +%F).tgz uploads gallery_db.json checkin_spots
 
 ## 已知注意事项
 
-- **`gallery_db.json` 目前被 git 跟踪**：服务器运行时会写它，下次 `git pull` 可能与远程版本冲突或覆盖运行时数据。建议后续把 `gallery_db.json` / `checkin_spots_db.json` / `uploads/` 从 git 取消跟踪并加进 `.gitignore`（服务器首次启动会自动重建种子数据，安全）。在那之前，更新前可先 `git stash` 或备份这些文件。
+- 运行时数据文件（`gallery_db.json` / `checkin_spots_db.json` / `uploads/`）已从 git 移除并加入 `.gitignore`，`git pull` 不会再覆盖它们。**若你在此变更之前就已部署并产生过数据**：更新到含本变更的版本时，`git pull` 会因 `gallery_db.json` 不再被跟踪而把它从工作区删除，所以请先 `cp gallery_db.json gallery_db.json.bak` 备份，拉取后再 `mv gallery_db.json.bak gallery_db.json` 放回（之后它已被忽略，不会再受影响）。
 - 旧 AI Studio 模板遗留的 `@google/genai` 依赖与 `GEMINI_API_KEY` / `APP_URL` 变量当前代码并未使用，可忽略；如需精简可单独清理。
