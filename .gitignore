@@ -6,3 +6,9 @@ coverage/
 *.log
 .env*
 !.env.example
+
+# Runtime data written by the server at process.cwd() — do not track.
+# (Seed data is recreated automatically on first boot.)
+gallery_db.json
+checkin_spots_db.json
+uploads/
