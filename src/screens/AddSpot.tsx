@@ -90,17 +90,21 @@ export default function AddSpot() {
       finalImage = defaultSceneries[selectedCategory];
     }
 
-    await createCheckinSpot({
-      name: name.trim(),
-      category: selectedCategory,
-      description: description.trim() || '随行打卡，风光无限。',
-      image_url: finalImage,
-      lat,
-      lng,
-      user: user.trim() || '旅行同伴'
-    });
+    try {
+      await createCheckinSpot({
+        name: name.trim(),
+        category: selectedCategory,
+        description: description.trim() || '随行打卡，风光无限。',
+        image_url: finalImage,
+        lat,
+        lng,
+        user: user.trim() || '旅行同伴'
+      });
 
-    navigate('/checkin-spots');
+      navigate('/checkin-spots');
+    } catch (err: any) {
+      alert(err?.message || '提交失败，请检查网络后重试');
+    }
   };
 
   return (

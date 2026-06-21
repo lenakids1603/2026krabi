@@ -52,7 +52,7 @@ export async function getHomeStatus(): Promise<HomeStatus> {
 
     return {
       dayNumber: 1,
-      totalDays: 10,
+      totalDays: ITINERARY.length,
       currentDayTitle: '全员集结，准备启程',
       tripStatus: 'before',
       message: '行前准备中，2026-06-28 启程！',
@@ -68,13 +68,13 @@ export async function getHomeStatus(): Promise<HomeStatus> {
   }
 
   if (progress.status === 'after') {
-    // Late fallback to the last event of Day 10
-    const lastDay = ITINERARY[9];
+    // Late fallback to the last event of the final day
+    const lastDay = ITINERARY[ITINERARY.length - 1];
     const lastAct = lastDay.activities[lastDay.activities.length - 1];
 
     return {
-      dayNumber: 10,
-      totalDays: 10,
+      dayNumber: ITINERARY.length,
+      totalDays: ITINERARY.length,
       currentDayTitle: '行程已圆满结束',
       tripStatus: 'after',
       message: '全部行程精彩收官，感谢同行！',
@@ -147,7 +147,7 @@ export async function getHomeStatus(): Promise<HomeStatus> {
 
   return {
     dayNumber: todayDay,
-    totalDays: 10,
+    totalDays: ITINERARY.length,
     currentDayTitle: todayItinerary.title,
     tripStatus: 'during',
     message: `第 ${todayDay} 天火热畅游中`,
@@ -175,7 +175,7 @@ export function getThailandTripProgress(): TripProgress {
     const dateStr = formatter.format(new Date()); // Format: YYYY-MM-DD
     
     const startDate = "2026-06-28";
-    const endDate = "2026-07-07";
+    const endDate = "2026-07-06";
 
     const parts = dateStr.split('-');
     const todayMMDD = parts.length === 3 ? `${parts[1]}.${parts[2]}` : ""; // "06.28"
@@ -299,76 +299,53 @@ export async function deleteGalleryMedia(id: string): Promise<boolean> {
 }
 
 // ==========================================
-// 📍 5. CHECK-IN SPOTS (LOCALSTORAGE ENGINE + FALLBACK)
+// 📍 5. CHECK-IN SPOTS (SHARED BACKEND API + FALLBACK)
 // ==========================================
+const CHECKIN_SPOTS_API = '/api/checkin-spots';
+
 export async function getCheckinSpots(): Promise<CheckinSpot[]> {
-  const saved = localStorage.getItem('lenakids_shared_spots');
-  if (saved) {
-    try {
-      const parsed = JSON.parse(saved) as CheckinSpot[];
-      const merged = [...parsed];
-      DEFAULT_CHECKIN_SPOTS.forEach(defSpot => {
-        if (!merged.some(s => s.id === defSpot.id)) {
-          merged.push(defSpot);
-        }
-      });
-      return merged;
-    } catch {
-      return DEFAULT_CHECKIN_SPOTS;
+  try {
+    const res = await fetch(CHECKIN_SPOTS_API, {
+      headers: { 'X-Owner-Token': getUploaderId() },
+      cache: 'no-store'
+    });
+    if (!res.ok) {
+      throw new Error('Failed to load checkin spots');
     }
+    return await res.json() as CheckinSpot[];
+  } catch (err) {
+    // Network/server failure: fall back to bundled defaults so the page still renders.
+    console.error('Failed to load checkin spots from server, using defaults:', err);
+    return DEFAULT_CHECKIN_SPOTS;
   }
-  return DEFAULT_CHECKIN_SPOTS;
 }
 
 export async function createCheckinSpot(input: CreateCheckinSpotInput): Promise<CheckinSpot> {
-  const categoryImageFallbacks: Record<string, string> = {
-    '餐厅': 'https://images.unsplash.com/photo-1552566626-52f8b828add9?auto=format&fit=crop&w=600&q=80',
-    '摄影位': 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=600&q=80',
-    '酒吧': 'https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?auto=format&fit=crop&w=600&q=80',
-    '咖啡馆': 'https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?auto=format&fit=crop&w=600&q=80',
-    '其他': 'https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?auto=format&fit=crop&w=600&q=80'
-  };
+  const res = await fetch(CHECKIN_SPOTS_API, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'X-Owner-Token': getUploaderId()
+    },
+    body: JSON.stringify(input)
+  });
 
-  const newSpot: CheckinSpot = {
-    id: 'spot-' + Date.now(),
-    name: input.name,
-    category: input.category,
-    description: input.description || '随行打卡，风光无限。',
-    image: input.image_url || categoryImageFallbacks[input.category],
-    lat: input.lat,
-    lng: input.lng,
-    user: input.user || '旅行同伴',
-    createdAt: new Date().toISOString(),
-    address: input.address,
-    google_maps_url: input.google_maps_url || `https://www.google.com/maps/search/?api=1&query=${input.lat},${input.lng}`
-  };
-
-  const saved = localStorage.getItem('lenakids_shared_spots');
-  let list: CheckinSpot[] = [];
-  if (saved) {
-    try {
-      list = JSON.parse(saved);
-    } catch {
-      list = [];
-    }
+  if (!res.ok) {
+    const errData = await res.json().catch(() => ({}));
+    throw new Error(errData.error || '创建打卡点失败，请稍后重试');
   }
-  list.unshift(newSpot);
-  localStorage.setItem('lenakids_shared_spots', JSON.stringify(list));
-
-  return newSpot;
+  return await res.json() as CheckinSpot;
 }
 
 export async function deleteCheckinSpot(id: string): Promise<boolean> {
-  const saved = localStorage.getItem('lenakids_shared_spots');
-  if (saved) {
-    try {
-      let list = JSON.parse(saved) as CheckinSpot[];
-      list = list.filter(item => item.id !== id);
-      localStorage.setItem('lenakids_shared_spots', JSON.stringify(list));
-      return true;
-    } catch {
-      return false;
-    }
+  const res = await fetch(`${CHECKIN_SPOTS_API}/${encodeURIComponent(id)}`, {
+    method: 'DELETE',
+    headers: { 'X-Owner-Token': getUploaderId() }
+  });
+
+  if (!res.ok) {
+    const errData = await res.json().catch(() => ({}));
+    throw new Error(errData.error || '删除失败，您可能无权删除此打卡点');
   }
-  return false;
+  return true;
 }

@@ -156,16 +156,6 @@ export default function Gallery() {
     }
   };
 
-  // Double-liker
-  const handleLike = (id: string) => {
-    setPhotos(prev => prev.map(p => {
-      if (p.id === id) {
-        return { ...p, likes: p.likes + 1 };
-      }
-      return p;
-    }));
-  };
-
   // Download handler with iPhone/WeChat browser fallback options
   const handleDownload = async (photo: GalleryItem) => {
     const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
@@ -370,7 +360,6 @@ export default function Gallery() {
         <GalleryGrid 
           photos={filteredPhotos} 
           isAdmin={isAdmin}
-          onLike={handleLike} 
           onSelect={setSelectedPhoto} 
           onDelete={handleDeleteItem}
         />
