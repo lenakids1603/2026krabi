@@ -24,3 +24,19 @@ Notes:
 - `.webp` sources were re-encoded to `.jpg` on download so every file is a real JPEG.
 - tiger-cave.jpg is the only image kept from Wikimedia Commons; its CC BY 4.0
   attribution is given above as required by that license.
+
+## 待替换占位图 / Placeholders to replace（2026/6/22 新增 6 张卡片）
+
+These six spots were added to the check-in guide but have **no photo file yet**.
+Until a real JPEG is dropped in at the path below, the card renders the built-in
+gradient fallback (see `SpotsSharing` `<img onError>`). Replace each before going
+live — keep the exact filenames so no code change is needed.
+
+| File | Spot | Status |
+|------|------|--------|
+| aonang.jpg | Ao Nang Beach 奥南海滩 | ⏳ awaiting photo |
+| krabi-night-market.jpg | Krabi Town Night Market 甲米镇周末夜市 | ⏳ awaiting photo |
+| wat-kaew.jpg | Wat Kaew Korawaram 翡翠白庙 | ⏳ awaiting photo |
+| long-beach.jpg | Long Beach (Phra Ae) 长滩 | ⏳ awaiting photo |
+| kantiang-bay.jpg | Kantiang Bay 康田湾 | ⏳ awaiting photo |
+| tung-yee-peng.jpg | Tung Yee Peng Mangrove 红树林 | ⏳ awaiting photo |
