@@ -118,5 +118,6 @@ tar czf /backup/krabi-data-$(date +%F).tgz uploads gallery_db.json checkin_spots
 
 ## 已知注意事项
 
+- **精选打卡点（种子数据）会随发布自动更新**：服务每次启动时，会把 `server.ts` 里 `DEFAULT_SPOTS` 定义的官方打卡点同步进 `checkin_spots_db.json`（`is_seed: true` 的条目整体替换为最新版），而**用户自己新增的打卡点（`is_seed: false`）始终原样保留**。因此改动 `DEFAULT_SPOTS` 后只需 `git pull && npm run build && pm2 restart krabi` 即可让线上生效，无需手动删库。打卡点配图放在 `public/checkin-spots/`（构建时由 Vite 拷入 `dist/`，以站点根路径 `/checkin-spots/*.jpg` 提供），来源与授权见 `public/checkin-spots/CREDITS.md`。
 - 运行时数据文件（`gallery_db.json` / `checkin_spots_db.json` / `uploads/`）已从 git 移除并加入 `.gitignore`，`git pull` 不会再覆盖它们。**若你在此变更之前就已部署并产生过数据**：更新到含本变更的版本时，`git pull` 会因 `gallery_db.json` 不再被跟踪而把它从工作区删除，所以请先 `cp gallery_db.json gallery_db.json.bak` 备份，拉取后再 `mv gallery_db.json.bak gallery_db.json` 放回（之后它已被忽略，不会再受影响）。
 - 旧 AI Studio 模板遗留的 `@google/genai` 依赖与 `GEMINI_API_KEY` / `APP_URL` 变量当前代码并未使用，可忽略；如需精简可单独清理。
