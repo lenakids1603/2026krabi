@@ -340,10 +340,14 @@ export default function Weather() {
           transition={{ type: "spring", damping: 24, stiffness: 140 }}
           className="flex w-[200%] select-none align-start"
           drag="x"
+          dragDirectionLock
           dragConstraints={{ left: 0, right: 0 }}
           dragElastic={0.15}
           onDragEnd={(e, info) => {
             const dragThreshold = 55;
+            // Ignore mostly-vertical gestures (page scrolling). Without this, a
+            // scroll after switching cities fired here and snapped back to Krabi.
+            if (Math.abs(info.offset.x) <= Math.abs(info.offset.y)) return;
             if (info.offset.x < -dragThreshold) {
               setActiveIndex(1);
             } else if (info.offset.x > dragThreshold) {
