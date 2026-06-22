@@ -80,6 +80,7 @@ export function MemberCard({ member, index }: MemberCardProps): React.JSX.Elemen
 
   const badge = getGroupBadge(member.group);
   const displayName = member.name;
+  const hasPhone = Boolean(member.phoneRaw);
 
   return (
     <motion.div 
@@ -114,24 +115,30 @@ export function MemberCard({ member, index }: MemberCardProps): React.JSX.Elemen
         <div className="flex items-center justify-between p-3 rounded-2xl bg-surface-container-low border border-outline-variant/20 group-hover:bg-primary/5 group-hover:border-primary/20 transition-all duration-500">
           <div className="flex flex-col pl-2 text-left">
             <span className={cn("text-[10px] font-bold uppercase tracking-widest", badge.accentText)}>TH Mobile</span>
-            <span className="text-base font-sans font-bold text-on-surface tracking-tight">{member.phoneDisplay}</span>
+            <span className={cn("text-base font-sans font-bold tracking-tight", hasPhone ? "text-on-surface" : "text-on-surface-variant/50")}>{member.phoneDisplay}</span>
           </div>
-          <div className="flex gap-2">
-            <a 
-              href={`tel:${member.phoneRaw}`}
-              className="w-12 h-12 flex items-center justify-center rounded-2xl bg-primary text-white shadow-lg hover:brightness-110 active:scale-95 transition-all text-sm font-bold"
-              title="呼叫 电话"
-            >
-              <Phone size={20} />
-            </a>
-            <a 
-              href={`sms:${member.phoneRaw}`}
-              className="w-12 h-12 flex items-center justify-center rounded-2xl bg-[#E76F51] text-white shadow-md hover:brightness-110 active:scale-95 transition-all text-sm font-bold"
-              title="发送 短信"
-            >
-              <MessageSquare size={20} />
-            </a>
-          </div>
+          {hasPhone ? (
+            <div className="flex gap-2">
+              <a
+                href={`tel:${member.phoneRaw}`}
+                className="w-12 h-12 flex items-center justify-center rounded-2xl bg-primary text-white shadow-lg hover:brightness-110 active:scale-95 transition-all text-sm font-bold"
+                title="呼叫 电话"
+              >
+                <Phone size={20} />
+              </a>
+              <a
+                href={`sms:${member.phoneRaw}`}
+                className="w-12 h-12 flex items-center justify-center rounded-2xl bg-[#E76F51] text-white shadow-md hover:brightness-110 active:scale-95 transition-all text-sm font-bold"
+                title="发送 短信"
+              >
+                <MessageSquare size={20} />
+              </a>
+            </div>
+          ) : (
+            <span className="px-3 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-on-surface-variant/10 text-on-surface-variant/60 border border-outline-variant/30">
+              待登记
+            </span>
+          )}
         </div>
       </div>
     </motion.div>

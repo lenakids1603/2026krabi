@@ -6,8 +6,8 @@ export const TEAM_MEMBERS: TeamMember[] = [
     name: '老板',
     gender: '男',
     group: 'BOSS',
-    phoneDisplay: '+66-8-1234-5678',
-    phoneRaw: '+66812345678',
+    phoneDisplay: '+66 61-451-6837',
+    phoneRaw: '+66614516837',
     avatar: ''
   },
   {
@@ -15,8 +15,8 @@ export const TEAM_MEMBERS: TeamMember[] = [
     name: '老板娘',
     gender: '女',
     group: 'BOSS',
-    phoneDisplay: '+66-8-1234-5679',
-    phoneRaw: '+66812345679',
+    phoneDisplay: '+66 61-451-6873',
+    phoneRaw: '+66614516873',
     avatar: ''
   },
   {
@@ -24,8 +24,8 @@ export const TEAM_MEMBERS: TeamMember[] = [
     name: '小吴',
     gender: '男',
     group: '运营',
-    phoneDisplay: '+66-8-1234-5680',
-    phoneRaw: '+66812345680',
+    phoneDisplay: '+66 61-451-6774',
+    phoneRaw: '+66614516774',
     avatar: ''
   },
   {
@@ -33,17 +33,8 @@ export const TEAM_MEMBERS: TeamMember[] = [
     name: '小占',
     gender: '女',
     group: '运营',
-    phoneDisplay: '+66-8-1234-5681',
-    phoneRaw: '+66812345681',
-    avatar: ''
-  },
-  {
-    id: '5',
-    name: '设计师小潘',
-    gender: '女',
-    group: '开发',
-    phoneDisplay: '+66-8-1234-5682',
-    phoneRaw: '+66812345682',
+    phoneDisplay: '+66 61-451-6576',
+    phoneRaw: '+66614516576',
     avatar: ''
   },
   {
@@ -51,8 +42,8 @@ export const TEAM_MEMBERS: TeamMember[] = [
     name: '王nuo',
     gender: '女',
     group: '运营',
-    phoneDisplay: '+66-8-1234-5683',
-    phoneRaw: '+66812345683',
+    phoneDisplay: '+66 61-451-6557',
+    phoneRaw: '+66614516557',
     avatar: ''
   },
   {
@@ -60,8 +51,8 @@ export const TEAM_MEMBERS: TeamMember[] = [
     name: '小宇',
     gender: '女',
     group: '客服',
-    phoneDisplay: '+66-8-1234-5684',
-    phoneRaw: '+66812345684',
+    phoneDisplay: '+66 61-451-6575',
+    phoneRaw: '+66614516575',
     avatar: ''
   },
   {
@@ -69,8 +60,8 @@ export const TEAM_MEMBERS: TeamMember[] = [
     name: '果果',
     gender: '女',
     group: '客服',
-    phoneDisplay: '+66-8-1234-5685',
-    phoneRaw: '+66812345685',
+    phoneDisplay: '+66 61-451-6489',
+    phoneRaw: '+66614516489',
     avatar: ''
   },
   {
@@ -78,8 +69,8 @@ export const TEAM_MEMBERS: TeamMember[] = [
     name: '小婷',
     gender: '女',
     group: '客服',
-    phoneDisplay: '+66-8-1234-5686',
-    phoneRaw: '+66812345686',
+    phoneDisplay: '待定',
+    phoneRaw: '',
     avatar: ''
   },
   {
@@ -87,8 +78,8 @@ export const TEAM_MEMBERS: TeamMember[] = [
     name: '小鲍',
     gender: '女',
     group: '行政',
-    phoneDisplay: '+66-8-1234-5687',
-    phoneRaw: '+66812345687',
+    phoneDisplay: '+66 61-451-6849',
+    phoneRaw: '+66614516849',
     avatar: ''
   },
   {
@@ -96,8 +87,8 @@ export const TEAM_MEMBERS: TeamMember[] = [
     name: '盼盼',
     gender: '女',
     group: '运营',
-    phoneDisplay: '+66-8-1234-5688',
-    phoneRaw: '+66812345688',
+    phoneDisplay: '+66 61-451-6567',
+    phoneRaw: '+66614516567',
     avatar: ''
   },
   {
@@ -105,8 +96,8 @@ export const TEAM_MEMBERS: TeamMember[] = [
     name: '小英',
     gender: '女',
     group: '运营',
-    phoneDisplay: '+66-8-1234-5689',
-    phoneRaw: '+66812345689',
+    phoneDisplay: '+66 61-451-6746',
+    phoneRaw: '+66614516746',
     avatar: ''
   },
   {
@@ -114,8 +105,8 @@ export const TEAM_MEMBERS: TeamMember[] = [
     name: '老章',
     gender: '男',
     group: '开发',
-    phoneDisplay: '+66-8-1234-5690',
-    phoneRaw: '+66812345690',
+    phoneDisplay: '+66 61-451-6517',
+    phoneRaw: '+66614516517',
     avatar: ''
   },
   {
@@ -123,8 +114,8 @@ export const TEAM_MEMBERS: TeamMember[] = [
     name: '龙龙',
     gender: '女',
     group: '直播组',
-    phoneDisplay: '+66-8-1234-5691',
-    phoneRaw: '+66812345691',
+    phoneDisplay: '+66 61-451-6782',
+    phoneRaw: '+66614516782',
     avatar: ''
   },
   {
@@ -132,8 +123,8 @@ export const TEAM_MEMBERS: TeamMember[] = [
     name: '安nuo',
     gender: '女',
     group: '直播组',
-    phoneDisplay: '+66-8-1234-5692',
-    phoneRaw: '+66812345692',
+    phoneDisplay: '+66 61-451-6769',
+    phoneRaw: '+66614516769',
     avatar: ''
   },
   {
@@ -141,8 +132,8 @@ export const TEAM_MEMBERS: TeamMember[] = [
     name: '张ting',
     gender: '女',
     group: '直播组',
-    phoneDisplay: '+66-8-1234-5693',
-    phoneRaw: '+66812345693',
+    phoneDisplay: '待定',
+    phoneRaw: '',
     avatar: ''
   },
   {
@@ -150,8 +141,8 @@ export const TEAM_MEMBERS: TeamMember[] = [
     name: '大菲菲',
     gender: '女',
     group: '直播组',
-    phoneDisplay: '+66-8-1234-5694',
-    phoneRaw: '+66812345694',
+    phoneDisplay: '待定',
+    phoneRaw: '',
     avatar: ''
   },
   {
@@ -159,8 +150,8 @@ export const TEAM_MEMBERS: TeamMember[] = [
     name: '蓉儿',
     gender: '女',
     group: '直播组',
-    phoneDisplay: '+66-8-1234-5695',
-    phoneRaw: '+66812345695',
+    phoneDisplay: '待定',
+    phoneRaw: '',
     avatar: ''
   },
   {
@@ -168,8 +159,8 @@ export const TEAM_MEMBERS: TeamMember[] = [
     name: '小于',
     gender: '女',
     group: '直播组',
-    phoneDisplay: '+66-8-1234-5696',
-    phoneRaw: '+66812345696',
+    phoneDisplay: '待定',
+    phoneRaw: '',
     avatar: ''
   },
   {
@@ -177,8 +168,8 @@ export const TEAM_MEMBERS: TeamMember[] = [
     name: '小霏霏',
     gender: '女',
     group: '直播组',
-    phoneDisplay: '+66-8-1234-5697',
-    phoneRaw: '+66812345697',
+    phoneDisplay: '+66 61-451-6867',
+    phoneRaw: '+66614516867',
     avatar: ''
   },
   {
@@ -186,8 +177,8 @@ export const TEAM_MEMBERS: TeamMember[] = [
     name: '廖廖',
     gender: '女',
     group: '直播组',
-    phoneDisplay: '+66-8-1234-5698',
-    phoneRaw: '+66812345698',
+    phoneDisplay: '+66 61-451-6863',
+    phoneRaw: '+66614516863',
     avatar: ''
   },
   {
@@ -195,8 +186,8 @@ export const TEAM_MEMBERS: TeamMember[] = [
     name: '陈yan',
     gender: '女',
     group: '直播组',
-    phoneDisplay: '+66-8-1234-5699',
-    phoneRaw: '+66812345699',
+    phoneDisplay: '+66 61-451-6854',
+    phoneRaw: '+66614516854',
     avatar: ''
   },
   {
@@ -204,8 +195,8 @@ export const TEAM_MEMBERS: TeamMember[] = [
     name: '董yin',
     gender: '女',
     group: '直播组',
-    phoneDisplay: '+66-8-1234-5700',
-    phoneRaw: '+66812345700',
+    phoneDisplay: '+66 61-451-6859',
+    phoneRaw: '+66614516859',
     avatar: ''
   },
   {
@@ -213,8 +204,8 @@ export const TEAM_MEMBERS: TeamMember[] = [
     name: '美玲',
     gender: '女',
     group: '财务',
-    phoneDisplay: '+66-8-1234-5701',
-    phoneRaw: '+66812345701',
+    phoneDisplay: '+66 61-451-6760',
+    phoneRaw: '+66614516760',
     avatar: ''
   },
   {
@@ -222,8 +213,8 @@ export const TEAM_MEMBERS: TeamMember[] = [
     name: '梦祥',
     gender: '男',
     group: '采购',
-    phoneDisplay: '+66-8-1234-5702',
-    phoneRaw: '+66812345702',
+    phoneDisplay: '+66 61-451-6751',
+    phoneRaw: '+66614516751',
     avatar: ''
   },
   {
@@ -231,8 +222,8 @@ export const TEAM_MEMBERS: TeamMember[] = [
     name: '林qi',
     gender: '女',
     group: '行政',
-    phoneDisplay: '+66-8-1234-5703',
-    phoneRaw: '+66812345703',
+    phoneDisplay: '+66 61-451-6748',
+    phoneRaw: '+66614516748',
     avatar: ''
   },
   {
@@ -240,8 +231,8 @@ export const TEAM_MEMBERS: TeamMember[] = [
     name: '琪琪妈',
     gender: '女',
     group: '行政',
-    phoneDisplay: '+66-8-1234-5704',
-    phoneRaw: '+66812345704',
+    phoneDisplay: '+66 61-451-6895',
+    phoneRaw: '+66614516895',
     avatar: ''
   },
   {
@@ -249,8 +240,8 @@ export const TEAM_MEMBERS: TeamMember[] = [
     name: '徐shuyan',
     gender: '女',
     group: '亲友团',
-    phoneDisplay: '+66-8-1234-5705',
-    phoneRaw: '+66812345705',
+    phoneDisplay: '+66 61-451-6775',
+    phoneRaw: '+66614516775',
     avatar: ''
   },
   {
@@ -258,8 +249,8 @@ export const TEAM_MEMBERS: TeamMember[] = [
     name: '陈qingjun',
     gender: '男',
     group: '亲友团',
-    phoneDisplay: '+66-8-1234-5706',
-    phoneRaw: '+66812345706',
+    phoneDisplay: '+66 61-451-6855',
+    phoneRaw: '+66614516855',
     avatar: ''
   },
   {
@@ -267,8 +258,8 @@ export const TEAM_MEMBERS: TeamMember[] = [
     name: '木木子老板',
     gender: '男',
     group: '亲友团',
-    phoneDisplay: '+66-8-1234-5707',
-    phoneRaw: '+66812345707',
+    phoneDisplay: '+66 61-451-6869',
+    phoneRaw: '+66614516869',
     avatar: ''
   },
   {
@@ -276,8 +267,8 @@ export const TEAM_MEMBERS: TeamMember[] = [
     name: '木木子老板娘',
     gender: '女',
     group: '亲友团',
-    phoneDisplay: '+66-8-1234-5708',
-    phoneRaw: '+66812345708',
+    phoneDisplay: '+66 61-451-6882',
+    phoneRaw: '+66614516882',
     avatar: ''
   }
 ];
