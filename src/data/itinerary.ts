@@ -13,10 +13,10 @@ export const ITINERARY: DayItinerary[] = [
     activities: [
       {
         id: 'a1-1',
-        time: '晚上',
+        time: '20:00',
         title: '全员萧山集结',
         location: '杭州萧山国际机场 T4 航站楼',
-        description: '团队成员统一在指定值机柜台前集合，办理值机和出境手续。温馨提醒：提前备好少量泰铢，检查护照和随身物品。',
+        description: '请于晚上 8 点（20:00）在萧山机场 T4 航站楼集合，统一在指定值机柜台前办理值机和出境手续。温馨提醒：提前备好少量泰铢，检查护照和随身物品。',
         type: 'itinerary'
       },
       {
