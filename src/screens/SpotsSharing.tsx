@@ -1,19 +1,35 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'motion/react';
 import { Link } from 'react-router-dom';
-import { MapPin, Compass, Plus, Navigation, Heart, Share2, ArrowLeft } from 'lucide-react';
+import { MapPin, Compass, Plus, Navigation, Heart, Share2, ArrowLeft, LayoutGrid, Map as MapIcon } from 'lucide-react';
 import { getCheckinSpots } from '../services/api';
 import { CheckinSpot } from '../types/api';
 import { cn } from '../lib/utils';
+import SpotsMapView from '../components/checkin/SpotsMapView';
 
 export default function SpotsSharing() {
   const [spots, setSpots] = useState<CheckinSpot[]>([]);
   const [activeFilter, setActiveFilter] = useState<string>('全部');
+  const [viewMode, setViewMode] = useState<'card' | 'map'>(() => {
+    // Default is the card view; optionally remember the user's last choice.
+    if (typeof window !== 'undefined') {
+      const saved = window.localStorage.getItem('checkin_view_mode');
+      if (saved === 'card' || saved === 'map') return saved;
+    }
+    return 'card';
+  });
 
   // Load spots from API layer
   useEffect(() => {
     getCheckinSpots().then(data => setSpots(data));
   }, []);
+
+  // Persist the last selected view (card / map).
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      window.localStorage.setItem('checkin_view_mode', viewMode);
+    }
+  }, [viewMode]);
 
   const categories = ['全部', '餐厅', '摄影位', '酒吧', '咖啡馆', '其他'];
 
@@ -46,6 +62,27 @@ export default function SpotsSharing() {
         </p>
       </header>
 
+      {/* View toggle: 卡片 / 地图 (default 卡片) */}
+      <div className="flex">
+        <div className="inline-flex p-1 bg-surface-container-low rounded-2xl border border-outline-variant/30 shadow-sm">
+          {([['card', '卡片'], ['map', '地图']] as const).map(([mode, label]) => (
+            <button
+              key={mode}
+              onClick={() => setViewMode(mode)}
+              className={cn(
+                "px-5 py-2 rounded-xl text-sm font-bold transition-all flex items-center gap-1.5 cursor-pointer",
+                viewMode === mode
+                  ? "bg-primary text-white shadow-sm"
+                  : "text-on-surface-variant hover:text-primary"
+              )}
+            >
+              {mode === 'card' ? <LayoutGrid size={16} /> : <MapIcon size={16} />}
+              {label}
+            </button>
+          ))}
+        </div>
+      </div>
+
       {/* Primary Orange Call-To-Action Button */}
       <div className="flex justify-start">
         <Link
@@ -57,6 +94,8 @@ export default function SpotsSharing() {
         </Link>
       </div>
 
+      {viewMode === 'card' && (
+      <>
       {/* Category Tabs */}
       <div className="flex gap-2 overflow-x-auto pb-2 -mx-4 px-4 hide-scrollbar">
         {categories.map(cat => (
@@ -160,6 +199,12 @@ export default function SpotsSharing() {
           </div>
         )}
       </div>
+      </>
+      )}
+
+      {viewMode === 'map' && (
+        <SpotsMapView spots={spots} onNavigate={handleNavigate} />
+      )}
     </div>
   );
 }

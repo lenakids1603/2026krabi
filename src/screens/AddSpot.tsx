@@ -5,14 +5,7 @@ import { ArrowLeft, MapPin, Camera, Info, Check, Plus, Search, HelpCircle, Compa
 import { APIProvider, Map, AdvancedMarker, Pin } from '@vis.gl/react-google-maps';
 import { createCheckinSpot } from '../services/api';
 import { cn } from '../lib/utils';
-
-// Read Maps Platform key as specified in the GMP skill
-const API_KEY =
-  process.env.GOOGLE_MAPS_PLATFORM_KEY ||
-  (import.meta as any).env?.VITE_GOOGLE_MAPS_PLATFORM_KEY ||
-  (globalThis as any).GOOGLE_MAPS_PLATFORM_KEY ||
-  '';
-const hasValidKey = Boolean(API_KEY) && API_KEY !== 'YOUR_API_KEY';
+import { MAPS_API_KEY as API_KEY, hasValidMapsKey as hasValidKey } from '../lib/mapsKey';
 
 export default function AddSpot() {
   const navigate = useNavigate();
