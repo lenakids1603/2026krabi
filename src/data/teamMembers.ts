@@ -69,8 +69,8 @@ export const TEAM_MEMBERS: TeamMember[] = [
     name: '小婷',
     gender: '女',
     group: '客服',
-    phoneDisplay: '待定',
-    phoneRaw: '',
+    phoneDisplay: '+66 61-451-6487',
+    phoneRaw: '+66614516487',
     avatar: ''
   },
   {
