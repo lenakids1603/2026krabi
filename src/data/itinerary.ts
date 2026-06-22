@@ -48,9 +48,9 @@ export const ITINERARY: DayItinerary[] = [
       {
         id: 'a2-2',
         time: '中午-下午',
-        title: '专车前往兰塔酒店并入住',
-        location: '甲米机场 -> 兰塔度假酒店',
-        description: '乘坐舒适舒心的专车前往美丽的兰塔岛酒店。下午办理入住并休整放松。',
+        title: '专车前往兰塔 Rawi Warin 酒店并入住',
+        location: '甲米机场 -> 兰塔岛 Rawi Warin Resort & Spa',
+        description: '乘坐舒适舒心的专车前往美丽的兰塔岛 Rawi Warin Resort & Spa（克隆托湾，Khlong Toab Beach）。下午办理入住（6/29 入住，住 3 晚），稍作休整放松。',
         type: 'hotel'
       },
       {
@@ -141,17 +141,17 @@ export const ITINERARY: DayItinerary[] = [
       {
         id: 'a5-1',
         time: '上午',
-        title: '办理退房，专车离岛重聚奥南',
-        location: '兰塔岛 -> 甲米奥南',
-        description: '美味早餐过后整理行装，统一办理退房，乘坐专车离开兰塔岛，返回甲米奥南酒店。',
+        title: 'Rawi Warin 退房，专车离岛重聚奥南',
+        location: '兰塔岛 Rawi Warin -> 甲米奥南',
+        description: '美味早餐过后整理行装，统一在 Rawi Warin 办理退房（7/2 退房），乘坐专车离开兰塔岛，当天赶往甲米奥南。',
         type: 'itinerary'
       },
       {
         id: 'a5-2',
         time: '下午',
-        title: '新酒店入住办理 & 自由午休',
-        location: '甲米奥南区域度假酒店',
-        description: '在新酒店安顿行李，舒服地简单睡个午觉并补充体力。',
+        title: '入住奥南 Holiday Inn & 自由午休',
+        location: '甲米奥南 Holiday Inn Resort Krabi Ao Nang',
+        description: '抵达后在 Holiday Inn Resort Krabi Ao Nang 办理入住（7/2 入住，住 4 晚），安顿行李，舒服地简单睡个午觉并补充体力。',
         type: 'hotel'
       },
       {
@@ -258,8 +258,8 @@ export const ITINERARY: DayItinerary[] = [
         id: 'a9-1',
         time: '上午（送机时刻）',
         title: '整理行装 & 登上专用大巴返航',
-        location: '奥南度假酒店 -> 甲米机场',
-        description: '在酒店从容吃完早餐，退房办理好行李整理，登上面包专用送机专车，乘车稳稳驶入甲米国际机场进行办票。',
+        location: '奥南 Holiday Inn -> 甲米机场',
+        description: '在 Holiday Inn 从容吃完早餐，办理退房（7/6 退房）并整理好行李，登上专用送机专车，乘车稳稳驶入甲米国际机场进行办票。',
         type: 'itinerary'
       },
       {

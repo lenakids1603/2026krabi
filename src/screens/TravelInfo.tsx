@@ -164,25 +164,25 @@ export default function TravelInfo() {
         </div>
         
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          <HotelCard 
-            title="Krabi Resort & Spa" 
-            stay="甲米主岛 2晚" 
-            addr="232 Moo 2, Ao Nang, Krabi 81180, Thailand" 
-            dates="Jun 28 - Jun 30" 
+          <HotelCard
+            title="Rawi Warin Resort & Spa"
+            stay="兰塔岛 3晚"
+            addr="139 Moo 8, Khlong Toab Beach, Ko Lanta Yai, Krabi 81150, Thailand"
+            dates="Jun 29 - Jul 02"
             img={krabiResort}
             color="bg-primary"
-            websiteUrl="https://www.krabiresort.com/"
-            mapUrl="https://www.google.com/maps/search/?api=1&query=Krabi+Resort+%26+Spa"
+            websiteUrl="https://rawiwarin.com/"
+            mapUrl="https://www.google.com/maps/search/?api=1&query=Rawi+Warin+Resort+%26+Spa+Koh+Lanta"
           />
-          <HotelCard 
-            title="Pimalai Resort & Spa" 
-            stay="兰塔岛 3晚" 
-            addr="99 Moo 5, Ba Kantiang Bay, Koh Lanta, Krabi 81150" 
-            dates="Jun 30 - Jul 03" 
+          <HotelCard
+            title="Holiday Inn Resort Krabi Ao Nang"
+            stay="甲米奥南 4晚"
+            addr="244 Moo 2, Ao Nang, Mueang Krabi, Krabi 81180, Thailand"
+            dates="Jul 02 - Jul 06"
             img={krabiIslands}
             color="bg-secondary"
-            websiteUrl="https://www.pimalai.com/"
-            mapUrl="https://www.google.com/maps/search/?api=1&query=Pimalai+Resort+%26+Spa"
+            websiteUrl="https://www.ihg.com/holidayinnresorts/hotels/us/en/krabi/kbvab/hoteldetail"
+            mapUrl="https://www.google.com/maps/search/?api=1&query=Holiday+Inn+Resort+Krabi+Ao+Nang+Beach"
           />
         </div>
       </section>
