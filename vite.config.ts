@@ -1,13 +1,22 @@
 import tailwindcss from '@tailwindcss/vite';
 import react from '@vitejs/plugin-react';
 import path from 'path';
-import {defineConfig} from 'vite';
+import {defineConfig, loadEnv} from 'vite';
 
-export default defineConfig(() => {
+export default defineConfig(({mode}) => {
+  // Load .env (all keys, no VITE_ prefix filter) so GOOGLE_MAPS_PLATFORM_KEY can
+  // live in the .env file like every other secret. A real shell env var still
+  // wins, e.g.  export GOOGLE_MAPS_PLATFORM_KEY="xxx" && npm run build
+  const env = loadEnv(mode, process.cwd(), '');
+  const mapsKey = process.env.GOOGLE_MAPS_PLATFORM_KEY || env.GOOGLE_MAPS_PLATFORM_KEY || '';
+
   return {
     plugins: [react(), tailwindcss()],
     define: {
-      'process.env.GOOGLE_MAPS_PLATFORM_KEY': JSON.stringify(process.env.GOOGLE_MAPS_PLATFORM_KEY || '')
+      // Only the maps key is exposed to the client bundle. Other .env values
+      // (admin password, session secret) are NOT defined here — they stay
+      // server-side and never reach the browser.
+      'process.env.GOOGLE_MAPS_PLATFORM_KEY': JSON.stringify(mapsKey)
     },
     resolve: {
       alias: {
