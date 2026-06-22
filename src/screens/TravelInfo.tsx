@@ -5,8 +5,8 @@ import { cn } from '@/src/lib/utils';
 
 import changiWaterfall from '@/src/assets/images/changi_waterfall_one_1779244607786.png';
 import changiGarden from '@/src/assets/images/changi_indoor_garden_1779244634467.png';
-import krabiResort from '@/src/assets/images/krabi_luxury_resort_1779244650872.png';
-import krabiIslands from '@/src/assets/images/krabi_island_tour_1779244669020.png';
+import rawiWarin from '@/src/assets/images/rawi_warin_resort.jpg';
+import holidayInn from '@/src/assets/images/holiday_inn_ao_nang.jpg';
 
 const CHANGI_IMAGES = [
   changiWaterfall,
@@ -169,7 +169,7 @@ export default function TravelInfo() {
             stay="兰塔岛 3晚"
             addr="139 Moo 8, Khlong Toab Beach, Ko Lanta Yai, Krabi 81150, Thailand"
             dates="Jun 29 - Jul 02"
-            img={krabiResort}
+            img={rawiWarin}
             color="bg-primary"
             websiteUrl="https://rawiwarin.com/"
             mapUrl="https://www.google.com/maps/search/?api=1&query=Rawi+Warin+Resort+%26+Spa+Koh+Lanta"
@@ -179,7 +179,7 @@ export default function TravelInfo() {
             stay="甲米奥南 4晚"
             addr="244 Moo 2, Ao Nang, Mueang Krabi, Krabi 81180, Thailand"
             dates="Jul 02 - Jul 06"
-            img={krabiIslands}
+            img={holidayInn}
             color="bg-secondary"
             websiteUrl="https://www.ihg.com/holidayinnresorts/hotels/us/en/krabi/kbvab/hoteldetail"
             mapUrl="https://www.google.com/maps/search/?api=1&query=Holiday+Inn+Resort+Krabi+Ao+Nang+Beach"
