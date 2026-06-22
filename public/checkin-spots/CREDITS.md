@@ -19,24 +19,22 @@ photos or Creative Commons alternatives).
 | lanta-lighthouse.jpg | Koh Lanta Lighthouse 兰塔角灯塔 | Google Images thumbnail (encrypted-tbn0.gstatic.com); original source unverified |
 | khaothong-hill.jpg | Khaothong Hill 山景咖啡馆 | thailandee.com/img/villes/krabi/khaothong-hill-krabi.jpg (bears a Thailandee.com watermark) |
 | tiger-cave.jpg | Tiger Cave Temple 老虎洞寺 | Wikimedia Commons — Vyacheslav Argenberg, CC BY 4.0 — https://commons.wikimedia.org/w/index.php?curid=111795450 |
+| aonang.jpg | Ao Nang Beach 奥南海滩 | encrypted-tbn0.gstatic.com (Google Images thumbnail); original source unverified |
+| ao-nang-night-market.jpg | Ao Nang Landmark Night Market 奥南夜市 | cktravels.com/wp-content/uploads/2024/05/ao-nang-night-market-7.jpg |
+| wat-kaew.jpg | Wat Kaew Korawaram 翡翠白庙 | Adobe Stock preview — t3.ftcdn.net/jpg/05/51/96/24/360_F_551962476_jE2tBWd8ji5s3JYY7HNkf2ohHYR72INy.jpg (watermarked) |
+| long-beach.jpg | Long Beach / Phra Ae 长滩 | lantacastaway.com/images/gallery/gallery-67-640x480.jpg |
+| kantiang-bay.jpg | Kantiang Bay 康田湾 | thailandmagazine.com/wp-content/uploads/2024/12/Kentiang-Beach-Koh-lanta-Thailand-2.jpg |
+| tung-yee-peng.jpg | Tung Yee Peng Mangrove 红树林 | image.kkday.com/.../product_163663/20240228092636_uURir (KKday) |
 
 Notes:
 - `.webp` sources were re-encoded to `.jpg` on download so every file is a real JPEG.
 - tiger-cave.jpg is the only image kept from Wikimedia Commons; its CC BY 4.0
   attribution is given above as required by that license.
-
-## 待替换占位图 / Placeholders to replace（2026/6/22 新增 6 张卡片）
-
-These six spots were added to the check-in guide but have **no photo file yet**.
-Until a real JPEG is dropped in at the path below, the card renders the built-in
-gradient fallback (see `SpotsSharing` `<img onError>`). Replace each before going
-live — keep the exact filenames so no code change is needed.
-
-| File | Spot | Status |
-|------|------|--------|
-| aonang.jpg | Ao Nang Beach 奥南海滩 | ⏳ awaiting photo |
-| krabi-night-market.jpg | Krabi Town Night Market 甲米镇周末夜市 | ⏳ awaiting photo |
-| wat-kaew.jpg | Wat Kaew Korawaram 翡翠白庙 | ⏳ awaiting photo |
-| long-beach.jpg | Long Beach (Phra Ae) 长滩 | ⏳ awaiting photo |
-| kantiang-bay.jpg | Kantiang Bay 康田湾 | ⏳ awaiting photo |
-| tung-yee-peng.jpg | Tung Yee Peng Mangrove 红树林 | ⏳ awaiting photo |
+- The six 2026/6/22 additions (aonang, ao-nang-night-market, wat-kaew, long-beach,
+  kantiang-bay, tung-yee-peng) are third-party editorial/stock images chosen by the
+  site owner; copyright remains with their respective owners.
+- wat-kaew.jpg is an Adobe Stock preview and carries a faint stock watermark —
+  swap it for a license-cleared photo before any public launch.
+- tung-yee-peng.jpg was served by KKday as WebP and re-encoded to JPEG on download.
+- aonang.jpg is a low-resolution Google Images thumbnail (701×438); replace with a
+  higher-resolution photo if you want it crisp on large screens.
